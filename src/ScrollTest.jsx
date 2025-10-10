@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { FaArrowUp } from "react-icons/fa";
+import { IoIosArrowUp } from "react-icons/io";
 
 export default function ScrollTest() {
   const [showButton, setShowButton] = useState(false);
@@ -37,9 +38,11 @@ export default function ScrollTest() {
       {showButton && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-20 right-4 z-[99999] bg-purple-600 text-white p-4 rounded-full shadow-lg hover:bg-purple-800 cursor-pointer transition-all duration-300"
+          className="fixed bottom-20 right-4 z-[99999] bg-black text-white p-3  shadow-lg  cursor-pointer "
         >
-          <FaArrowUp size={24} />
+          
+          <IoIosArrowUp  size={26}/>
+
         </button>
       )}
 

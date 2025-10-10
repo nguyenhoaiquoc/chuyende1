@@ -5,6 +5,8 @@ import Banner from './compoments/Banner.jsx';
 import Footer from './compoments/Footer.jsx';
 import ScrollTest from './ScrollTest.jsx';
 import Panel from "./compoments/Panel.jsx";
+import User0008 from "./compoments/User0008.jsx";
+
 
 const menuItems = [
   { id: 'intro', label: 'Giới Thiệu', link: '#' },
@@ -64,7 +66,7 @@ function App() {
 
   return (
     <div className="bg-white">
-      <header className="sticky top-0 z-30 bg-white shadow-sm ">
+      <header className=" bg-white shadow-sm ">
         <div className="">
             <BT onMenuToggle={handleMobileMenuToggle} />
         </div>
@@ -84,6 +86,7 @@ function App() {
       {/* Banner */}
       <Banner /> 
 
+      <User0008/>
       <ScrollTest />
 
       <Footer />
