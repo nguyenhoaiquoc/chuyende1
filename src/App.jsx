@@ -6,6 +6,7 @@ import Footer from './compoments/Footer.jsx';
 import ScrollTest from './ScrollTest.jsx';
 import Panel from "./compoments/Panel.jsx";
 import User0008 from "./compoments/User0008.jsx";
+import Policies from './compoments/Policies.jsx';
 
 
 const menuItems = [
@@ -88,7 +89,7 @@ function App() {
 
       <User0008/>
       <ScrollTest />
-
+      <Policies/>
       <Footer />
 
       {/* Panel cố định dưới cùng */}
