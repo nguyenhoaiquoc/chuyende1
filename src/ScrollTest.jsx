@@ -7,7 +7,7 @@ export default function ScrollTest() {
 
   useEffect(() => {
     const handleScroll = () => {
-      console.log("scrollY:", window.scrollY); // 👀 log kiểm tra
+      console.log("scrollY:", window.scrollY); 
       setShowButton(window.scrollY > 50);
     };
 
@@ -22,7 +22,7 @@ export default function ScrollTest() {
   return (
     <div className="min-h-[200vh] p-6 space-y-6">
       <h1 className="text-3xl font-bold mb-6">Test Scroll To Top</h1>
-      <p>Cuộn xuống để thấy nút xuất hiện ở góc dưới bên phải 👇</p>
+      <p>Cuộn xuống để thấy nút xuất hiện ở góc dưới bên phải </p>
 
       {/* Văn bản dài để tạo scroll */}
       {Array.from({ length: 40 }).map((_, i) => (
@@ -34,7 +34,6 @@ export default function ScrollTest() {
         </p>
       ))}
 
-      {/* Nút scroll to top */}
       {showButton && (
         <button
           onClick={scrollToTop}
