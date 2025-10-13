@@ -11,8 +11,8 @@ export default function BT({ onMenuToggle }) {
   const [showSearch, setShowSearch] = useState(false);
 
   return (
-    <>
-      <div className={`md:px-12 md:mt-7 mt-5 px-10  pb-8`}>
+    <div className="w-full mt-5">
+ <div className={`md:px-12 md:mt-7 pb-8 w-full px-2`}>
 
         <div className="flex justify-between items-center ">
           <div className="block md:hidden">
@@ -24,31 +24,29 @@ export default function BT({ onMenuToggle }) {
           </div>
 
           <div className="">
-            <a href="#"> <img className="w-[138px] h-[26px] sm:w-[180px] sm:h-[34px]" src={logo} alt="" /> </a>
+            <a href="#"> <img className="w-full h-[26px] sm:w-[180px] sm:h-[34px]" src={logo} alt="" /> </a>
           </div>
 
-          <div className="flex items-center gap-2 ">
+          <div className="flex items-center gap-1 ">
             <form action="" className="relative">
               <input type="text" className="hidden md:block w-[260px] h-[34px] pl-2 border border-gray-400" placeholder="Tìm..." />
               <FaSearch className="absolute right-2 top-1/2 -translate-y-1/2 lg:text-xl cursor-pointer" onClick={() => setShowSearch(!showSearch)} />
-
-
 
             </form>
 
             <Link> <FaUser className="hidden md:block mb-1 hover:text-purple-500 ml-3" /> </Link>
             <Link className="relative"> <HiShoppingBag className="  ml-3 text-xl lg:mb-1 hover:text-purple-500 hidden md:block" />
 
-              <IoMdCart className="  ml-3 text-xl lg:mb-1 block md:hidden" />
+              <IoMdCart className="text-xl lg:mb-1 block md:hidden" />
               <span className="absolute -right-4 -top-3 bg-red-500 text-white px-[8px] py-[2px] text-[12px] rounded-full">0</span>
             </Link>
 
-            <div className="pl-3 hidden md:block">
-              <Link><img className="w-[24px] h-[24px] " src={vn} alt="" /></Link>
+            <div className="pl-3">
+              <Link><img className="md:w-[24px] md:h-[24px] w-[18px] h-[18px] " src={vn} alt="" /></Link>
             </div>
 
-            <div className="border-l border-black pl-2 hidden md:block">
-              <Link><img className="w-[22px] h-[22px]" src={eng} alt="" /></Link>
+            <div className="border-l border-black pl-2">
+              <Link><img className="md:w-[22px] md:h-[22px] w-[16px] h-[16px]" src={eng} alt="" /></Link>
             </div>
           </div>
         </div>
@@ -69,7 +67,9 @@ export default function BT({ onMenuToggle }) {
         </form>
 
       </div>
+    </div>
+     
 
-    </>
+    
   );
 }

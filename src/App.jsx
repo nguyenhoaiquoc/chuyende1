@@ -68,10 +68,7 @@ function App() {
   return (
     <div className="bg-white">
       <header className=" bg-white shadow-sm ">
-        <div className="">
             <BT onMenuToggle={handleMobileMenuToggle} />
-        </div>
-        <div className="pl-7 pr-8 ">
           <NavigationMenu 
             isMobileMenuOpen={isMobileMenuOpen}
             mobileSubmenu={mobileSubmenu}
@@ -81,7 +78,7 @@ function App() {
             handleSubmenuToggle={handleSubmenuToggle}
             handleLinkClick={handleLinkClick}
           />
-        </div>
+      
       </header>
       
       {/* Banner */}
