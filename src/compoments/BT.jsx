@@ -46,7 +46,7 @@ export default function BT({ onMenuToggle }) {
             </div>
 
             <div className="border-l border-black pl-2">
-              <Link><img className="md:w-[22px] md:h-[22px] w-[16px] h-[16px]" src={eng} alt="" /></Link>
+              <Link><img className="md:w-[20px] md:h-[20px] w-[16px] h-[16px]" src={eng} alt="" /></Link>
             </div>
           </div>
         </div>

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link } from "react-router-dom";
 import { ChevronDown, X, ChevronRight } from 'lucide-react';
 
+
+
 export default function NavigationMenu({
   isMobileMenuOpen,
   mobileSubmenu,
@@ -10,7 +12,10 @@ export default function NavigationMenu({
   handleMobileMenuToggle,
   handleSubmenuToggle,
   handleLinkClick
-}) {
+}) 
+
+{
+  
   const [hoveredItem, setHoveredItem] = useState(null);
 
   const renderMenuItem = (item) => (
@@ -37,6 +42,7 @@ export default function NavigationMenu({
       )}
     </div>
   );
+  
 
   return (
     <>
