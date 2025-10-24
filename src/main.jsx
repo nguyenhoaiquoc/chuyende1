@@ -1,30 +1,29 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import "./index.css";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
 import App from "./App";
-import "./index.css"
-import{createBrowserRouter, RouterProvider} from 'react-router-dom'
+import Gird from "./compoments/Product";
 import Detail from "./compoments/Detail";
 
-const routers = createBrowserRouter([
-  
- {
+const router = createBrowserRouter([
+  {
     path: "/",
-    children: [
-      {
-        index: true,    
-        element: <App/>,
-      },
-        {
-        path: "detail",
-        element: <Detail />,
-      },
-     
-    ],
+    element: <App />,   // Trang chủ
   },
-  
+  {
+    path: "/gird",
+    element: <Gird />,  // Trang Gird
+  },
+  {
+    path: "/detail",
+    element: <Detail />, // Trang chi tiết (nếu có)
+  },
 ]);
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-       <RouterProvider router={routers}/>
+    <RouterProvider router={router} />
   </React.StrictMode>
 );

@@ -8,26 +8,25 @@ import Panel from "./compoments/Panel.jsx";
 import User0008 from "./compoments/User0008.jsx";
 import Policies from './compoments/Policies.jsx';
 
-
 const menuItems = [
   { id: 'intro', label: 'Giới Thiệu', link: '#' },
   {
     id: 'men', label: 'Đồ Nam', link: '#',
-    submenu: [ { label: 'Áo', link: '#' }, { label: 'Quần', link: '#' }, { label: 'Giày chạy bộ', link: '#' }, { label: 'Giày địa hình', link: '#' } ]
+    submenu: [{ label: 'Áo', link: '#' }, { label: 'Quần', link: '#' }, { label: 'Giày chạy bộ', link: '#' }, { label: 'Giày địa hình', link: '#' }]
   },
   {
     id: 'women', label: 'Đồ Nữ', link: '#',
-    submenu: [ { label: 'Áo', link: '#' }, { label: 'Quần', link: '#' }, { label: 'Giày chạy bộ', link: '#' }, { label: 'Giày địa hình', link: '#' } ]
+    submenu: [{ label: 'Áo', link: '#' }, { label: 'Quần', link: '#' }, { label: 'Giày chạy bộ', link: '#' }, { label: 'Giày địa hình', link: '#' }]
   },
   {
     id: 'watch-earphone', label: 'Đồng Hồ', link: '#',
-    submenu: [ { label: 'Suunto', link: '#' }, { label: 'Garmin', link: '#' }, { label: 'Coros', link: '#' } ]
+    submenu: [{ label: 'Suunto', link: '#' }, { label: 'Garmin', link: '#' }, { label: 'Coros', link: '#' }]
   },
   { id: 'brands', label: 'Thương Hiệu', link: '#' },
   { id: 'sale', label: 'SALE 10.10', link: '#sale', highlight: true }
 ];
 
-function App() {
+export default function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [mobileSubmenu, setMobileSubmenu] = useState(null);
   const menuRef = useRef(null);
@@ -67,32 +66,25 @@ function App() {
 
   return (
     <div className="bg-white">
-      <header className=" bg-white shadow-sm ">
-            <BT onMenuToggle={handleMobileMenuToggle} />
-          <NavigationMenu 
-            isMobileMenuOpen={isMobileMenuOpen}
-            mobileSubmenu={mobileSubmenu}
-            menuRef={menuRef}
-            menuItems={menuItems}
-            handleMobileMenuToggle={handleMobileMenuToggle}
-            handleSubmenuToggle={handleSubmenuToggle}
-            handleLinkClick={handleLinkClick}
-          />
-      
+      <header className="bg-white shadow-sm">
+        <BT onMenuToggle={handleMobileMenuToggle} />
+        <NavigationMenu
+          isMobileMenuOpen={isMobileMenuOpen}
+          mobileSubmenu={mobileSubmenu}
+          menuRef={menuRef}
+          menuItems={menuItems}
+          handleMobileMenuToggle={handleMobileMenuToggle}
+          handleSubmenuToggle={handleSubmenuToggle}
+          handleLinkClick={handleLinkClick}
+        />
       </header>
-      
-      {/* Banner */}
-      <Banner /> 
 
-      <User0008/>
+      <Banner />
+      <User0008 />
       <ScrollTest />
-      <Policies/>
+      <Policies />
       <Footer />
-
-      {/* Panel cố định dưới cùng */}
       <Panel />
     </div>
   );
 }
-
-export default App;
