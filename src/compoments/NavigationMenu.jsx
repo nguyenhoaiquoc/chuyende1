@@ -1,17 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from "react-router-dom";
 import { ChevronDown, X, ChevronRight } from 'lucide-react';
+import BT from './BT.jsx'; 
 
-export default function NavigationMenu({
-  isMobileMenuOpen,
-  mobileSubmenu,
-  menuRef,
-  menuItems,
-  handleMobileMenuToggle,
-  handleSubmenuToggle,
-  handleLinkClick
-}) {
+const menuItems = [
+  { id: 'intro', label: 'Giới Thiệu', link: '#' },
+  {
+    id: 'men', label: 'Đồ Nam', link: '#',
+    submenu: [ { label: 'Áo', link: '#' }, { label: 'Quần', link: '#' }, { label: 'Giày chạy bộ', link: '#' } , { label: 'Giày địa hình', link: '#' } ]
+  },
+  {
+    id: 'women', label: 'Đồ Nữ', link: '#',
+    submenu: [ { label: 'Áo', link: '#' }, { label: 'Quần', link: '#' }, { label: 'Giày chạy bộ', link: '#' } , { label: 'Giày địa hình', link: '#' }]
+  },
+  {
+    id: 'watch-earphone', label: 'Đồng Hồ', link: '#',
+    submenu: [ { label: 'Suunto', link: '#' }, { label: 'Garmin', link: '#' }, { label: 'Coros', link: '#' } ]
+  },
+  { id: 'sale', label: 'SALE', link: '#sale', highlight: true }
+];
+
+export default function NavigationMenu() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [mobileSubmenu, setMobileSubmenu] = useState(null);
   const [hoveredItem, setHoveredItem] = useState(null);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsMobileMenuOpen(false);
+        setMobileSubmenu(null);
+      }
+    };
+    if (isMobileMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isMobileMenuOpen]);
+
+  const handleMobileMenuToggle = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+    setMobileSubmenu(null);
+  };
+
+  const handleSubmenuToggle = (itemId) => {
+    setMobileSubmenu(mobileSubmenu === itemId ? null : itemId);
+  };
+
+  const handleLinkClick = () => {
+    setIsMobileMenuOpen(false);
+    setMobileSubmenu(null);
+  };
 
   const renderMenuItem = (item) => (
     <div
@@ -20,15 +62,15 @@ export default function NavigationMenu({
       onMouseEnter={() => item.submenu && setHoveredItem(item.id)}
       onMouseLeave={() => setHoveredItem(null)}
     >
-      <Link to={item.link} className={`flex items-center gap-1 text-base font-medium transition-colors cursor-pointer py-2 pr-2.5 `}>
+      <Link to={item.link} className="flex items-center gap-1 text-base font-medium transition-colors cursor-pointer py-2 pr-2.5">
         <span>{item.label}</span>
         {item.submenu && <ChevronDown className="w-4 h-4" />}
       </Link>
       {item.submenu && hoveredItem === item.id && (
-        <div className="absolute left-0 top-full pt-2 z-20 ">
+        <div className="absolute left-0 top-full pt-2 z-20">
           <div className="bg-white shadow-lg rounded-md py-2 min-w-[200px]">
             {item.submenu.map((subitem, index) => (
-              <Link key={index} to={subitem.link} className="block px-4 py-2 text-sm font-bold text-gray-700 hover: whitespace-nowrap">
+              <Link key={index} to={subitem.link} className="block px-4 py-2 text-sm font-bold text-gray-700 hover:whitespace-nowrap">
                 {subitem.label}
               </Link>
             ))}
@@ -39,14 +81,19 @@ export default function NavigationMenu({
   );
 
   return (
-    <>
-      <div className="max-w-7xl mx-auto px-4 lg:pb-3">
-        <nav className="hidden lg:flex items-center justify-start flex-wrap gap-x-8 gap-y-2 py-2  border-gray-200">
+    <header className="bg-white shadow-sm">
+      <BT onMenuToggle={handleMobileMenuToggle} />
+
+      <div className="max-w-7xl mx-auto px-4 lg:pb-3 pl-7 pr-8">
+        <nav className="hidden lg:flex items-center justify-start flex-wrap gap-x-8 gap-y-2 py-2 border-gray-200">
           {menuItems.map(renderMenuItem)}
         </nav>
       </div>
 
+      {/* Mobile Menu Overlay */}
       <div className={`fixed inset-0 bg-black bg-opacity-50 transition-opacity duration-300 z-40 lg:hidden ${isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`} onClick={handleMobileMenuToggle} />
+      
+      {/* Mobile Menu Panel */}
       <div ref={menuRef} className={`fixed top-0 left-0 h-full w-80 max-w-[85vw] bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} lg:hidden overflow-y-auto`}>
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
           <span className="font-bold">MENU</span>
@@ -86,6 +133,6 @@ export default function NavigationMenu({
           </div>
         </div>
       </div>
-    </>
+    </header>
   );
 };
