@@ -4,20 +4,36 @@ import { ChevronDown, X, ChevronRight } from 'lucide-react';
 import BT from './BT.jsx'; 
 
 const menuItems = [
-  { id: 'intro', label: 'Giới Thiệu', link: '#' },
+ { id: 'home', label: 'Trang Chủ', link: '/' },
   {
-    id: 'men', label: 'Đồ Nam', link: '#',
-    submenu: [ { label: 'Áo', link: '#' }, { label: 'Quần', link: '#' }, { label: 'Giày chạy bộ', link: '#' } , { label: 'Giày địa hình', link: '#' } ]
+    id: 'men', label: 'Đồ Nam', 
+    link: '/donam', 
+    submenu: [ 
+        { label: 'Áo', link: '/donam/ao' }, 
+        { label: 'Quần', link: '/donam/quan' }, 
+        { label: 'Giày chạy bộ', link: '/donam/giay-chay-bo' },
+        { label: 'Giày địa hình', link: '/donam/giay-dia-hinh' }
+    ]
   },
   {
-    id: 'women', label: 'Đồ Nữ', link: '#',
-    submenu: [ { label: 'Áo', link: '#' }, { label: 'Quần', link: '#' }, { label: 'Giày chạy bộ', link: '#' } , { label: 'Giày địa hình', link: '#' }]
+    id: 'women', label: 'Đồ Nữ', 
+    link: '/do-nu', 
+    submenu: [ 
+        { label: 'Áo', link: '/donu/ao' }, 
+        { label: 'Quần', link: '/donu/quan' }, 
+        { label: 'Giày chạy bộ', link: '/donu/giay-chay-bo' },
+        { label: 'Giày địa hình', link: '/donu/giay-dia-hinh' }
+    ]
   },
   {
-    id: 'watch-earphone', label: 'Đồng Hồ', link: '#',
-    submenu: [ { label: 'Suunto', link: '#' }, { label: 'Garmin', link: '#' }, { label: 'Coros', link: '#' } ]
+    id: 'watch-earphone', label: 'Đồng Hồ', link: '/dongho',
+    submenu: [ 
+        { label: 'Suunto', link: '/dongho/suunto' }, 
+        { label: 'Garmin', link: '/dongho/garmin' }, 
+        { label: 'Coros', link: '/dongho/coros' } 
+    ]
   },
-  { id: 'sale', label: 'SALE', link: '#sale', highlight: true }
+  { id: 'sale', label: 'SALE', link: '/sale', highlight: true }
 ];
 
 export default function NavigationMenu() {
