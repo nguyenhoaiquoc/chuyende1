@@ -19,42 +19,42 @@ export default function Detail() {
   const [offsetX, setOffsetX] = useState(0)
   const step = 120; // độ dịch mỗi lần bấm
 
-  const canScrollUp = offsetY < 0;
+  const canScrollUp =  offsetY < 0;
   const canScrollDown = Math.abs(offsetY) < (thumbs.length - 3) * step;
 
   const stepMobile = 110;
 
-  const canScrollLeft = offsetX < 0;
-  const canScrollRight = Math.abs(offsetX) < (thumbs.length - 5) * stepMobile;
+const canScrollLeft = offsetX < 0;
+const canScrollRight = Math.abs(offsetX) < (thumbs.length - 5) * stepMobile;
 
-  const handleUp = () => {
-    if (canScrollUp) setOffsetY(prev => Math.min(prev + step, 0));
-  };
+ const handleUp = () => {
+  if (canScrollUp) setOffsetY(prev => Math.min(prev + step, 0));
+};
 
-  const handleDown = () => {
-    if (canScrollDown) setOffsetY(prev => prev - step);
-  };
-  const handleLeft = () => {
-    if (canScrollLeft) setOffsetX(prev => Math.min(prev + stepMobile, 0));
-  };
+const handleDown = () => {
+  if (canScrollDown) setOffsetY(prev => prev - step);
+};
+ const handleLeft = () => {
+  if (canScrollLeft) setOffsetX(prev => Math.min(prev + stepMobile, 0));
+};
 
-  const handleRight = () => {
-    if (canScrollRight) setOffsetX(prev => prev - stepMobile);
-  };
-  const [quantity, setQuantity] = useState(1);
-  const handleQuantityChange = (e) => {
-    const value = e.target.value;
+const handleRight = () => {
+  if (canScrollRight) setOffsetX(prev => prev - stepMobile);
+};
+const [quantity, setQuantity] = useState(1);
+const handleQuantityChange = (e) => {
+  const value = e.target.value;
 
-    // Chỉ cho phép số nguyên dương
-    if (/^\d+$/.test(value)) {
-      setQuantity(Number(value));
-    }
-  };
+  // Chỉ cho phép số nguyên dương
+  if (/^\d+$/.test(value)) {
+    setQuantity(Number(value));
+  }
+};
 
   return (
     <div className="">
-
-
+    
+    
 
       <div className="relative md:grid md:grid-cols-2 md:px-40">
 
@@ -79,23 +79,23 @@ export default function Detail() {
           <div className="flex flex-col items-center">
             <MdOutlineKeyboardArrowUp className={`mb-5 text-2xl hidden md:block cursor-pointer ${!canScrollUp ? "opacity-40 pointer-events-none" : ""}`} onClick={handleUp} />
             <div className="relative max-w-[400px] overflow-hidden md:max-w-none md:h-[350px] flex justify-center">
-              <MdOutlineKeyboardArrowLeft onClick={handleLeft} className={`absolute text-2xl left-0 bg-[#313131] z-10 text-white  block md:hidden ${!canScrollLeft ? "opacity-40 pointer-events-none" : ""} `} />
-              <div className="md:block flex items-center relative  max-h-[350px] justify-center gap-4 transition-transform duration-300"
-                style={{
-                  transform: window.innerWidth >= 768
-                    ? `translateY(${offsetY}px)`
-                    : `translateX(${offsetX}px)`
-                }} >
+                <MdOutlineKeyboardArrowLeft onClick={handleLeft} className={ `absolute text-2xl left-0 bg-[#313131] z-10 text-white  block md:hidden ${!canScrollLeft ? "opacity-40 pointer-events-none" : ""} `} />
+               <div className="md:block flex items-center relative  max-h-[350px] justify-center gap-4 transition-transform duration-300"
+               style={{
+              transform: window.innerWidth >= 768
+                ? `translateY(${offsetY}px)`
+                : `translateX(${offsetX}px)`
+            }} >
+             
+              {thumbs.map((b, index) => (
+                <div key={index} onClick={ () =>  setSelectedImage(b)} className="border w-[90px] h-[91px] mb-5 md:h-[111px] md:my-2 cursor-pointer " ><img src={b} alt="" className="max-w-[100%] h-full object-contain mx-auto" /></div>
+              ))}
 
-                {thumbs.map((b, index) => (
-                  <div key={index} onClick={() => setSelectedImage(b)} className="border w-[90px] h-[91px] mb-5 md:h-[111px] md:my-2 cursor-pointer " ><img src={b} alt="" className="max-w-[100%] h-full object-contain mx-auto" /></div>
-                ))}
-
-
-              </div>
-              <MdOutlineKeyboardArrowRight onClick={handleRight} className={`absolute text-2xl right-0 bg-[#313131] text-white block md:hidden ${!canScrollRight ? "opacity-40 pointer-events-none" : ""}`} />
+       
             </div>
-
+                   <MdOutlineKeyboardArrowRight onClick={handleRight} className={ `absolute text-2xl right-0 bg-[#313131] text-white block md:hidden ${!canScrollRight ? "opacity-40 pointer-events-none" : ""}` } />
+            </div>
+           
 
             <MdOutlineKeyboardArrowDown onClick={handleDown} className={`mt-5 text-2xl hidden md:block cursor-pointer ${!canScrollDown ? "opacity-40 pointer-events-none" : ""}`} />
 
@@ -161,15 +161,18 @@ export default function Detail() {
 
           <div className="">Số lương:</div>
           <div className="md:flex items-center gap-4 border-b pb-10">
-            <div className="mb-5 md:mb-0">
+            <div className="mb-5 md:mb-0"> 
+              
+
               <input
-                type="number"
-                min="1"
-                value={quantity}
-                onChange={handleQuantityChange}
-                className="border h-[50px] rounded-full text-center w-full md:w-auto"
-              />
-            </div>
+    type="number"
+    min="1"
+    value={quantity}
+    onChange={handleQuantityChange}
+    className="border h-[50px] rounded-full text-center w-full md:w-auto"
+  />
+  
+              </div>
             <div className="flex justify-center gap-2">
               <button className="bg-[#673AB7] rounded-full text-white py-2.5 px-12">THÊM VÀO GIỎ HÀNG</button>
               <div className="border p-4 rounded-full cursor-pointer "><CiHeart /></div>
@@ -184,24 +187,24 @@ export default function Detail() {
             <p className="">- Gấp gọn vào túi áo</p>
             <p className="">- Thiết kế khuỷu tay xoắn</p>
           </div>
-          <div className="flex gap-20 border-b p-5">
+              <div className="flex gap-20 border-b p-5">
 
 
-            <p className="">Chia sẻ:</p>
-            <div className="flex gap-4 text-white">
-              <div className="flex bg-[#1877f2]  px-2 rounded-sm items-center gap-1">
-                <AiFillLike />
-                <button className="font-bold  text-xs">Thích 0</button>
+                  <p className="">Chia sẻ:</p>
+                  <div className="flex gap-4 text-white">
+                    <div className="flex bg-[#1877f2]  px-2 rounded-sm items-center gap-1">
+                       <AiFillLike/>
+                        <button className="font-bold  text-xs">Thích 0</button>
+                     
+                    </div>
+                  
+
+                  <button className="bg-[#1877f2] font-bold px-3 text-xs rounded-sm">Chia sẻ</button>
+
+                  </div>
+                  
 
               </div>
-
-
-              <button className="bg-[#1877f2] font-bold px-3 text-xs rounded-sm">Chia sẻ</button>
-
-            </div>
-
-
-          </div>
         </div>
       </div>
 
