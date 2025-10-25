@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import BT from './compoments/BT.jsx';
-import NavigationMenu from './compoments/NavigationMenu.jsx';
-import Banner from './compoments/Banner.jsx';
-import Footer from './compoments/Footer.jsx';
+import BT from './components/BT.js';
+import NavigationMenu from './components/NavigationMenu.js';
+import Banner from './components/Banner.js';
+import Footer from './components/Footer.js';
 import ScrollTest from './ScrollTest.jsx';
-import Panel from "./compoments/Panel.jsx";
-import User0008 from "./compoments/User0008.jsx";
-import Policies from './compoments/Policies.jsx';
+import Panel from "./components/Panel.js";
+import User0008 from "./components/User0008.jsx";
+import Policies from './components/Policies.js';
 
 const menuItems = [
   { id: 'intro', label: 'Giới Thiệu', link: '#' },

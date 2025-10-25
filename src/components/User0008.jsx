@@ -180,7 +180,7 @@ export default function User0008() {
         </div>
 
         <div className="flex justify-center mt-10 w-full">
-          <Link className="bg-[#f47435] py-3 px-6 text-white rounded-full text-xs"  to="/gird">
+          <Link className="bg-[#f47435] py-3 px-6 text-white rounded-full text-xs"  to="/Gird">
           
             XEM THÊM
           </Link>

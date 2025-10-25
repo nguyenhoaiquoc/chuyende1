@@ -4,8 +4,8 @@ import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import App from "./App";
-import Gird from "./compoments/Product";
-import Detail from "./compoments/Detail";
+import Gird from "./components/Product";
+import Detail from "./components/Detail";
 
 const router = createBrowserRouter([
   {
