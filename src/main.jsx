@@ -1,12 +1,24 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import { BrowserRouter } from "react-router-dom";
 import "./index.css"
+import{createBrowserRouter, RouterProvider} from 'react-router-dom'
+import Detail from "./components/Detail";
+import Breadcrumb from "./components/Breadcrumb";
+const routers = createBrowserRouter([
+  {
+    path: "/",
+    children: [
+      { index: true, element: <App /> },
+      { path: ":category", element: <Breadcrumb /> }, 
+      { path: ":category/:subCategory", element: <Breadcrumb /> },
+      { path: "detail", element: <Detail /> },
+    ],
+  },
+]);
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App/>
-    </BrowserRouter>
+       <RouterProvider router={routers}/>
   </React.StrictMode>
 );

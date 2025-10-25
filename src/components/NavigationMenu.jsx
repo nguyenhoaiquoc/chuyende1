@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from "react-router-dom";
 import { ChevronDown, X, ChevronRight } from 'lucide-react';
 
-export default function NavigationMenu({
+  export default function NavigationMenu({
   isMobileMenuOpen,
   mobileSubmenu,
   menuRef,
@@ -10,7 +10,10 @@ export default function NavigationMenu({
   handleMobileMenuToggle,
   handleSubmenuToggle,
   handleLinkClick
-}) {
+}) 
+
+{
+  
   const [hoveredItem, setHoveredItem] = useState(null);
 
   const renderMenuItem = (item) => (
@@ -28,15 +31,17 @@ export default function NavigationMenu({
         <div className="absolute left-0 top-full pt-2 z-20 ">
           <div className="bg-white shadow-lg rounded-md py-2 min-w-[200px]">
             {item.submenu.map((subitem, index) => (
-              <Link key={index} to={subitem.link} className="block px-4 py-2 text-sm font-bold text-gray-700 hover: whitespace-nowrap">
-                {subitem.label}
-              </Link>
+              <Link key={index} to={subitem.link} className="block px-4 py-2 text-sm font-bold text-gray-700 hover:text-purple-600 whitespace-nowrap">
+  {subitem.label}
+</Link>
+
             ))}
           </div>
         </div>
       )}
     </div>
   );
+  
 
   return (
     <>
