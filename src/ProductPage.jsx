@@ -41,8 +41,8 @@ Bạn đang tìm kiếm trang phục và giày chạy bộ cao cấp, đáp ứn
 ✔ Chạy địa hình (trail running) 🏔 → Giày HOKA (phù hợp cho đa số runner) hoặc NNormal/Norda (hiệu suất cao, bám địa hình cực tốt), áo khoác chống gió, quần có túi tiện lợi.
 ✔ Tập luyện hàng ngày & chạy cự ly ngắn 💪 → Áo thun thể thao, quần short linh hoạt, dép recovery để phục hồi.</p>    `, 
    subcategories: [
-      { name: 'Áo', path: '/donam/ao' }, 
-      { name: 'Quần', path: '/donam/quan' },
+      { name: 'Áo Chạy bộ nam', path: '/donam/ao' }, 
+      { name: 'Quần Chạy bộ nam', path: '/donam/quan' },
       { name: 'Giày Chạy Bộ Nam', path: '/donam/giay-chay-bo' }, 
       { name: 'Giày Địa Hình Nam', path: '/donam/giay-dia-hinh' },
     ],
@@ -51,8 +51,8 @@ Bạn đang tìm kiếm trang phục và giày chạy bộ cao cấp, đáp ứn
     name: 'Đồ Nữ',
     path: '/donu', 
     subcategories: [
-      { name: 'Áo', path: '/donu/ao' }, 
-      { name: 'Quần', path: '/donu/quan' },
+      { name: 'Áo Chạy bộ nữ', path: '/donu/ao' }, 
+      { name: 'Quần Chạy bộ nữ', path: '/donu/quan' },
       { name: 'Giày Chạy Bộ Nữ', path: '/donu/giay-chay-bo' }, 
       { name: 'Giày Địa Hình Nữ', path: '/donu/giay-dia-hinh' },
     ],
@@ -194,21 +194,49 @@ export default function ProductPage() {
   // Render giao diện trang danh mục sản phẩm
   return (
     <div className="container mx-auto px-4 py-6 md:py-8"> 
-      <div className="flex justify-between items-center mb-4 md:mb-6">
-        <Breadcrumb /> 
-        <button className="md:hidden p-2 -mr-2 border border-gray-300 rounded hover:bg-gray-100 transition-colors" onClick={() => setSidebarOpen(true)} aria-label="Mở bộ lọc">
-          <Bars3Icon className="w-5 h-5 text-gray-600" /> 
-        </button>
-      </div>
-
       {/* --- Mobile Sidebar Logic --- */}
-      <div className={`fixed inset-0 bg-black bg-opacity-40 z-40 md:hidden transition-opacity duration-300 ${isSidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} onClick={() => setSidebarOpen(false)} aria-hidden={!isSidebarOpen}/>
-      <div ref={sidebarRef} className={`fixed top-0 right-0 h-full w-[300px] max-w-[85vw] bg-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out md:hidden ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full'}`} role="dialog" aria-modal="true" aria-labelledby="filter-heading-mobile">
-        <div className="px-4 py-3 border-b flex justify-between items-center"><h2 id="filter-heading-mobile" className="font-bold text-base uppercase text-gray-800">Bộ lọc</h2><button onClick={() => setSidebarOpen(false)} className="p-1 -mr-1 text-gray-500 hover:text-black transition-colors" aria-label="Đóng bộ lọc"><XMarkIcon className="w-5 h-5" /></button></div>
-        <div className="p-4 overflow-y-auto h-[calc(100%-53px)]"> 
-          <CategorySidebar onLinkClick={() => setSidebarOpen(false)} /> 
+      {!isSidebarOpen && (
+        <button
+          onClick={() => setSidebarOpen(true)}
+          className="fixed top-1/2 right-0 z-50 bg-purple-600 hover:bg-purple-700 text-white p-3 rounded-l-lg shadow-lg transform -translate-y-1/2 transition-all duration-300 md:hidden"
+          aria-label="Mở bộ lọc"
+        >
+          <Bars3Icon className="w-6 h-6" />
+        </button>
+      )}
+
+      <div
+        className={`fixed inset-0 bg-black/40 z-40 md:hidden transition-opacity duration-300 ${
+          isSidebarOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+        onClick={() => setSidebarOpen(false)}
+        aria-hidden={!isSidebarOpen}
+      />
+
+      <div
+        ref={sidebarRef}
+        className={`fixed top-0 right-0 h-full w-[300px] max-w-[85vw] bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out md:hidden ${
+          isSidebarOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="filter-heading-mobile"
+      >
+        {isSidebarOpen && (
+          <button
+            onClick={() => setSidebarOpen(false)}
+            className="absolute top-1/2 -left-10 bg-purple-600 hover:bg-purple-700 text-white p-2 rounded-r-lg shadow-md transform -translate-y-1/2 transition-all duration-300"
+            aria-label="Đóng bộ lọc"
+          >
+            <XMarkIcon className="w-5 h-5" />
+          </button>
+        )}
+
+        <div className="p-4 overflow-y-auto h-full">
+          <CategorySidebar onLinkClick={() => setSidebarOpen(false)} />
         </div>
       </div>
+
       {/* --- End Mobile Sidebar --- */}
 
       {/* Main Layout */}
