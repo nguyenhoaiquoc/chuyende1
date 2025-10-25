@@ -10,15 +10,15 @@ const ProductCard = ({ product }) => {
       <div className="relative aspect-square">
         {/* Ảnh mặc định */}
         <img
-          src={product.img1}
+          src={product.img2}
           alt={product.name}
           className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0"
         />
         {/* Ảnh hover */}
         <img
-          src={product.img2}
+          src={product.img1}
           alt={product.name}
-          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+                      className="object-cover w-full h-full absolute -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-in-out z-10"
         />
       </div>
 

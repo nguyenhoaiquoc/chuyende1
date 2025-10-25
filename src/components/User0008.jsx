@@ -200,7 +200,7 @@ const handleScroll = (direction, ref) => {
       </div>
 
      <div className="flex justify-center mt-10 w-full">
-  <Link to="/gird" className="bg-[#f47435] py-3 px-6 text-white rounded-full text-xs">
+  <Link className="bg-[#f47435] py-3 px-6 text-white rounded-full text-xs">
             XEM THÊM
   </Link>
 </div>
@@ -283,7 +283,7 @@ const handleScroll = (direction, ref) => {
       </div>
 
      <div className="flex justify-center mt-10 w-full">
-  <Link to="/gird" className="bg-[#f47435] py-3 px-6 text-white rounded-full text-xs">
+  <Link className="bg-[#f47435] py-3 px-6 text-white rounded-full text-xs">
             XEM THÊM
   </Link>
      
