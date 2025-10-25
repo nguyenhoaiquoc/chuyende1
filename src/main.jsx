@@ -17,7 +17,7 @@ const routers = createBrowserRouter([
       { path: ":category/:subCategory", element: <Breadcrumb /> },
       {
     path: "/gird",
-    element: <Gird />,  // Trang Gird
+    element: <Gird />, 
   },
       { path: "detail", element: <Detail /> },
     ],
