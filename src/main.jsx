@@ -1,32 +1,16 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import "./index.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-
-import App from "./App";
-import "./index.css"
-import Detail from "./components/Detail";
-import Breadcrumb from "./components/Breadcrumb";
-import Gird from "./components/Gird";
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import './index.css'
+import App from './App.jsx'
+import Footer from "./components/Footer.jsx";
 import Collection from './collection.jsx'
-const routers = createBrowserRouter([
-  {
-    path: "/",
-    children: [
-      { index: true, element: <App /> },
-      { path: ":category", element: <Breadcrumb /> }, 
-      { path: ":category/:subCategory", element: <Breadcrumb /> },
-      {
-    path: "/gird",
-    element: <Gird />, 
-  },
-      { path: "detail", element: <Detail /> },
-    ],
-  },
-]);
-
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <RouterProvider router={routers} />
-  </React.StrictMode>
+import { BrowserRouter } from 'react-router-dom';
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <BrowserRouter> {/* 👈 Bọc toàn bộ ứng dụng */}
+      <App />
+      <Collection />
+      <Footer />
+    </BrowserRouter>
+  </StrictMode>,
 );
