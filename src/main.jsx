@@ -8,6 +8,7 @@ import "./index.css"
 import Detail from "./components/Detail";
 import Breadcrumb from "./components/Breadcrumb";
 import Gird from "./components/Gird";
+import Collection from './collection.jsx'
 const routers = createBrowserRouter([
   {
     path: "/",
