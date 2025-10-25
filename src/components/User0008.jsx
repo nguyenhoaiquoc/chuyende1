@@ -6,9 +6,23 @@ import sanPham2Load from "../assets/sanpham2load.jpg";
 import { Link } from "react-router-dom";
 import { FaSearchPlus, FaRegEye } from "react-icons/fa";
 import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
+import ProductPopup from "./ProductPopup";
 
 export default function User0008() {
- 
+
+  const [showPopup, setShowPopup] = useState(false);
+const [selectedProduct, setSelectedProduct] = useState(null);
+
+const handleOpenPopup = (product) => {
+  setSelectedProduct(product);
+  setShowPopup(true);
+};
+
+const handleClosePopup = () => {
+  setShowPopup(false);
+  setSelectedProduct(null);
+};
+
 
   const products = [
     {
@@ -17,6 +31,7 @@ export default function User0008() {
     imgMain: sanPham2,
     imgHover: sanPham2Load,
     sale: "20%",
+    sizes: ["S", "M", "L", "XL"],
     },
     {
      name: "Áo Khoác Chạy Bộ Name On Running Men's Weather",
@@ -24,6 +39,7 @@ export default function User0008() {
     imgMain: Ao,
     imgHover: mauAnh,
     sale: "20%",
+    sizes: ["S", "M", "L", "XL"],
     },
     {
      name: "Áo Khoác Chạy Bộ Name On Running Men's Weather",
@@ -31,6 +47,7 @@ export default function User0008() {
     imgMain: Ao,
     imgHover: mauAnh,
     sale: "20%",
+    sizes: ["S", "M", "L", "XL"],
     },
     {
      name: "Áo Khoác Chạy Bộ Name On Running Men's Weather",
@@ -38,6 +55,7 @@ export default function User0008() {
     imgMain: Ao,
     imgHover: mauAnh,
     sale: "20%",
+    sizes: ["S", "M", "L", "XL"],
     },
     {
      name: "Áo Khoác Chạy Bộ Name On Running Men's Weather",
@@ -45,6 +63,7 @@ export default function User0008() {
     imgMain: Ao,
     imgHover: mauAnh,
     sale: "20%",
+    sizes: ["S", "M", "L", "XL"],
     },
     {
      name: "Áo Khoác Chạy Bộ Name On Running Men's Weather",
@@ -52,6 +71,7 @@ export default function User0008() {
     imgMain: Ao,
     imgHover: mauAnh,
     sale: "20%",
+    sizes: ["S", "M", "L", "XL"],
     },
     {
      name: "Áo Khoác Chạy Bộ Name On Running Men's Weather",
@@ -59,6 +79,7 @@ export default function User0008() {
     imgMain: Ao,
     imgHover: mauAnh,
     sale: "20%",
+    sizes: ["S", "M", "L", "XL"],
     },
     {
      name: "Áo Khoác Chạy Bộ Name On Running Men's Weather",
@@ -66,6 +87,7 @@ export default function User0008() {
     imgMain: Ao,
     imgHover: mauAnh,
     sale: "20%",
+    sizes: ["S", "M", "L", "XL"],
     },
     {
      name: "Áo Khoác Chạy Bộ Name On Running Men's Weather",
@@ -73,6 +95,7 @@ export default function User0008() {
     imgMain: Ao,
     imgHover: mauAnh,
     sale: "20%",
+    sizes: ["S", "M", "L", "XL"],
     },
     {
      name: "Áo Khoác Chạy Bộ Name On Running Men's Weather",
@@ -80,6 +103,7 @@ export default function User0008() {
     imgMain: Ao,
     imgHover: mauAnh,
     sale: "20%",
+    sizes: ["S", "M", "L", "XL"],
     },
 
   ]
@@ -151,12 +175,10 @@ const handleScroll = (direction, ref) => {
 
                   <div className="absolute top-[10%] left-[10px]">
                     <div className="flex flex-col items-center">
-                       
-                   
-                      <Link className="hover:bg-purple-800 bg-white p-4 rounded-md mb-4 hover:text-white z-10 transition-colors duration-300 hidden md:block">
+                      <Link onClick={() => handleOpenPopup(p)} className="hover:bg-purple-800 bg-white p-4 rounded-md mb-4 hover:text-white z-10 transition-colors duration-300 hidden md:block">
                         <FaSearchPlus className="text-[12px] opacity-0 group-hover:opacity-100 duration-500 ease-in-out transition-opacity" />
                       </Link>
-                      <Link className="bg-white hover:bg-purple-800 p-4 rounded-md hover:text-white z-10 transition-colors duration-300 ">
+                      <Link to="/Detail" className="bg-white hover:bg-purple-800 p-4 rounded-md hover:text-white z-10 transition-colors duration-300 ">
                         <FaRegEye className="text-[12px] opacity-0 group-hover:opacity-100 duration-500 ease-in-out transition-opacity" />
                       </Link>
                     </div>
@@ -236,10 +258,10 @@ const handleScroll = (direction, ref) => {
                       </div>
               
                    
-                      <Link className="hover:bg-purple-800 bg-white p-4 rounded-md mb-4 hover:text-white z-10 transition-colors duration-300 hidden md:block">
-                        <FaSearchPlus className="text-[12px] opacity-0 group-hover:opacity-100 duration-500 ease-in-out transition-opacity" />
+                      <Link onClick={() => handleOpenPopup(p)} className="hover:bg-purple-800 bg-white p-4 rounded-md mb-4 hover:text-white z-10 transition-colors duration-300 hidden md:block">
+                        <FaSearchPlus  className="text-[12px] opacity-0 group-hover:opacity-100 duration-500 ease-in-out transition-opacity" />
                       </Link>
-                      <Link className="bg-white hover:bg-purple-800 p-4 rounded-md hover:text-white z-10 transition-colors duration-300 ">
+                      <Link to="/Detail" className="bg-white hover:bg-purple-800 p-4 rounded-md hover:text-white z-10 transition-colors duration-300 ">
                         <FaRegEye className="text-[12px] opacity-0 group-hover:opacity-100 duration-500 ease-in-out transition-opacity" />
                       </Link>
                     </div>
@@ -264,10 +286,14 @@ const handleScroll = (direction, ref) => {
   <Link className="bg-[#f47435] py-3 px-6 text-white rounded-full text-xs">
             XEM THÊM
   </Link>
+     
 </div>
 
     </div>
-   
+
+{showPopup && selectedProduct && (
+  <ProductPopup product={selectedProduct} onClose={handleClosePopup} />
+)}
     </div>
 
   

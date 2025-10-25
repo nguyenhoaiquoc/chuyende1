@@ -55,7 +55,7 @@ function Banner() {
       {/* Banner chính */}
       <Swiper
         modules={[Autoplay]}
-        autoplay={{ delay: 3000, disableOnInteraction: false }}
+        autoplay={{ delay: 5000, disableOnInteraction: false }}
         loop={true}
         spaceBetween={0}
         slidesPerView={1}
@@ -89,13 +89,12 @@ function Banner() {
         {brandLogos.map((logo, index) => (
           <SwiperSlide key={index}>
             <a href="#" className="flex items-center justify-center h-16 px-2 cursor-pointer">
-  <img
-    src={logo}
-    alt={`Brand ${index + 1}`}
-    className="h-12 max-w-[120px] object-contain"
-  />
-</a>
-
+              <img
+                src={logo}
+                alt={`Brand ${index + 1}`}
+                className="h-12 max-w-[120px] object-contain"
+              />
+            </a>
           </SwiperSlide>
         ))}
       </Swiper>

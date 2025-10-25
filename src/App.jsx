@@ -1,31 +1,51 @@
 import React, { useState, useEffect, useRef } from 'react';
-import BT from './compoments/BT.jsx';
-import NavigationMenu from './compoments/NavigationMenu.jsx';
-import Banner from './compoments/Banner.jsx';
-import Footer from './compoments/Footer.jsx';
+import BT from './components/BT.jsx';
+import NavigationMenu from './components/NavigationMenu.jsx';
+import Banner from './components/Banner.jsx';
+import Footer from './components/Footer.jsx';
 import ScrollTest from './ScrollTest.jsx';
-import Panel from "./compoments/Panel.jsx";
-import User0008 from "./compoments/User0008.jsx";
-import Policies from './compoments/Policies.jsx';
-
+import Panel from "./components/Panel.jsx";
+import User0008 from "./components/User0008.jsx";
+import Policies from './components/Policies.jsx';
 
 const menuItems = [
-  { id: 'intro', label: 'Giới Thiệu', link: '#' },
+  { id: "intro", label: "Giới Thiệu", link: "#" },
   {
-    id: 'men', label: 'Đồ Nam', link: '#',
-    submenu: [ { label: 'Áo', link: '#' }, { label: 'Quần', link: '#' }, { label: 'Giày chạy bộ', link: '#' }, { label: 'Giày địa hình', link: '#' } ]
+    id: "men",
+    label: "Đồ Nam",
+    link: "/do-nam",
+    submenu: [
+      { label: "Áo", link: "/do-nam/ao" },
+      { label: "Quần", link: "/do-nam/quan" },
+      { label: "Giày chạy bộ", link: "/do-nam/giay-chay-bo" },
+      { label: "Giày địa hình", link: "/do-nam/giay-dia-hinh" },
+    ],
   },
   {
-    id: 'women', label: 'Đồ Nữ', link: '#',
-    submenu: [ { label: 'Áo', link: '#' }, { label: 'Quần', link: '#' }, { label: 'Giày chạy bộ', link: '#' }, { label: 'Giày địa hình', link: '#' } ]
+    id: "women",
+    label: "Đồ Nữ",
+    link: "/do-nu", // ✅ thêm đường dẫn đúng
+    submenu: [
+      { label: "Áo", link: "/do-nu/ao" },
+      { label: "Quần", link: "/do-nu/quan" },
+      { label: "Giày chạy bộ", link: "/do-nu/giay-chay-bo" },
+      { label: "Giày địa hình", link: "/do-nu/giay-dia-hinh" },
+    ],
   },
   {
-    id: 'watch-earphone', label: 'Đồng Hồ', link: '#',
-    submenu: [ { label: 'Suunto', link: '#' }, { label: 'Garmin', link: '#' }, { label: 'Coros', link: '#' } ]
+    id: "watch-earphone",
+    label: "Đồng Hồ",
+    link: "/dong-ho",
+    submenu: [
+      { label: "Suunto", link: "/dong-ho/suunto" },
+      { label: "Garmin", link: "/dong-ho/garmin" },
+      { label: "Coros", link: "/dong-ho/coros" },
+    ],
   },
-  { id: 'brands', label: 'Thương Hiệu', link: '#' },
-  { id: 'sale', label: 'SALE 10.10', link: '#sale', highlight: true }
+  { id: "brands", label: "Thương Hiệu", link: "/thuong-hieu" },
+  { id: "sale", label: "SALE 10.10", link: "/sale", highlight: true },
 ];
+
 
 function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -88,7 +108,7 @@ function App() {
       <ScrollTest />
       <Policies/>
       <Footer />
-
+      
       {/* Panel cố định dưới cùng */}
       <Panel />
     </div>
