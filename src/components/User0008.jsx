@@ -286,7 +286,6 @@ const handleScroll = (direction, ref) => {
   <Link className="bg-[#f47435] py-3 px-6 text-white rounded-full text-xs">
             XEM THÊM
   </Link>
-     
 </div>
 
     </div>
