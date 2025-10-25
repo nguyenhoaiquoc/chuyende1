@@ -3,8 +3,8 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.css"
 import{createBrowserRouter, RouterProvider} from 'react-router-dom'
-import Detail from "./compoments/Detail";
-import Breadcrumb from "./compoments/Breadcrumb";
+import Detail from "./components/Detail";
+import Breadcrumb from "./components/Breadcrumb";
 const routers = createBrowserRouter([
   {
     path: "/",

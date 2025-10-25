@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ChevronUpIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/solid'; 
-import CategoryDescription from './compoments/CategoryDescription';
-import Gird from './compoments/Gird';
-import Footer from './compoments/Footer';
-import Panel from './compoments/Panel';
+import CategoryDescription from './components/CategoryDescription';
+import Gird from './components/Gird';
+import Footer from './components/Footer';
+import Panel from './components/Panel';
 import ScrollTest from './ScrollTest';
 
 const categories = [
