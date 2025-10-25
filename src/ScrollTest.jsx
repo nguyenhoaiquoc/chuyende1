@@ -21,19 +21,6 @@ export default function ScrollTest() {
 
   return (
     <div className="min-h-[200vh] p-6 space-y-6">
-      <h1 className="text-3xl font-bold mb-6">Test Scroll To Top</h1>
-      <p>Cuộn xuống để thấy nút xuất hiện ở góc dưới bên phải </p>
-
-      {/* Văn bản dài để tạo scroll */}
-      {Array.from({ length: 40 }).map((_, i) => (
-        <p key={i} className="text-gray-700">
-          {i + 1}. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          Donec volutpat, nunc at ultricies sagittis, libero turpis pretium lorem,
-          vel luctus dui ipsum ut odio. Cras bibendum luctus purus, nec varius
-          est ultricies vitae. (Đoạn văn {i + 1})
-        </p>
-      ))}
-
       {showButton && (
         <button
           onClick={scrollToTop}

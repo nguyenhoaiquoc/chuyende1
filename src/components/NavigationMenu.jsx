@@ -6,7 +6,7 @@ import { ChevronDown, X, ChevronRight } from 'lucide-react';
   isMobileMenuOpen,
   mobileSubmenu,
   menuRef,
-  menuItems,
+  menuItems = [],
   handleMobileMenuToggle,
   handleSubmenuToggle,
   handleLinkClick
@@ -47,7 +47,7 @@ import { ChevronDown, X, ChevronRight } from 'lucide-react';
     <>
       <div className="max-w-7xl mx-auto px-4 lg:pb-3">
         <nav className="hidden lg:flex items-center justify-start flex-wrap gap-x-8 gap-y-2 py-2  border-gray-200">
-          {menuItems.map(renderMenuItem)}
+          {menuItems && menuItems.map(renderMenuItem)}
         </nav>
       </div>
 
@@ -81,7 +81,7 @@ import { ChevronDown, X, ChevronRight } from 'lucide-react';
                   <ChevronRight className="w-5 h-5 transform rotate-180" />
                   <span>{menuItems.find((i) => i.id === mobileSubmenu)?.label}</span>
                 </button>
-                {menuItems.find((i) => i.id === mobileSubmenu)?.submenu.map((subitem, index) => (
+                {menuItems.find((i) => i.id === mobileSubmenu)?.submenu?.map((subitem, index) => (
                   <Link key={index} to={subitem.link} onClick={handleLinkClick} className="block px-5 py-3.5 text-gray-700 border-b border-gray-100">
                     {subitem.label}
                   </Link>

@@ -46,8 +46,7 @@ const menuItems = [
   { id: "sale", label: "SALE 10.10", link: "/sale", highlight: true },
 ];
 
-
-function App() {
+export default function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [mobileSubmenu, setMobileSubmenu] = useState(null);
   const menuRef = useRef(null);
@@ -87,32 +86,25 @@ function App() {
 
   return (
     <div className="bg-white">
-      <header className=" bg-white shadow-sm ">
-            <BT onMenuToggle={handleMobileMenuToggle} />
-          <NavigationMenu 
-            isMobileMenuOpen={isMobileMenuOpen}
-            mobileSubmenu={mobileSubmenu}
-            menuRef={menuRef}
-            menuItems={menuItems}
-            handleMobileMenuToggle={handleMobileMenuToggle}
-            handleSubmenuToggle={handleSubmenuToggle}
-            handleLinkClick={handleLinkClick}
-          />
-      
+      <header className="bg-white shadow-sm">
+        <BT onMenuToggle={handleMobileMenuToggle} />
+        <NavigationMenu
+          isMobileMenuOpen={isMobileMenuOpen}
+          mobileSubmenu={mobileSubmenu}
+          menuRef={menuRef}
+          menuItems={menuItems}
+          handleMobileMenuToggle={handleMobileMenuToggle}
+          handleSubmenuToggle={handleSubmenuToggle}
+          handleLinkClick={handleLinkClick}
+        />
       </header>
-      
-      {/* Banner */}
-      <Banner /> 
 
-      <User0008/>
+      <Banner />
+      <User0008 />
       <ScrollTest />
-      <Policies/>
+      <Policies />
       <Footer />
-      
-      {/* Panel cố định dưới cùng */}
       <Panel />
     </div>
   );
 }
-
-export default App;
