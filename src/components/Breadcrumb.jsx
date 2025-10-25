@@ -15,6 +15,8 @@ export default function Breadcrumb() {
     "dong-ho": "Đồng Hồ",
     "thuong-hieu": "Thương Hiệu",
     "sale": "Khuyến Mãi 10.10",
+    "running-gears":"Running Gears",
+    "triathlon":"Triathlon",
   }[category] || "Danh mục";
 
   const subCategoryLabel = {
@@ -25,6 +27,7 @@ export default function Breadcrumb() {
     suunto: "Suunto",
     garmin: "Garmin",
     coros: "Coros",
+
   }[subCategory] || null;
 
   return (

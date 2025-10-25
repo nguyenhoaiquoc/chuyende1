@@ -7,7 +7,7 @@ import Gird from './components/Gird';
 const categories = [
   {
     name: 'Đồ Nam',
-    path: '/donam', 
+    path: '/do-nam', 
     description: `
       <p>Đồ Chạy Bộ Nam – Sự Lựa Chọn Của Những Runner Đẳng Cấp
 Bạn đang tìm kiếm trang phục và giày chạy bộ cao cấp, đáp ứng được cả yếu tố hiệu suất, sự bền bỉ và tính thời trang? Bộ sưu tập đồ chạy bộ nam tại [Tên Website] mang đến những sản phẩm tốt nhất thế giới, giúp bạn tối ưu trải nghiệm chạy và chinh phục mọi cung đường.
@@ -42,25 +42,25 @@ Bạn đang tìm kiếm trang phục và giày chạy bộ cao cấp, đáp ứn
 ✔ Chạy địa hình (trail running) 🏔 → Giày HOKA (phù hợp cho đa số runner) hoặc NNormal/Norda (hiệu suất cao, bám địa hình cực tốt), áo khoác chống gió, quần có túi tiện lợi.
 ✔ Tập luyện hàng ngày & chạy cự ly ngắn 💪 → Áo thun thể thao, quần short linh hoạt, dép recovery để phục hồi.</p>    `, 
    subcategories: [
-      { name: 'Áo', path: '/donam/ao' }, 
-      { name: 'Quần', path: '/donam/quan' },
-      { name: 'Giày Chạy Bộ Nam', path: '/donam/giay-chay-bo' }, 
-      { name: 'Giày Địa Hình Nam', path: '/donam/giay-dia-hinh' },
+      { name: 'Áo', path: '/do-nam/ao' }, 
+      { name: 'Quần', path: '/do-nam/quan' },
+      { name: 'Giày Chạy Bộ Nam', path: '/do-nam/giay-chay-bo' }, 
+      { name: 'Giày Địa Hình Nam', path: '/do-nam/giay-dia-hinh' },
     ],
   },
   {
     name: 'Đồ Nữ',
-    path: '/donu', 
+    path: '/do-nu', 
     subcategories: [
-      { name: 'Áo', path: '/donu/ao' }, 
-      { name: 'Quần', path: '/donu/quan' },
-      { name: 'Giày Chạy Bộ Nữ', path: '/donu/giay-chay-bo' }, 
-      { name: 'Giày Địa Hình Nữ', path: '/donu/giay-dia-hinh' },
+      { name: 'Áo', path: '/do-nu/ao' }, 
+      { name: 'Quần', path: '/do-nu/quan' },
+      { name: 'Giày Chạy Bộ Nữ', path: '/do-nu/giay-chay-bo' }, 
+      { name: 'Giày Địa Hình Nữ', path: '/do-nu/giay-dia-hinh' },
     ],
   },
   { name: 'Running Gears', path: '/running-gears' }, 
   { name: 'Triathlon', path: '/triathlon' },
-  { name: 'Đồng Hồ', path: '/dongho' },
+  { name: 'Đồng Hồ', path: '/dong-ho' },
 ];
 
 // --- COMPONENT BREADCRUMB ---
@@ -79,22 +79,22 @@ const Breadcrumb = () => {
       }
       return { name: pathSegment.replace(/-/g, ' '), path: fullPath }; 
   };
-  return (
-    <nav className="text-sm text-gray-500 capitalize"> 
-      <Link to="/" className="hover:text-purple-500 transition-colors">Trang chủ</Link>
-      {pathnames.map((value, index) => {
-        const pathData = findPathData(value, index);
-         const isValidLink = categories.some(cat => cat.path === pathData.path || cat.subcategories?.some(sub => sub.path === pathData.path));
-         if (!isValidLink) return null; 
-        return (
-          <span key={pathData.path}>
-            <span className="mx-2 text-gray-400">/</span> 
-            <Link to={pathData.path} className="hover:text-purple-500 transition-colors">{pathData.name}</Link>
-          </span>
-        );
-      })}
-    </nav>
-  );
+  // return (
+    // <nav className="text-sm text-gray-500 capitalize"> 
+    //   <Link to="/" className="hover:text-purple-500 transition-colors">Trang chủ</Link>
+    //   {pathnames.map((value, index) => {
+    //     const pathData = findPathData(value, index);
+    //      const isValidLink = categories.some(cat => cat.path === pathData.path || cat.subcategories?.some(sub => sub.path === pathData.path));
+    //      if (!isValidLink) return null; 
+    //     return (
+    //       <span key={pathData.path}>
+    //         <span className="mx-2 text-gray-400">/</span> 
+    //         <Link to={pathData.path} className="hover:text-purple-500 transition-colors">{pathData.name}</Link>
+    //       </span>
+    //     );
+    //   })}
+    // </nav>
+  // );
 };
 
 // --- COMPONENT SIDEBAR ---

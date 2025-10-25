@@ -19,10 +19,10 @@ const menuItems = [
     id: 'women', label: 'Đồ Nữ', 
     link: '/do-nu', 
     submenu: [ 
-        { label: 'Áo', link: '/donu/ao' }, 
-        { label: 'Quần', link: '/donu/quan' }, 
-        { label: 'Giày chạy bộ', link: '/donu/giay-chay-bo' },
-        { label: 'Giày địa hình', link: '/donu/giay-dia-hinh' }
+        { label: 'Áo', link: '/do-nu/ao' }, 
+        { label: 'Quần', link: '/do-nu/quan' }, 
+        { label: 'Giày chạy bộ', link: '/do-nu/giay-chay-bo' },
+        { label: 'Giày địa hình', link: '/do-nu/giay-dia-hinh' }
     ]
   },
   {
