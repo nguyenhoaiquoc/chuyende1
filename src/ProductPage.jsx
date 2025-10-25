@@ -5,6 +5,7 @@ import CategoryDescription from './components/CategoryDescription';
 import Gird from './components/Gird';
 import Footer from './components/Footer';
 import Panel from './components/Panel';
+import ScrollTest from './ScrollTest';
 
 const categories = [
   {
@@ -253,8 +254,8 @@ export default function ProductPage() {
           
           
           {/* Khu vực hiển thị sản phẩm (hiện tại để trống theo yêu cầu) */}
-           <div className="bg-gray-50 min-h-[60vh] border rounded-md flex items-center justify-center">
-             <Gird/>
+           <div className=" min-h-[60vh] rounded-md flex items-center justify-center">
+              <Gird/>
            </div>
            {/* Nếu muốn hiển thị placeholder sản phẩm, thêm lại grid ở đây */}
             <CategoryDescription description={pageDescription} />
@@ -263,6 +264,7 @@ export default function ProductPage() {
     </div>
       <Footer/>
       <Panel/>
+      <ScrollTest/>
     </div>
   );
 }

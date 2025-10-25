@@ -46,7 +46,7 @@ const categories = [
   };
   const pageTitle = getPageTitle(location.pathname);
   return (
-    <div className="w-full">
+    <div className="w-full border-b">
       {/* ===== Header ===== */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
         {/* Title + Total products (chỉ hiện ở desktop) */}
@@ -54,7 +54,7 @@ const categories = [
           {/* <h1 className="text-xl md:text-3xl font-bold uppercase text-gray-900">
             ĐỒ NAM
           </h1> */}
-          <div className='flex justify-between items-center mb-4 border-b pb-3'>
+          <div className='flex justify-between items-center mb-4 pb-3'>
             <h1 className="text-xl md:text-2xl font-semibold uppercase text-gray-800 tracking-wide">{pageTitle}</h1>
           </div>
           <span className="hidden md:inline text-sm text-gray-600">

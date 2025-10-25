@@ -20,7 +20,7 @@ export default function ScrollTest() {
   };
 
   return (
-    <div className="min-h-[200vh] p-6 space-y-6">
+    <div className="">
       {showButton && (
         <button
           onClick={scrollToTop}

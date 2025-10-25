@@ -62,64 +62,65 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   if (totalPages <= 1) return null;
 
   return (
-    <nav
-      className="flex flex-col sm:flex-row justify-center items-center gap-2 flex-wrap mt-10"
-      aria-label="Pagination"
+<nav
+  className="flex flex-wrap justify-center items-center gap-2 mt-6 px-4"
+  aria-label="Pagination"
+>
+  {/* Nút trái */}
+  {currentPage > 1 && (
+    <button
+      onClick={() => onPageChange(currentPage - 1)}
+      className="px-3 py-1.5 border rounded-md text-sm font-medium hover:bg-gray-100"
     >
-      {/* Ẩn nút trái nếu ở trang đầu */}
-      {currentPage > 1 && (
-        <button
-          onClick={() => onPageChange(currentPage - 1)}
-          className="px-3 py-1.5 border rounded-md text-sm font-medium hover:bg-gray-100"
-        >
-          &lt;
-        </button>
-      )}
+      &lt;
+    </button>
+  )}
 
-      {pageNumbers.map((page) => (
-        <button
-          key={page}
-          onClick={() => onPageChange(page)}
-          disabled={page === currentPage}
-          className={`px-4 py-1.5 border rounded-md text-sm font-medium transition-all duration-150 ${
-            page === currentPage
-              ? "bg-blue-600 text-white border-blue-600 cursor-not-allowed"
-              : "hover:bg-gray-100"
-          }`}
-        >
-          {page}
-        </button>
-      ))}
+  {/* Các số trang */}
+  {pageNumbers.map((page) => (
+    <button
+      key={page}
+      onClick={() => onPageChange(page)}
+      disabled={page === currentPage}
+      className={`px-4 py-1.5 border rounded-md text-sm font-medium transition-all duration-150 ${
+        page === currentPage
+          ? "bg-blue-600 text-white border-blue-600 cursor-not-allowed"
+          : "hover:bg-gray-100"
+      }`}
+    >
+      {page}
+    </button>
+  ))}
 
-      {/* Ẩn nút phải nếu ở trang cuối */}
-      {currentPage < totalPages && (
-        <button
-          onClick={() => onPageChange(currentPage + 1)}
-          className="px-3 py-1.5 border rounded-md text-sm font-medium hover:bg-gray-100"
-        >
-          &gt;
-        </button>
-      )}
+  {/* Nút phải */}
+  {currentPage < totalPages && (
+    <button
+      onClick={() => onPageChange(currentPage + 1)}
+      className="px-3 py-1.5 border rounded-md text-sm font-medium hover:bg-gray-100"
+    >
+      &gt;
+    </button>
+  )}
 
-      <div className="flex gap-2 ml-0 sm:ml-4">
-        <input
-          type="number"
-          value={jumpPageInput}
-          onChange={(e) => setJumpPageInput(e.target.value)}
-          onKeyDown={handleJumpOnEnter}
-          className="w-16 border border-gray-300 rounded-md px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder={`1-${totalPages}`}
-          min="1"
-          max={totalPages}
-        />
-        <button
-          onClick={handleJumpToPage}
-          className="px-4 py-1.5 border rounded-md text-sm font-medium bg-gray-100 hover:bg-gray-200"
-        >
-          Đi
-        </button>
-      </div>
-    </nav>
+  {/* Ô nhập và nút "Đi" */}
+  <input
+    type="number"
+    value={jumpPageInput}
+    onChange={(e) => setJumpPageInput(e.target.value)}
+    onKeyDown={handleJumpOnEnter}
+    className="w-16 border border-gray-300 rounded-md px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-center"
+    placeholder={`1-${totalPages}`}
+    min="1"
+    max={totalPages}
+  />
+  <button
+    onClick={handleJumpToPage}
+    className="px-4 py-1.5 border rounded-md text-sm font-medium bg-gray-100 hover:bg-gray-200"
+  >
+    Đi
+  </button>
+</nav>
+
   );
 };
 
@@ -149,7 +150,7 @@ export default function Grid() {
   };
 
   return (
-    <div className="container mx-auto px-5 py-5">
+    <div className="container mx-auto py-5">
       
       {/* ✅ Header có tổng số sản phẩm */}
       <GridHeader totalProducts={products.length} />
