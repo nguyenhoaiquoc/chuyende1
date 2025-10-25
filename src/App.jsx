@@ -37,7 +37,6 @@ const HomePageContent = () => (
     <User0008 />
     <ScrollTest />
     <Policies />
-    <Footer/>
   </>
 );
 
