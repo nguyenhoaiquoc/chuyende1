@@ -41,6 +41,15 @@ const handleDown = () => {
 const handleRight = () => {
   if (canScrollRight) setOffsetX(prev => prev - stepMobile);
 };
+const [quantity, setQuantity] = useState(1);
+const handleQuantityChange = (e) => {
+  const value = e.target.value;
+
+  // Chỉ cho phép số nguyên dương
+  if (/^\d+$/.test(value)) {
+    setQuantity(Number(value));
+  }
+};
 
   return (
     <div className="">
@@ -152,7 +161,18 @@ const handleRight = () => {
 
           <div className="">Số lương:</div>
           <div className="md:flex items-center gap-4 border-b pb-10">
-            <div className="mb-5 md:mb-0"> <input type="number" className="border h-[50px] rounded-full text-center w-full md:w-auto" /></div>
+            <div className="mb-5 md:mb-0"> 
+              
+
+              <input
+    type="number"
+    min="1"
+    value={quantity}
+    onChange={handleQuantityChange}
+    className="border h-[50px] rounded-full text-center w-full md:w-auto"
+  />
+  
+              </div>
             <div className="flex justify-center gap-2">
               <button className="bg-[#673AB7] rounded-full text-white py-2.5 px-12">THÊM VÀO GIỎ HÀNG</button>
               <div className="border p-4 rounded-full cursor-pointer "><CiHeart /></div>
