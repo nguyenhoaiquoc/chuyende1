@@ -7,12 +7,12 @@ const menuItems = [
  { id: 'home', label: 'Trang Chủ', link: '/' },
   {
     id: 'men', label: 'Đồ Nam', 
-    link: '/donam', 
+    link: '/do-nam', 
     submenu: [ 
-        { label: 'Áo', link: '/donam/ao' }, 
-        { label: 'Quần', link: '/donam/quan' }, 
-        { label: 'Giày chạy bộ', link: '/donam/giay-chay-bo' },
-        { label: 'Giày địa hình', link: '/donam/giay-dia-hinh' }
+        { label: 'Áo', link: '/do-nam/ao' }, 
+        { label: 'Quần', link: '/do-nam/quan' }, 
+        { label: 'Giày chạy bộ', link: '/do-nam/giay-chay-bo' },
+        { label: 'Giày địa hình', link: '/do-nam/giay-dia-hinh' }
     ]
   },
   {

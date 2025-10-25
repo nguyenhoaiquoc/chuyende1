@@ -9,7 +9,7 @@ export default function GridHeader({ totalProducts }) {
   };
 
   return (
-    <div className="w-full px-4 py-6">
+    <div className="w-full">
       {/* ===== Header ===== */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
         {/* Title + Total products (chỉ hiện ở desktop) */}

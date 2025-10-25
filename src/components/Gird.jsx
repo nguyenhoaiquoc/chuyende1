@@ -149,7 +149,7 @@ export default function Grid() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-5 py-5">
       
       {/* ✅ Header có tổng số sản phẩm */}
       <GridHeader totalProducts={products.length} />

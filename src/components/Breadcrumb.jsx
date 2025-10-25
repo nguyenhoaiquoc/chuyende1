@@ -1,6 +1,10 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
 import BT from "./BT";
+import NavigationMenu from "./NavigationMenu";
+import CategoryDescription from "./CategoryDescription";
+import Grid from "./Gird";
+import ProductPage from "../ProductPage";
 
 export default function Breadcrumb() {
   const { category, subCategory } = useParams();
@@ -66,6 +70,7 @@ export default function Breadcrumb() {
           )}
         </nav>
       </header>
+      <ProductPage/>
     </div>
   );
 }

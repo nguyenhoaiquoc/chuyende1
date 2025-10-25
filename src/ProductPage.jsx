@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ChevronUpIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/solid'; 
-import CategoryDescription from './compoments/CategoryDescription';
+import CategoryDescription from './components/CategoryDescription';
+import Gird from './components/Gird';
 
 const categories = [
   {
@@ -193,7 +194,7 @@ export default function ProductPage() {
   const pageDescription = currentCategory.description;
   // Render giao diện trang danh mục sản phẩm
   return (
-    <div className="container mx-auto px-4 py-6 md:py-8"> 
+    <div className="container mx-auto px-4 py-6 md:py-6"> 
       <div className="flex justify-between items-center mb-4 md:mb-6">
         <Breadcrumb /> 
         <button className="md:hidden p-2 -mr-2 border border-gray-300 rounded hover:bg-gray-100 transition-colors" onClick={() => setSidebarOpen(true)} aria-label="Mở bộ lọc">
@@ -217,16 +218,13 @@ export default function ProductPage() {
           <CategorySidebar /> 
         </div>
         <main className="flex-1">
-          <div className='flex justify-between items-center mb-4 border-b pb-3'>
-            <h1 className="text-xl md:text-2xl font-semibold uppercase text-gray-800 tracking-wide">{pageTitle}</h1>
-          </div>
+          
           
           {/* Khu vực hiển thị sản phẩm (hiện tại để trống theo yêu cầu) */}
-           <div className="bg-gray-50 p-8 min-h-[60vh] border rounded-md flex items-center justify-center">
-             <p className="text-gray-100"></p>
+           <div className="bg-gray-50 min-h-[60vh] border rounded-md flex items-center justify-center">
+             <Gird/>
            </div>
            {/* Nếu muốn hiển thị placeholder sản phẩm, thêm lại grid ở đây */}
-           {/* <div className="grid grid-cols-2 ..."> ... </div> */}
             <CategoryDescription description={pageDescription} />
 
         </main>
