@@ -6,6 +6,10 @@ import { MdOutlineKeyboardArrowUp, MdOutlineKeyboardArrowDown, MdOutlineKeyboard
 import { AiFillLike } from "react-icons/ai";
 import Panel from "./Panel";
 import ScrollTest from "../ScrollTest";
+import BT from "./BT";
+import NavigationMenu from "./NavigationMenu";
+import Breadcrumb from "./Breadcrumb";
+import Footer from "./Footer";
 
 export default function Detail() {
   const [selectedImage, setSelectedImage] = useState(mauAnh);
@@ -53,9 +57,8 @@ const handleQuantityChange = (e) => {
   return (
     <div className="">
     
-    
-
-      <div className="relative md:grid md:grid-cols-2 md:px-40">
+    <NavigationMenu/>
+      <div className="relative md:grid md:grid-cols-2 md:px-40 my-10">
 
         {/* Zoomed view */}
         {zoom && (
@@ -206,7 +209,7 @@ const handleQuantityChange = (e) => {
               </div>
         </div>
       </div>
-
+            <Footer/>
             <ScrollTest/>
       <Panel/>
     </div>

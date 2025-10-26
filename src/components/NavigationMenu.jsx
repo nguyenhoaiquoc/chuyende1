@@ -95,7 +95,6 @@ export default function NavigationMenu() {
       )}
     </div>
   );
-  
 
   return (
     <header className="bg-white shadow-sm">

@@ -128,6 +128,7 @@ const handleScroll = (direction, ref) => {
 };
 
   return (
+    
     <div className="flex flex-col">
         <div className="">
       <div className="w-full text-center mt-10 my-10 font-medium text-4xl text-gray-700">
