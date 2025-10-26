@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import BT from "./BT";
-import NavigationMenu from "./NavigationMenu";
 import mauAnh from "../assets/mauanh.png";
 import Ao from "../assets/Aoremove.png";
 import { CiHeart } from "react-icons/ci";
 import { MdOutlineKeyboardArrowUp, MdOutlineKeyboardArrowDown, MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { AiFillLike } from "react-icons/ai";
+import Panel from "./Panel";
+import ScrollTest from "../ScrollTest";
 
 
 export default function Detail() {
@@ -208,7 +208,8 @@ const handleQuantityChange = (e) => {
         </div>
       </div>
 
-
+            <ScrollTest/>
+      <Panel/>
     </div>
   )
 }
