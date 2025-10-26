@@ -24,7 +24,7 @@ export default function BT({ onMenuToggle }) {
           </div>
 
           <div className="">
-            <a href="#"> <img className="w-full h-[26px] sm:w-[180px] sm:h-[34px]" src={logo} alt="" /> </a>
+            <a href="/"> <img className="w-full h-[26px] sm:w-[180px] sm:h-[34px]" src={logo} alt="" /> </a>
           </div>
 
           <div className="flex items-center gap-1 ">
