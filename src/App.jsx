@@ -8,7 +8,7 @@ import Policies from './components/Policies.jsx';
 import ProductPage from './ProductPage.jsx';
 import { Routes, Route, Outlet } from 'react-router-dom';
 import BT from './components/BT.jsx';
-import Breadcrumb from './components/Breadcrumb.jsx';
+import Collection from './collection.jsx';
 
 const ProductLayout = () => (
   <div className="bg-white flex flex-col min-h-screen">
@@ -36,6 +36,7 @@ const HomePageContent = () => (
      <NavigationMenu/>
     <Banner />
     <User0008 />
+    <Collection/>
     <ScrollTest />
     <Policies />
     <Footer/>

@@ -67,7 +67,6 @@ import xemthem3 from './assets/xemthem3.jpeg';
 import xemthem4 from './assets/xemthem4.jpeg';
 import xemthem5 from './assets/xemthem5.jpeg';
 import xemthem6 from './assets/xemthem6.jpg';
-
 // Dữ liệu
 const collectionsData = [
   {
@@ -84,7 +83,7 @@ const collectionsData = [
   },
 ];
 
-function CollectionsPage() {
+function Collection() {
   return (
     <main className="collections-page">
       <h1 className="page-title">Các Bộ Sưu Tập</h1>
@@ -101,7 +100,7 @@ function CollectionsPage() {
   );
 }
 
-export default CollectionsPage;
+export default Collection;
 
 function CollectionSection({ title, image, products }) {
   const handleClickDetail = (id) => {
