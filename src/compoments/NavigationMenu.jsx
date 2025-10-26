@@ -4,7 +4,7 @@ import { ChevronDown, X, ChevronRight } from 'lucide-react';
 import BT from './BT.jsx'; 
 
 const menuItems = [
- { id: 'home', label: 'Trang Chủ', link: '/' },
+ { id: 'home', label: 'Giới thiệu', link: '/' },
   {
     id: 'men', label: 'Đồ Nam', 
     link: '/donam', 
