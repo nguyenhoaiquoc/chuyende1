@@ -6,9 +6,7 @@ import { MdOutlineKeyboardArrowUp, MdOutlineKeyboardArrowDown, MdOutlineKeyboard
 import { AiFillLike } from "react-icons/ai";
 import Panel from "./Panel";
 import ScrollTest from "../ScrollTest";
-import BT from "./BT";
 import NavigationMenu from "./NavigationMenu";
-import Breadcrumb from "./Breadcrumb";
 import Footer from "./Footer";
 
 export default function Detail() {
@@ -54,6 +52,14 @@ const handleQuantityChange = (e) => {
   }
 };
 
+const [selectedSize, setSelectedSize] = useState(null);
+
+const sizes = [
+  {label: "XL", available: true},
+  {label: "L", available: true},
+  {label: "S", available: false},
+  {label: "M", available: false},
+]
   return (
     <div className="">
     
@@ -150,16 +156,23 @@ const handleQuantityChange = (e) => {
 
           <div className="">chọn Size:</div>
           <div className="flex items-center gap-2 min-w-11 text-center leading-[2] text-[#767676]">
-            <div className="border border-white [box-shadow:0_0_0_1px_#B8B8B8] hover:[box-shadow:0_0_2px_2px_#FF7A00] transition-[box-shadow] duration-300 ease-out h-[30px] min-w-10 cursor-pointer">XL</div>
-            <div className="border border-white bg-gray-300 shadow-sm shadow-slate-500 h-[30px] min-w-10 relative 
-          before:content[''] before:w-[1px] before:h-[40px] before:bg-gray-600 before:absolute  before:left-1/2  before:-top-[6px] before:rotate-[55deg]
-          after:content[''] after:w-[1px] after:h-[40px] after:bg-gray-600 after:absolute  after:left-1/2  after:-top-[6px] after:-rotate-[55deg]
-          ">S</div>
-            <div className="border border-white bg-gray-300 shadow-sm shadow-slate-500 h-[30px] min-w-10 relative 
-          before:content[''] before:w-[1px] before:h-[40px] before:bg-gray-600 before:absolute  before:left-1/2  before:-top-[6px] before:rotate-[55deg]
-          after:content[''] after:w-[1px] after:h-[40px] after:bg-gray-600 after:absolute  after:left-1/2  after:-top-[6px] after:-rotate-[55deg]
-          ">M</div>
-          </div>
+  {sizes.map(({ label, available }) => (
+    <div
+      key={label}
+      onClick={() => available && setSelectedSize(label)}
+      className={`border h-[30px] min-w-10 cursor-pointer relative transition-[box-shadow] duration-300 ease-out 
+        ${
+          available
+            ? selectedSize === label
+              ? "[box-shadow:0_0_2px_2px_#FF7A00] border-white"
+              : "border-white [box-shadow:0_0_0_1px_#B8B8B8] hover:[box-shadow:0_0_2px_2px_#FF7A00]"
+            : "border border-white bg-gray-300 shadow-sm shadow-slate-500 before:content[''] before:w-[1px] before:h-[40px] before:bg-gray-600 before:absolute before:left-1/2 before:-top-[6px] before:rotate-[55deg] after:content[''] after:w-[1px] after:h-[40px] after:bg-gray-600 after:absolute after:left-1/2 after:-top-[6px] after:-rotate-[55deg]"
+        }`}
+    >
+      {label}
+    </div>
+  ))}
+</div>
 
           <div className="">Số lương:</div>
           <div className="md:flex items-center gap-4 border-b pb-10">

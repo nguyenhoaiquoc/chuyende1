@@ -133,6 +133,9 @@
   margin-top: 6px;
   cursor: pointer;
   transition: color 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .add-to-cart:hover {
