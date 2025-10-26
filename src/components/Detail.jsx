@@ -7,7 +7,6 @@ import { AiFillLike } from "react-icons/ai";
 import Panel from "./Panel";
 import ScrollTest from "../ScrollTest";
 
-
 export default function Detail() {
   const [selectedImage, setSelectedImage] = useState(mauAnh);
   const ZOOM_SCALE = 3;
