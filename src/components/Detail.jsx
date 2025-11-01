@@ -12,6 +12,14 @@ import sanPham2Load from "../assets/sanpham2load.jpg";
 import { CiHeart } from "react-icons/ci";
 import { MdOutlineKeyboardArrowUp, MdOutlineKeyboardArrowDown, MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { AiFillLike } from "react-icons/ai";
+import { useLocation } from "react-router-dom";
+import NavigationMenu from "./NavigationMenu";
+import Footer from "./Footer";
+import ScrollTest from "../ScrollTest";
+import Panel from "./Panel";
+import ProductDescription from "./ProductDescription";
+import ProductTabs from "./ProductTabs";
+import ProductComposition from "./ProductComposition";
 
 // --- Import components (Giữ nguyên) ---
 import Panel from "./Panel";
@@ -270,6 +278,21 @@ export default function Detail() {
   const ZOOM_SCALE = 3;
   const [zoom, setZoom] = useState(false);
   const [zoomPos, setZoomPos] = useState({ x: 0, y: 0 });
+  const ZOOM_SCALE = 3;
+  const thumbs = [product.imgMain, product.imgHover, Ao, mauAnh, Ao, mauAnh]; // ảnh phụ demo
+  const scrollRef = useRef(null);
+
+  const handleUp = () => {
+    scrollRef.current?.scrollBy({ top: -120, behavior: "smooth" });
+  };
+  const handleDown = () => {
+    scrollRef.current?.scrollBy({ top: 120, behavior: "smooth" });
+  };
+  const handleLeft = () => {
+    scrollRef.current?.scrollBy({ left: -100, behavior: "smooth" });
+  };
+  const handleRight = () => {
+    scrollRef.current?.scrollBy({ left: 100, behavior: "smooth" });
 
   const [offsetY, setOffsetY] = useState(0);
   const [offsetX, setOffsetX] = useState(0)
@@ -305,6 +328,27 @@ export default function Detail() {
 
   const [selectedSize, setSelectedSize] = useState(null);
 
+  // Dữ liệu size từ product (nếu có)
+  const sizes = product.sizes?.map((s) => ({ label: s, available: true })) || [
+    { label: "S", available: false },
+    { label: "M", available: false },
+    { label: "L", available: true },
+    { label: "XL", available: true },
+  ];
+
+  const productDescriptionHTML = `
+    <h3 style="font-size: 1.25rem; font-weight: 600;">Zoot Elite Tri Aero Fx Racesuit</h3>
+    <p>Sự kết hợp hoàn hảo giữa tốc độ, độ thoải mái và phong cách, bộ trisuit Zoot Elite Tri Aero được thiết kế cho những vận động viên ba môn phối hợp tìm kiếm hiệu suất đỉnh cao.</p>
+    <img src="https://pos.nvncdn.com/be3294-43017/ps/content/20251021_N7zmH6hG.webp" alt="Product detail" style="width:100%; margin: 1rem 0;" />
+    <h4 style="font-weight: 600;">Tính năng nổi bật</h4>
+    <ul>
+      <li>Vải dệt Exo-Dry™ High Thread Count: hỗ trợ cơ bắp và tăng lưu thông máu.</li>
+      <li>Highway Ribbed Fabric: cấu trúc gân khí động học giảm lực cản gió.</li>
+      <li>Aeromax™ Mesh Back Panel: phần lưng bằng lưới siêu thoáng, thoát nhiệt.</li>
+      <li>Đệm PRO Carbon Tri Chamois: thiết kế riêng cho tư thế aero, êm ái và khô thoáng.</li>
+    </ul>
+  `;
+  const productType = "ao";
   // === 6. XỬ LÝ TRƯỜNG HỢP KHÔNG TÌM THẤY SẢN PHẨM ===
   if (!currentProduct) {
     return (
@@ -321,11 +365,9 @@ export default function Detail() {
   // === 7. RENDER JSX VỚI DỮ LIỆU ĐỘNG ===
   return (
     <div className="">
-    
-      <NavigationMenu/>
-      <div className="relative md:grid md:grid-cols-2 md:px-40 my-10">
-
-        {/* Zoomed view (Giữ nguyên) */}
+      <NavigationMenu />
+      <div className="relative md:grid md:grid-cols-2 md:px-40">
+        {/* Zoom Preview */}
         {zoom && (
           <div className="w-[500px] h-[500px] overflow-hidden border-4 border-black absolute right-[270px] top-0 bg-gray-200 z-20 ">
             <img
@@ -485,6 +527,20 @@ export default function Detail() {
           </div>
         </div>
       </div>
+      <div className="md:px-40 px-4 mt-8">
+        <ProductTabs
+          descriptionContent={
+            <ProductDescription
+              descriptionHtml={productDescriptionHTML}
+              productType={productType}
+            />
+          }
+          compositionContent={<ProductComposition />}
+        />
+      </div>
+      <Footer />
+      <ScrollTest />
+      <Panel />
       
       {/* === 8. TÍCH HỢP RELATED PRODUCTS === */}
       <RelatedProducts
