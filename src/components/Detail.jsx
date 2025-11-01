@@ -10,6 +10,13 @@ import {
 } from "react-icons/md";
 import { AiFillLike } from "react-icons/ai";
 import { useLocation } from "react-router-dom";
+import NavigationMenu from "./NavigationMenu";
+import Footer from "./Footer";
+import ScrollTest from "../ScrollTest";
+import Panel from "./Panel";
+import ProductDescription from "./ProductDescription";
+import ProductTabs from "./ProductTabs";
+import ProductComposition from "./ProductComposition";
 
 export default function Detail() {
   const location = useLocation();
@@ -30,24 +37,20 @@ export default function Detail() {
   const [zoomPos, setZoomPos] = useState({ x: 0, y: 0 });
   const ZOOM_SCALE = 3;
   const thumbs = [product.imgMain, product.imgHover, Ao, mauAnh, Ao, mauAnh]; // ảnh phụ demo
-const scrollRef = useRef(null);
+  const scrollRef = useRef(null);
 
-
-
- 
- const handleUp = () => {
-  scrollRef.current?.scrollBy({ top: -120, behavior: "smooth" });
-};
-const handleDown = () => {
-  scrollRef.current?.scrollBy({ top: 120, behavior: "smooth" });
-};
-const handleLeft = () => {
-  scrollRef.current?.scrollBy({ left: -100, behavior: "smooth" });
-};
-const handleRight = () => {
-  scrollRef.current?.scrollBy({ left: 100, behavior: "smooth" });
-};
-
+  const handleUp = () => {
+    scrollRef.current?.scrollBy({ top: -120, behavior: "smooth" });
+  };
+  const handleDown = () => {
+    scrollRef.current?.scrollBy({ top: 120, behavior: "smooth" });
+  };
+  const handleLeft = () => {
+    scrollRef.current?.scrollBy({ left: -100, behavior: "smooth" });
+  };
+  const handleRight = () => {
+    scrollRef.current?.scrollBy({ left: 100, behavior: "smooth" });
+  };
 
   const [quantity, setQuantity] = useState(1);
   const handleQuantityChange = (e) => {
@@ -58,17 +61,31 @@ const handleRight = () => {
   const [selectedSize, setSelectedSize] = useState(null);
 
   // Dữ liệu size từ product (nếu có)
-  const sizes =
-    product.sizes?.map((s) => ({ label: s, available: true })) || [
-      { label: "S", available: false },
-      { label: "M", available: false },
-      { label: "L", available: true },
-      { label: "XL", available: true },
-    ];
+  const sizes = product.sizes?.map((s) => ({ label: s, available: true })) || [
+    { label: "S", available: false },
+    { label: "M", available: false },
+    { label: "L", available: true },
+    { label: "XL", available: true },
+  ];
+
+  const productDescriptionHTML = `
+    <h3 style="font-size: 1.25rem; font-weight: 600;">Zoot Elite Tri Aero Fx Racesuit</h3>
+    <p>Sự kết hợp hoàn hảo giữa tốc độ, độ thoải mái và phong cách, bộ trisuit Zoot Elite Tri Aero được thiết kế cho những vận động viên ba môn phối hợp tìm kiếm hiệu suất đỉnh cao.</p>
+    <img src="https://pos.nvncdn.com/be3294-43017/ps/content/20251021_N7zmH6hG.webp" alt="Product detail" style="width:100%; margin: 1rem 0;" />
+    <h4 style="font-weight: 600;">Tính năng nổi bật</h4>
+    <ul>
+      <li>Vải dệt Exo-Dry™ High Thread Count: hỗ trợ cơ bắp và tăng lưu thông máu.</li>
+      <li>Highway Ribbed Fabric: cấu trúc gân khí động học giảm lực cản gió.</li>
+      <li>Aeromax™ Mesh Back Panel: phần lưng bằng lưới siêu thoáng, thoát nhiệt.</li>
+      <li>Đệm PRO Carbon Tri Chamois: thiết kế riêng cho tư thế aero, êm ái và khô thoáng.</li>
+    </ul>
+  `;
+  const productType = "ao";
 
   // === Render ===
   return (
     <div className="">
+      <NavigationMenu />
       <div className="relative md:grid md:grid-cols-2 md:px-40">
         {/* Zoom Preview */}
         {zoom && (
@@ -95,35 +112,34 @@ const handleRight = () => {
               className={`mb-5 text-2xl hidden md:block cursor-pointer`}
               onClick={handleUp}
             />
-          <div className="relative overflow-hidden flex justify-center w-full">
-  <MdOutlineKeyboardArrowLeft
-    onClick={handleLeft}
-    className={`absolute text-2xl left-0 bg-[#313131] z-10 text-white block md:hidden`}
-  />
-  <div
-    ref={scrollRef}
-    className="md:flex md:flex-col flex flex-row overflow-hidden scroll-smooth gap-2 max-h-[330px] md:max-h-[330px] w-full"
-  >
-    {thumbs.map((b, index) => (
-      <div
-        key={index}
-        onClick={() => setSelectedImage(b)}
-        className="border mb-5 md:my-2 cursor-pointer h-[100px] w-[25%] sm:w-[90px]  overflow-hidden shrink-0"
-      >
-        <img
-          src={b}
-          alt=""
-          className="max-w-[80%] h-full object-contain mx-auto"
-        />
-      </div>
-    ))}
-  </div>
-  <MdOutlineKeyboardArrowRight
-    onClick={handleRight}
-    className={`absolute text-2xl right-0 bg-[#313131] text-white block md:hidden`}
-  />
-</div>
-
+            <div className="relative overflow-hidden flex justify-center w-full">
+              <MdOutlineKeyboardArrowLeft
+                onClick={handleLeft}
+                className={`absolute text-2xl left-0 bg-[#313131] z-10 text-white block md:hidden`}
+              />
+              <div
+                ref={scrollRef}
+                className="md:flex md:flex-col flex flex-row overflow-hidden scroll-smooth gap-2 max-h-[330px] md:max-h-[330px] w-full"
+              >
+                {thumbs.map((b, index) => (
+                  <div
+                    key={index}
+                    onClick={() => setSelectedImage(b)}
+                    className="border mb-5 md:my-2 cursor-pointer h-[100px] w-[25%] sm:w-[90px]  overflow-hidden shrink-0"
+                  >
+                    <img
+                      src={b}
+                      alt=""
+                      className="max-w-[80%] h-full object-contain mx-auto"
+                    />
+                  </div>
+                ))}
+              </div>
+              <MdOutlineKeyboardArrowRight
+                onClick={handleRight}
+                className={`absolute text-2xl right-0 bg-[#313131] text-white block md:hidden`}
+              />
+            </div>
 
             <MdOutlineKeyboardArrowDown
               onClick={handleDown}
@@ -263,9 +279,20 @@ const handleRight = () => {
           </div>
         </div>
       </div>
-            <Footer/>
-            <ScrollTest/>
-      <Panel/>
+      <div className="md:px-40 px-4 mt-8">
+        <ProductTabs
+          descriptionContent={
+            <ProductDescription
+              descriptionHtml={productDescriptionHTML}
+              productType={productType}
+            />
+          }
+          compositionContent={<ProductComposition />}
+        />
+      </div>
+      <Footer />
+      <ScrollTest />
+      <Panel />
     </div>
   );
 }
