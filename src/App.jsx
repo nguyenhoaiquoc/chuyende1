@@ -8,7 +8,8 @@ import Policies from './components/Policies.jsx';
 import ProductPage from './ProductPage.jsx';
 import { Routes, Route, Outlet } from 'react-router-dom';
 import BT from './components/BT.jsx';
-
+import Detail from "./components/Detail.jsx";
+import ProductPopup from './components/ProductPopup.jsx';
 const ProductLayout = () => (
   <div className="bg-white flex flex-col min-h-screen">
     <BT />
@@ -50,10 +51,10 @@ function App() {
 
       {/* Các trang sản phẩm dùng ProductLayout */}
       <Route element={<ProductLayout />}>
+       <Route path="/product/:id" element={<Detail />} />
         <Route path="/*" element={<ProductPage />} />
       </Route>
     </Routes>
   );
 }
-
 export default App;

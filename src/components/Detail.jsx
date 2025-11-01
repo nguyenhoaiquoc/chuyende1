@@ -188,8 +188,6 @@ const handleQuantityChange = (e) => {
             <p className="">- Thiết kế khuỷu tay xoắn</p>
           </div>
               <div className="flex gap-20 border-b p-5">
-
-
                   <p className="">Chia sẻ:</p>
                   <div className="flex gap-4 text-white">
                     <div className="flex bg-[#1877f2]  px-2 rounded-sm items-center gap-1">
@@ -197,18 +195,12 @@ const handleQuantityChange = (e) => {
                         <button className="font-bold  text-xs">Thích 0</button>
                      
                     </div>
-                  
-
                   <button className="bg-[#1877f2] font-bold px-3 text-xs rounded-sm">Chia sẻ</button>
 
                   </div>
-                  
-
               </div>
         </div>
       </div>
-
-
     </div>
   )
 }

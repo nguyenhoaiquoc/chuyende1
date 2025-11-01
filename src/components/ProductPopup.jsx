@@ -3,17 +3,18 @@ import "../css/ProductPopup.css";
 import { Link } from "react-router-dom";
 
 const ProductPopup = ({ product, onClose }) => {
+  if (!product) return null;
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState(null);
 
   const handleQuantityChange = (e) => {
-  const value = e.target.value;
+    const value = e.target.value;
 
-  // Chỉ cho phép số nguyên dương
-  if (/^\d+$/.test(value)) {
-    setQuantity(Number(value));
-  }
-};
+    // Chỉ cho phép số nguyên dương
+    if (/^\d+$/.test(value)) {
+      setQuantity(Number(value));
+    }
+  };
 
   const handleSizeClick = (size) => {
     setSelectedSize(size);
@@ -48,7 +49,7 @@ const ProductPopup = ({ product, onClose }) => {
             </div>
 
             <div className="product-price">{price}</div>
-<hr className="divider" />
+            <hr className="divider" />
             <div className="sizes">
               <div className="size-list">
                 {sizes.map((size) => (
@@ -62,24 +63,20 @@ const ProductPopup = ({ product, onClose }) => {
                 ))}
               </div>
             </div>
-<div className="quantity-add">
-  <label className="label">Số lượng:</label>
-  <div className="quantity-row">
-  <input
-    type="number"
-    min="1"
-    value={quantity}
-    onChange={handleQuantityChange}
-    className="quantity-input"
-  />
-  <button className="add-to-cart">THÊM VÀO GIỎ HÀNG</button>
-</div>
+            <div className="quantity-add">
+              <label className="label">Số lượng:</label>
+              <div className="quantity-row">
+                <input
+                  type="number"
+                  min="1"
+                  value={quantity}
+                  onChange={handleQuantityChange}
+                  className="quantity-input"
+                />
+                <button className="add-to-cart">THÊM VÀO GIỎ HÀNG</button>
+              </div>
 
-</div>
-
-
-
-
+            </div>
           </div>
         </div>
       </div>
