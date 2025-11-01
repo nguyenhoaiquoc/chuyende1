@@ -1,6 +1,10 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
 import BT from "./BT";
+import NavigationMenu from "./NavigationMenu";
+import CategoryDescription from "./CategoryDescription";
+import Grid from "./Gird";
+import ProductPage from "../ProductPage";
 
 export default function Breadcrumb() {
   const { category, subCategory } = useParams();
@@ -11,6 +15,8 @@ export default function Breadcrumb() {
     "dong-ho": "Đồng Hồ",
     "thuong-hieu": "Thương Hiệu",
     "sale": "Khuyến Mãi 10.10",
+    "running-gears":"Running Gears",
+    "triathlon":"Triathlon",
   }[category] || "Danh mục";
 
   const subCategoryLabel = {
@@ -21,6 +27,7 @@ export default function Breadcrumb() {
     suunto: "Suunto",
     garmin: "Garmin",
     coros: "Coros",
+
   }[subCategory] || null;
 
   return (
@@ -66,6 +73,7 @@ export default function Breadcrumb() {
           )}
         </nav>
       </header>
+      <ProductPage/>
     </div>
   );
 }

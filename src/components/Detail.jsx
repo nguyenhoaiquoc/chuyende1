@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import mauAnh from "../assets/mauanh.png";
 import Ao from "../assets/Aoremove.png";
 import { CiHeart } from "react-icons/ci";
@@ -263,6 +263,9 @@ const handleRight = () => {
           </div>
         </div>
       </div>
+            <Footer/>
+            <ScrollTest/>
+      <Panel/>
     </div>
   );
 }
