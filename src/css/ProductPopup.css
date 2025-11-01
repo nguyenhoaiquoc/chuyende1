@@ -19,23 +19,7 @@
   overflow-y: auto;
 }
 
-.popup-close {
-  position: absolute;
-  top: 7px;
-  right: 13px;
-  width: 30px;
-  height: 30px;
-  font-size: 20px;
-  background: #673ab7;
-  border: none;
-  cursor: pointer;
-  border-radius: 50%;
-  font-weight: bold;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+
 
 .popup-content {
   display: flex;
@@ -150,20 +134,7 @@
 }
 
 /* Nút giỏ hàng */
-.add-to-cart {
-  height: 45px;
-  background-color: #673ab7;
-  color: white;
-  padding: 0 20px;
-  border: 1px solid transparent;
-  border-radius: 23px;
-  cursor: pointer;
-}
 
-.add-to-cart:hover {
-  background-color: #6f4fb9;
-  border-color: #333;
-}
 
 .divider {
   border: none;

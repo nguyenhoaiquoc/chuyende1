@@ -59,9 +59,41 @@ Bạn đang tìm kiếm trang phục và giày chạy bộ cao cấp, đáp ứn
   },
   {
     name: 'Đồ Nữ',
-    path: '/do-nu',
-    subcategories: [
-      { name: 'Áo', path: '/do-nu/ao' },
+    path: '/do-nu', 
+    description: `
+      <p>Đồ Chạy Bộ Nam – Sự Lựa Chọn Của Những Runner Đẳng Cấp
+Bạn đang tìm kiếm trang phục và giày chạy bộ cao cấp, đáp ứng được cả yếu tố hiệu suất, sự bền bỉ và tính thời trang? Bộ sưu tập đồ chạy bộ nam tại [Tên Website] mang đến những sản phẩm tốt nhất thế giới, giúp bạn tối ưu trải nghiệm chạy và chinh phục mọi cung đường.
+</p><br>
+<p> 
+  1. Vì sao runner cần đầu tư vào đồ chạy bộ chuyên dụng?
+  ✔ Công nghệ vải tiên tiến: Thoáng khí, hút ẩm nhanh giúp cơ thể luôn khô ráo và thoải mái.
+  ✔ Thiết kế tối ưu hiệu suất: Co giãn linh hoạt, ôm vừa vặn nhưng không bó chặt, hỗ trợ chuyển động tối đa.
+  ✔ Trọng lượng siêu nhẹ: Giảm thiểu lực cản, giúp runner cảm thấy tự do, linh hoạt hơn trong từng bước chạy.
+  ✔ Thương hiệu chạy bộ đỉnh cao: Chúng tôi chỉ mang đến các thương hiệu cao cấp đã được các vận động viên chuyên nghiệp tin dùng.
+  </p><br>
+  <p>
+2. Bộ sưu tập đồ chạy bộ nam tại IMSPORTS 
+🏃‍♂ Áo chạy bộ nam: Áo tank top, áo thun, áo dài tay thoáng khí, co giãn tốt.
+🏃‍♂ Quần chạy bộ nam: Quần short siêu nhẹ, quần 2 lớp hỗ trợ tối đa, quần dài chống nắng.
+🏃‍♂ Áo khoác chạy bộ nam: Giữ ấm, chống gió mà vẫn đảm bảo sự thông thoáng khi chạy.
+🏃‍♂ Giày chạy bộ nam: Đệm êm, hỗ trợ tốt cho chạy đường nhựa, đường dài và thi đấu.
+🏃‍♂ Giày chạy địa hình nam (trail running shoes):
+    🔹 HOKA – Thương hiệu giày trail "quốc dân" với độ êm ái vượt trội, phù hợp với đa số runner Việt Nam.
+    🔹 NNormal & Norda – Hai thương hiệu giày trail top 1 thế giới dành cho những người yêu thích sự bền bỉ, hiệu suất cao và độ bám vượt trội.
+🏃‍♂ Dép chạy bộ nam (recovery sandals): Phục hồi chân nhanh chóng sau những buổi tập luyện cường độ cao.
+🏃‍♂ Phụ kiện chạy bộ nam: Tất nén, mũ chạy bộ, găng tay giúp nâng cao trải nghiệm chạy.
+</p> <br>
+<p>
+3. Những thương hiệu chạy bộ cao cấp tại IMSPORTS 
+🔥 Giày chạy bộ nam: HOKA, NNormal, Norda, ON Running, Saucony, Xeroshoes, Salomon – những thương hiệu được các VĐV hàng đầu lựa chọn.
+🔥 Trang phục chạy bộ nam: ON Running, Soar Running, 2XU, Compressport, Raidlight, T8, Runderwear – dòng sản phẩm hiệu suất cao, đảm bảo tối ưu cho từng cử động.</p>
+  </p>
+  <p>4. Cách chọn đồ chạy bộ nam phù hợp theo nhu cầu
+✔ Chạy bộ trong thời tiết nóng ☀ → Áo thoáng khí, quần short nhẹ, giày có độ thông thoáng cao.
+✔ Chạy đường dài / marathon 🏃‍♂ → Quần short có túi đựng gel, áo chống nắng, giày có độ đệm êm.
+✔ Chạy địa hình (trail running) 🏔 → Giày HOKA (phù hợp cho đa số runner) hoặc NNormal/Norda (hiệu suất cao, bám địa hình cực tốt), áo khoác chống gió, quần có túi tiện lợi.
+✔ Tập luyện hàng ngày & chạy cự ly ngắn 💪 → Áo thun thể thao, quần short linh hoạt, dép recovery để phục hồi.</p>    `, subcategories: [
+      { name: 'Áo', path: '/do-nu/ao' }, 
       { name: 'Quần', path: '/do-nu/quan' },
       { name: 'Giày Chạy Bộ Nữ', path: '/do-nu/giay-chay-bo' },
       { name: 'Giày Địa Hình Nữ', path: '/do-nu/giay-dia-hinh' },
@@ -281,7 +313,7 @@ export default function ProductPage() {
     for (const cat of categories) {
       if (cat.path === pathname) return cat.name;
       if (cat.subcategories) {
-        const sub = cat.subcategories.find(s => s.path === pathname);
+        const sub = cat.subcategories.find((s) => s.path === pathname);
         if (sub) return sub.name;
       }
     }
@@ -291,7 +323,8 @@ export default function ProductPage() {
   const getCurrentCategoryData = (pathname) => {
     if (pathname === '/') return { name: 'Trang Chủ', description: null };
     for (const cat of categories) {
-      if (cat.path === pathname) return { name: cat.name, description: cat.description || null };
+      if (cat.path === pathname)
+        return { name: cat.name, description: cat.description || null };
       if (cat.subcategories) {
         const sub = cat.subcategories.find(s => s.path === pathname);
         if (sub) return { name: sub.name, description: sub.description || cat.description || null };
