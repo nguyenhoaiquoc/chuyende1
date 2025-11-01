@@ -27,12 +27,13 @@ const ProductPopup = ({ product, onClose }) => {
   return (
     <div className="popup-overlay" onClick={onClose}>
       <div className="popup-container" onClick={(e) => e.stopPropagation()}>
-        <button
+     <button
   onClick={onClose}
-  className="absolute top-[7px] right-[13px] w-[30px] h-[30px] text-[20px] bg-[#673ab7] border-none cursor-pointer rounded-full font-bold text-white flex items-center justify-center"
+  className="absolute top-[7px] right-[13px] w-[30px] h-[30px] text-[20px] bg-[#673ab7] cursor-pointer rounded-full font-bold text-white flex items-center justify-center"
 >
   &times;
 </button>
+
 
 
         <div className="popup-content">

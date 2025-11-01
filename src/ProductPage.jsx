@@ -412,7 +412,10 @@ export default function ProductPage() {
               <Gird />
             </div>
 
-            <CategoryDescription description={pageDescription} />
+            <CategoryDescription
+              key={location.pathname}
+              description={pageDescription}
+            />
           </main>
         </div>
       </div>
