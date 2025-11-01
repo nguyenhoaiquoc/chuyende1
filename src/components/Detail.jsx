@@ -490,12 +490,82 @@ export default function Detail() {
           <div className="md:flex items-center gap-4 border-b pb-10">
             <div className="mb-5 md:mb-0"> 
               <input
-                type="number"
-                min="1"
-                value={quantity}
-                onChange={handleQuantityChange}
-                className="border h-[50px] rounded-full text-center w-full md:w-auto"
-              />
+  type="number"
+  min="1"
+  value={quantity}
+  onKeyDown={(e) => {
+    // Cho phép các phím điều hướng / control
+    const allowedKeys = [
+      "Backspace",
+      "Delete",
+      "ArrowLeft",
+      "ArrowRight",
+      "ArrowUp",
+      "ArrowDown",
+      "Home",
+      "End",
+      "Tab",
+      "Enter",
+    ];
+
+    // Cho phép combo Ctrl/Command như Ctrl+C, Ctrl+V, Ctrl+A,...
+    if (e.ctrlKey || e.metaKey) {
+      return;
+    }
+
+    // Nếu là phím điều hướng / xóa thì cho qua
+    if (allowedKeys.includes(e.key)) {
+      return;
+    }
+
+    // Nếu là 1 ký tự số (0-9) thì cho qua
+    if (/^\d$/.test(e.key)) {
+      return;
+    }
+
+    // Còn lại (ví dụ "e", "-", "+", chữ cái, dấu phẩy, khoảng trắng, ...) -> chặn
+    e.preventDefault();
+  }}
+  onPaste={(e) => {
+    const pasteData = e.clipboardData.getData("text");
+    // Nếu dữ liệu dán không phải toàn số -> chặn
+    if (!/^\d+$/.test(pasteData)) {
+      e.preventDefault();
+    }
+  }}
+  onDrop={(e) => {
+    // Kéo-thả text vào input cũng chặn luôn cho chắc
+    e.preventDefault();
+  }}
+  onChange={(e) => {
+    let val = e.target.value;
+
+    // Cho phép rỗng (để user xóa hết)
+    if (val === "") {
+      setQuantity("");
+      return;
+    }
+
+    // Dọn sạch mọi thứ không phải số (phòng trường hợp trình duyệt lách)
+    val = val.replace(/\D/g, "");
+
+    // Nếu sau khi lọc vẫn có số thì set
+    if (val !== "") {
+      const num = Number(val);
+      if (!Number.isNaN(num) && num >= 0) {
+        setQuantity(num);
+      }
+    }
+  }}
+  onBlur={() => {
+    // Nếu bỏ trống rồi blur ra ngoài -> tự reset về 1
+    if (quantity === "") {
+      setQuantity(1);
+    }
+  }}
+  className="border h-[50px] rounded-full text-center w-full md:w-[150px] pr-5 pl-8"
+/>
+
             </div>
             <div className="flex justify-center gap-2">
               <button className="bg-[#673AB7] rounded-full text-white py-2.5 px-12">THÊM VÀO GIỎ HÀNG</button>
