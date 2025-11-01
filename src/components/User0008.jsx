@@ -71,6 +71,38 @@ export default function User0008() {
       sale: "20%",
       sizes: ["S", "M", "L", "XL"],
     },
+    {
+      name: "Áo Khoác Chạy Bộ Name On Running Men's Weather",
+      price: "7,060,000 VNĐ",
+      imgMain: Ao,
+      imgHover: mauAnh,
+      sale: "20%",
+      sizes: ["S", "M", "L", "XL"],
+    },
+    {
+      name: "Áo Khoác Chạy Bộ Name On Running Men's Weather",
+      price: "7,060,000 VNĐ",
+      imgMain: Ao,
+      imgHover: mauAnh,
+      sale: "20%",
+      sizes: ["S", "M", "L", "XL"],
+    },
+    {
+      name: "Áo Khoác Chạy Bộ Name On Running Men's Weather",
+      price: "7,060,000 VNĐ",
+      imgMain: Ao,
+      imgHover: mauAnh,
+      sale: "20%",
+      sizes: ["S", "M", "L", "XL"],
+    },
+    {
+      name: "Áo Khoác Chạy Bộ Name On Running Men's Weather",
+      price: "7,060,000 VNĐ",
+      imgMain: Ao,
+      imgHover: mauAnh,
+      sale: "20%",
+      sizes: ["S", "M", "L", "XL"],
+    },
   ];
 
   const newProductsRef = useRef(null);
@@ -118,6 +150,9 @@ export default function User0008() {
 
           <div className="overflow-hidden" ref={newProductsRef}>
             <div className="grid grid-cols-2 gap-6 w-full md:flex">
+                <div className="absolute w-[233px] h-full z-40 bg-white/60 lg:hidden xl:block"></div>
+        <div className="absolute w-[242px] h-full z-40 bg-white/60 right-2 lg:hidden xl:block"></div>
+
               {products.map((p, index) => (
                 <Link
                   to="/Detail"
@@ -194,6 +229,9 @@ export default function User0008() {
 
         <div className="relative">
           <div className="hidden md:block">
+              <div className="absolute w-[233px] h-full z-40 bg-white/60 lg:hidden xl:block"></div>
+        <div className="absolute w-[242px] h-full z-40 bg-white/60 right-2 lg:hidden xl:block"></div>
+
             <button
               onClick={() => handleScroll("prev", saleProductsRef)}
               className="absolute top-1/3 z-30 left-[250px] bg-[#f47435] rounded-full p-2 hover:bg-[#673ab7] lg:left-0 xl:left-[250px]"
