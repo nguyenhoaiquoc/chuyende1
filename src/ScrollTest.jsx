@@ -20,7 +20,11 @@ export default function ScrollTest() {
   };
 
   return (
-    <div>
+    <div className="min-h-[200vh] p-6 space-y-6 text-center">
+      <h1 className="text-3xl font-bold mb-6 ">Test Scroll To Top</h1>
+      <p>Cuộn xuống để thấy nút xuất hiện ở góc dưới bên phải </p>
+
+
       {showButton && (
         <button
           onClick={scrollToTop}
