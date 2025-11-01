@@ -302,9 +302,11 @@ export default function Detail() {
   const [quantity, setQuantity] = useState(1);
   const handleQuantityChange = (e) => {
     const value = e.target.value;
-    if (/^\d+$/.test(value)) {
-      setQuantity(Number(value));
-    }
+    if (value === "") {
+    setQuantity("");
+  } else if (/^\d+$/.test(value)) {
+    setQuantity(Number(value));
+  }
   };
 
   // Logic Chọn Size
@@ -488,8 +490,8 @@ export default function Detail() {
           {/* Số lượng */}
           <div className="">Số lương:</div>
           <div className="md:flex items-center gap-4 border-b pb-10">
-            <div className="mb-5 md:mb-0"> 
-              <input
+            <div className="mb-5 md:mb-0">
+<input
   type="number"
   min="1"
   value={quantity}

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Ao from "../assets/Aoremove.png";
 import sanPham2 from "../assets/sanpham2.jpg";
 import GridHeader from "./GridHeader";
+import PriceFilter from './PriceFilter';
 
 const ProductCard = ({ product }) => {
   return (
@@ -154,6 +155,7 @@ export default function Grid() {
       
       {/* ✅ Header có tổng số sản phẩm */}
       <GridHeader totalProducts={products.length} />
+  
 
       {/* ✅ Grid Layout */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mt-4">
