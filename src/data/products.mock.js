@@ -41,7 +41,8 @@ export const products = [
     imgHover: giayHokaBack,
     images: [giayHokaSide, giayHokaBack],
     sizes: ["40", "41", "42", "43", "44"],
-    sale: "10%", // có giảm giá
+    sale: "10%",
+    gift: true,
   },
   {
     id: "AO-ON-001",
@@ -54,6 +55,7 @@ export const products = [
     images: [aoOnFlat],
     sizes: ["S", "M", "L", "XL"],
     sale: "20%",
+    gift: true,
   },
   {
     id: "SANDAL-TRAIL-LUNA-001",
@@ -64,7 +66,8 @@ export const products = [
     imgMain: depTrailSide,
     imgHover: depTrailTop,
     images: [depTrailSide, depTrailTop],
-    sizes: ["38", "39", "40", "41", "42"], // không sale thì thôi
+    sizes: ["38", "39", "40", "41", "42"], // không sale thì thô
+    // gift: true,i
   }, // ===== ĐỒNG HỒ =====
 
   {
@@ -77,6 +80,7 @@ export const products = [
     imgHover: corosGrey,
     images: [corosGrey, corosNylonDark, corosNylonWhite],
     sale: "5%",
+    gift: true,
   }, // ===== NỮ: ÁO =====
 
   {
@@ -90,6 +94,7 @@ export const products = [
     images: [aoNuFlat, aoNuModel, aoNuBack],
     sizes: ["XS", "S", "M", "L"],
     sale: "15%",
+    gift: true,
   }, // ===== NỮ: GIÀY ROAD =====
 
   {
@@ -103,6 +108,7 @@ export const products = [
     images: [giayNuRoadSide, giayNuRoadBack],
     sizes: ["36", "37", "38", "39", "40"],
     sale: "20%",
+    gift: true,
   }, // ===== NỮ: GIÀY TRAIL =====
 
   {
@@ -116,6 +122,7 @@ export const products = [
     images: [giayNuTrailSide, giayNuTrailAngle],
     sizes: ["36", "37", "38", "39", "40"],
     sale: "25%",
+    gift: true,
   }, // ===== NỮ: QUẦN (MỚI THÊM) =====
 
   {
@@ -129,6 +136,7 @@ export const products = [
     images: [QuanNuOnRunning, QuanNuOnRunning2],
     sizes: ["XS", "S", "M", "L"],
     sale: "10%",
+    gift: true,
   },
   {
     id: "W-SHORT-ON-002",
@@ -139,7 +147,8 @@ export const products = [
     imgMain: QuanNuOnRunning2,
     imgHover: QuanNuOnRunning,
     images: [QuanNuOnRunning2, QuanNuOnRunning],
-    sizes: ["XS", "S", "M", "L"], // không sale cũng được
+    sizes: ["XS", "S", "M", "L"],
+    gift: true,
   }, // ===== 20 SẢN PHẨM MỚI THÊM ===== // Thêm 3 'men-tops' (Áo Nam)
 
   {
@@ -153,6 +162,7 @@ export const products = [
     images: [aoOnFlat],
     sizes: ["S", "M", "L"],
     sale: "10%",
+    gift: true,
   },
   {
     id: "AO-ON-003",
@@ -164,6 +174,7 @@ export const products = [
     imgHover: aoOnFlat,
     images: [aoOnFlat],
     sizes: ["S", "M", "L", "XL"],
+    gift: true,
   },
   {
     id: "AO-HOKA-001",
@@ -176,6 +187,8 @@ export const products = [
     images: [aoOnFlat],
     sizes: ["M", "L"],
     sale: "15%",
+    gift: true,
+    bestseller: true,
   }, // Thêm 3 'men-shoes-trail' (Giày Trail Nam)
 
   {
@@ -188,6 +201,7 @@ export const products = [
     imgHover: giayHokaBack,
     images: [giayHokaSide, giayHokaBack],
     sizes: ["40", "42", "44"],
+    gift: true,
   },
   {
     id: "GIAY-HOKA-004",
@@ -200,6 +214,7 @@ export const products = [
     images: [giayHokaSide, giayHokaBack],
     sizes: ["41", "43"],
     sale: "5%",
+    gift: true,
   },
   {
     id: "SANDAL-TRAIL-LUNA-002",
@@ -223,6 +238,7 @@ export const products = [
     imgHover: corosNylonWhite,
     images: [corosNylonDark, corosNylonWhite, corosGrey],
     sale: "10%",
+    gift: true,
   },
   {
     id: "WATCH-COROS-VERTIX-001",
@@ -244,6 +260,8 @@ export const products = [
     imgHover: corosGrey,
     images: [corosNylonWhite, corosGrey, corosNylonDark],
     sale: "5%",
+
+    gift: true,
   }, // Thêm 3 'women-tops' (Áo Nữ)
 
   {
@@ -268,12 +286,13 @@ export const products = [
     images: [aoNuModel, aoNuBack, aoNuFlat],
     sizes: ["S", "M", "L"],
     sale: "10%",
+    gift: true,
   },
   {
     id: "AO-HOKA-W-001",
     name: "Áo Thun Nữ Hoka Glide",
     price: 1450000,
-    categoryId: "women-tops", 
+    categoryId: "women-tops",
     brandId: "hoka",
     imgMain: aoNuBack,
     imgHover: aoNuFlat,
@@ -292,6 +311,7 @@ export const products = [
     images: [giayNuRoadSide, giayNuRoadBack],
     sizes: ["36", "38", "40"],
     sale: "15%",
+    gift: true,
   },
   {
     id: "GIAY-HOKA-ROAD-W-003",
@@ -327,6 +347,7 @@ export const products = [
     images: [giayNuTrailAngle, giayNuTrailSide],
     sizes: ["36", "38"],
     sale: "10%",
+    gift: true,
   }, // Thêm 4 'women-shorts' (Quần Nữ)
 
   {
@@ -340,6 +361,8 @@ export const products = [
     images: [QuanNuOnRunning, QuanNuOnRunning2],
     sizes: ["XS", "S", "M"],
     sale: "5%",
+
+    gift: true,
   },
   {
     id: "W-SHORT-ON-004",
@@ -363,6 +386,8 @@ export const products = [
     images: [QuanNuOnRunning, QuanNuOnRunning2],
     sizes: ["XS", "L"],
     sale: "20%",
+    gift: true,
+    bestseller: true,
   },
   {
     id: "W-SHORT-HOKA-002",
@@ -374,245 +399,255 @@ export const products = [
     imgHover: QuanNuOnRunning,
     images: [QuanNuOnRunning2, QuanNuOnRunning],
     sizes: ["M", "L"],
-  },
+  }, // --- Thêm 3 Áo Nam (men-tops) ---
   // ===== 20 SẢN PHẨM MỚI (THÊM VÀO CUỐI MẢNG) =====
 
-  // --- Thêm 3 Áo Nam (men-tops) ---
-  {
-    id: "NEW-M-TOP-001",
-    name: "Áo Thun Nam Hoka Tech",
-    price: 1450000,
-    categoryId: "men-tops",
-    brandId: "hoka",
-    imgMain: aoOnFlat,
-    imgHover: aoOnFlat,
-    images: [aoOnFlat],
-    sizes: ["S", "M", "L", "XL"],
-  },
-  {
-    id: "NEW-M-TOP-002",
-    name: "Áo Dài Tay Nam On Running",
-    price: 2800000,
-    categoryId: "men-tops",
-    brandId: "on",
-    imgMain: aoOnFlat,
-    imgHover: aoOnFlat,
-    images: [aoOnFlat],
-    sizes: ["M", "L"],
-    sale: "5%",
-  },
-  {
-    id: "NEW-M-TOP-003",
-    name: "Áo Ba Lỗ Nam Hoka",
-    price: 1200000,
-    categoryId: "men-tops",
-    brandId: "hoka",
-    imgMain: aoOnFlat,
-    imgHover: aoOnFlat,
-    images: [aoOnFlat],
-    sizes: ["S", "M"],
-  },
+  {
+    id: "NEW-M-TOP-001",
+    name: "Áo Thun Nam Hoka Tech",
+    price: 1450000,
+    categoryId: "men-tops",
+    brandId: "hoka",
+    imgMain: aoOnFlat,
+    imgHover: aoOnFlat,
+    images: [aoOnFlat],
+    sizes: ["S", "M", "L", "XL"],
+  },
+  {
+    id: "NEW-M-TOP-002",
+    name: "Áo Dài Tay Nam On Running",
+    price: 2800000,
+    categoryId: "men-tops",
+    brandId: "on",
+    imgMain: aoOnFlat,
+    imgHover: aoOnFlat,
+    images: [aoOnFlat],
+    sizes: ["M", "L"],
+    sale: "5%",
 
-  // --- Thêm 3 Giày Trail Nam (men-shoes-trail) ---
-  {
-    id: "NEW-M-TRAIL-001",
-    name: "Giày Chạy Trail Hoka Tecton X 2",
-    price: 5990000,
-    categoryId: "men-shoes-trail",
-    brandId: "hoka",
-    imgMain: giayHokaSide,
-    imgHover: giayHokaBack,
-    images: [giayHokaSide, giayHokaBack],
-    sizes: ["40", "41", "42"],
-  },
-  {
-    id: "NEW-M-TRAIL-002",
-    name: "Giày Chạy Trail On Running Cloudventure",
-    price: 4500000,
-    categoryId: "men-shoes-trail",
-    brandId: "on",
-    imgMain: giayHokaSide,
-    imgHover: giayHokaBack,
-    images: [giayHokaSide, giayHokaBack],
-    sizes: ["42", "43", "44"],
-    sale: "10%",
-  },
-  {
-    id: "NEW-M-TRAIL-003",
-    name: "Dép Chạy Trail LUNA Retro Mono",
-    price: 2950000,
-    categoryId: "men-shoes-trail",
-    brandId: "luna",
-    imgMain: depTrailSide,
-    imgHover: depTrailTop,
-    images: [depTrailSide, depTrailTop],
-    sizes: ["40", "41"],
-  },
+    gift: true,
+    bestseller: true,
+  },
+  {
+    id: "NEW-M-TOP-003",
+    name: "Áo Ba Lỗ Nam Hoka",
+    price: 1200000,
+    categoryId: "men-tops",
+    brandId: "hoka",
+    imgMain: aoOnFlat,
+    imgHover: aoOnFlat,
+    images: [aoOnFlat],
+    sizes: ["S", "M"],
+  }, // --- Thêm 3 Giày Trail Nam (men-shoes-trail) ---
 
-  // --- Thêm 3 Đồng Hồ (watches) ---
-  {
-    id: "NEW-WATCH-001",
-    name: "Đồng Hồ COROS Apex 2 Pro",
-    price: 12500000,
-    categoryId: "watches",
-    brandId: "coros",
-    imgMain: corosNylonDark,
-    imgHover: corosGrey,
-    images: [corosNylonDark, corosGrey, corosNylonWhite],
-    sale: "10%",
-  },
-  {
-    id: "NEW-WATCH-002",
-    name: "Đồng Hồ COROS Vertix 2S",
-    price: 18990000,
-    categoryId: "watches",
-    brandId: "coros",
-    imgMain: corosNylonWhite,
-    imgHover: corosNylonDark,
-    images: [corosNylonWhite, corosNylonDark, corosGrey],
-  },
-  {
-    id: "NEW-WATCH-003",
-    name: "Đồng Hồ COROS Pace 3 (Dây Silicone)",
-    price: 6990000,
-    categoryId: "watches",
-    brandId: "coros",
-    imgMain: corosGrey,
-    imgHover: corosNylonWhite,
-    images: [corosGrey, corosNylonWhite, corosNylonDark],
-  },
+  {
+    id: "NEW-M-TRAIL-001",
+    name: "Giày Chạy Trail Hoka Tecton X 2",
+    price: 5990000,
+    categoryId: "men-shoes-trail",
+    brandId: "hoka",
+    imgMain: giayHokaSide,
+    imgHover: giayHokaBack,
+    images: [giayHokaSide, giayHokaBack],
+    sizes: ["40", "41", "42"],
+  },
+  {
+    id: "NEW-M-TRAIL-002",
+    name: "Giày Chạy Trail On Running Cloudventure",
+    price: 4500000,
+    categoryId: "men-shoes-trail",
+    brandId: "on",
+    imgMain: giayHokaSide,
+    imgHover: giayHokaBack,
+    images: [giayHokaSide, giayHokaBack],
+    sizes: ["42", "43", "44"],
+    sale: "10%",
+    gift: true,
+    bestseller: true,
+  },
+  {
+    id: "NEW-M-TRAIL-003",
+    name: "Dép Chạy Trail LUNA Retro Mono",
+    price: 2950000,
+    categoryId: "men-shoes-trail",
+    brandId: "luna",
+    imgMain: depTrailSide,
+    imgHover: depTrailTop,
+    images: [depTrailSide, depTrailTop],
+    sizes: ["40", "41"],
+  }, // --- Thêm 3 Đồng Hồ (watches) ---
 
-  // --- Thêm 3 Áo Nữ (women-tops) ---
-  {
-    id: "NEW-W-TOP-001",
-    name: "Áo Thun Nữ On Running Performance-T",
-    price: 2190000,
-    categoryId: "women-tops",
-    brandId: "on",
-    imgMain: aoNuFlat,
-    imgHover: aoNuModel,
-    images: [aoNuFlat, aoNuModel, aoNuBack],
-    sizes: ["XS", "S", "M"],
-    sale: "5%",
-  },
-  {
-    id: "NEW-W-TOP-002",
-    name: "Áo Ba Lỗ Nữ On Running Active Tank",
-    price: 1800000,
-    categoryId: "women-tops",
-    brandId: "on",
-    imgMain: aoNuModel,
-    imgHover: aoNuBack,
-    images: [aoNuModel, aoNuBack, aoNuFlat],
-    sizes: ["S", "M"],
-  },
-  {
-    id: "NEW-W-TOP-003",
-    name: "Áo Khoác Nữ Hoka",
-    price: 3100000,
-    categoryId: "women-tops",
-    brandId: "hoka",
-    imgMain: aoNuBack,
-    imgHover: aoNuFlat,
-    images: [aoNuBack, aoNuFlat, aoNuModel],
-    sizes: ["XS", "S", "M", "L"],
-    sale: "15%",
-  },
+  {
+    id: "NEW-WATCH-001",
+    name: "Đồng Hồ COROS Apex 2 Pro",
+    price: 12500000,
+    categoryId: "watches",
+    brandId: "coros",
+    imgMain: corosNylonDark,
+    imgHover: corosGrey,
+    images: [corosNylonDark, corosGrey, corosNylonWhite],
+    sale: "10%",
+    gift: true,
+    bestseller: true,
+  },
+  {
+    id: "NEW-WATCH-002",
+    name: "Đồng Hồ COROS Vertix 2S",
+    price: 18990000,
+    categoryId: "watches",
+    brandId: "coros",
+    imgMain: corosNylonWhite,
+    imgHover: corosNylonDark,
+    images: [corosNylonWhite, corosNylonDark, corosGrey],
+  },
+  {
+    id: "NEW-WATCH-003",
+    name: "Đồng Hồ COROS Pace 3 (Dây Silicone)",
+    price: 6990000,
+    categoryId: "watches",
+    brandId: "coros",
+    imgMain: corosGrey,
+    imgHover: corosNylonWhite,
+    images: [corosGrey, corosNylonWhite, corosNylonDark],
+  }, // --- Thêm 3 Áo Nữ (women-tops) ---
 
-  // --- Thêm 3 Giày Road Nữ (women-shoes-road) ---
-  {
-    id: "NEW-W-ROAD-001",
-    name: "Giày Chạy Bộ Nữ HOKA Bondi 8",
-    price: 4790000,
-    categoryId: "women-shoes-road",
-    brandId: "hoka",
-    imgMain: giayNuRoadSide,
-    imgHover: giayNuRoadBack,
-    images: [giayNuRoadSide, giayNuRoadBack],
-    sizes: ["36", "37", "38"],
-  },
-  {
-    id: "NEW-W-ROAD-002",
-    name: "Giày Chạy Bộ Nữ HOKA Mach 6",
-    price: 4200000,
-    categoryId: "women-shoes-road",
-    brandId: "hoka",
-    imgMain: giayNuRoadBack,
-    imgHover: giayNuRoadSide,
-    images: [giayNuRoadBack, giayNuRoadSide],
-    sizes: ["38", "39", "40"],
-    sale: "10%",
-  },
-  {
-    id: "NEW-W-ROAD-003",
-    name: "Giày Chạy Bộ Nữ On Running Cloudsurfer",
-    price: 5100000,
-    categoryId: "women-shoes-road",
-    brandId: "on",
-    imgMain: giayNuRoadSide,
-    imgHover: giayNuRoadBack,
-    images: [giayNuRoadSide, giayNuRoadBack],
-    sizes: ["37", "38"],
-  },
+  {
+    id: "NEW-W-TOP-001",
+    name: "Áo Thun Nữ On Running Performance-T",
+    price: 2190000,
+    categoryId: "women-tops",
+    brandId: "on",
+    imgMain: aoNuFlat,
+    imgHover: aoNuModel,
+    images: [aoNuFlat, aoNuModel, aoNuBack],
+    sizes: ["XS", "S", "M"],
+    sale: "5%",
 
-  // --- Thêm 2 Giày Trail Nữ (women-shoes-trail) ---
- {
-    id: "NEW-W-TRAIL-001",
-    name: "Giày Chạy Địa Hình Nữ On Running Cloudultra 2",
-    price: 5300000,
-    categoryId: "women-shoes-trail",
-    brandId: "on",
-    imgMain: giayNuTrailSide,
-    imgHover: giayNuTrailAngle,
-    images: [giayNuTrailSide, giayNuTrailAngle],
-    sizes: ["36", "37", "38", "39", "40"],
-    sale: "5%",
-  },
-  {
-    id: "NEW-W-TRAIL-002",
-    name: "Giày Chạy Địa Hình Nữ Hoka Tecton X",
-    price: 5500000,
-    categoryId: "women-shoes-trail",
-    brandId: "hoka",
-    imgMain: giayNuTrailAngle,
-    imgHover: giayNuTrailSide,
-    images: [giayNuTrailAngle, giayNuTrailSide],
-   sizes: ["38", "39"],
-  },
+    gift: true,
+    bestseller: true,
+  },
+  {
+    id: "NEW-W-TOP-002",
+    name: "Áo Ba Lỗ Nữ On Running Active Tank",
+    price: 1800000,
+    categoryId: "women-tops",
+    brandId: "on",
+    imgMain: aoNuModel,
+    imgHover: aoNuBack,
+    images: [aoNuModel, aoNuBack, aoNuFlat],
+    sizes: ["S", "M"],
+  },
+  {
+    id: "NEW-W-TOP-003",
+    name: "Áo Khoác Nữ Hoka",
+    price: 3100000,
+    categoryId: "women-tops",
+    brandId: "hoka",
+    imgMain: aoNuBack,
+    imgHover: aoNuFlat,
+    images: [aoNuBack, aoNuFlat, aoNuModel],
+    sizes: ["XS", "S", "M", "L"],
+    sale: "15%",
+    gift: true,
+    bestseller: true,
+  }, // --- Thêm 3 Giày Road Nữ (women-shoes-road) ---
 
-  // --- Thêm 3 Quần Nữ (women-shorts) ---
-  {
-    id: "NEW-W-SHORT-001",
-    name: "Quần Chạy Bộ Nữ Hoka Glide 5 Inch",
-    price: 1700000,
-    categoryId: "women-shorts",
-    brandId: "hoka",
-    imgMain: QuanNuOnRunning,
-    imgHover: QuanNuOnRunning2,
-    images: [QuanNuOnRunning, QuanNuOnRunning2],
-    sizes: ["S", "M"],
-  },
-  {
-    id: "NEW-W-SHORT-002",
-    name: "Quần Đùi Nữ On Running Sprinter",
-    price: 2200000,
-    categoryId: "women-shorts",
-    brandId: "on",
-    imgMain: QuanNuOnRunning2,
-    imgHover: QuanNuOnRunning,
-    images: [QuanNuOnRunning2, QuanNuOnRunning],
-    sizes: ["XS", "S", "M", "L"],
-    sale: "10%",
-  },
-  {
-    id: "NEW-W-SHORT-003",
-    name: "Quần Legging Nữ Hoka",
-    price: 2500000,
-    categoryId: "women-shorts",
-    brandId: "hoka",
-    imgMain: QuanNuOnRunning,
-    imgHover: QuanNuOnRunning2,
-    images: [QuanNuOnRunning, QuanNuOnRunning2],
-    sizes: ["XS", "S"],
-  }
+  {
+    id: "NEW-W-ROAD-001",
+    name: "Giày Chạy Bộ Nữ HOKA Bondi 8",
+    price: 4790000,
+    categoryId: "women-shoes-road",
+    brandId: "hoka",
+    imgMain: giayNuRoadSide,
+    imgHover: giayNuRoadBack,
+    images: [giayNuRoadSide, giayNuRoadBack],
+    sizes: ["36", "37", "38"],
+  },
+  {
+    id: "NEW-W-ROAD-002",
+    name: "Giày Chạy Bộ Nữ HOKA Mach 6",
+    price: 4200000,
+    categoryId: "women-shoes-road",
+    brandId: "hoka",
+    imgMain: giayNuRoadBack,
+    imgHover: giayNuRoadSide,
+    images: [giayNuRoadBack, giayNuRoadSide],
+    sizes: ["38", "39", "40"],
+    sale: "10%",
+    gift: true,
+    bestseller: true,
+  },
+  {
+    id: "NEW-W-ROAD-003",
+    name: "Giày Chạy Bộ Nữ On Running Cloudsurfer",
+    price: 5100000,
+    categoryId: "women-shoes-road",
+    brandId: "on",
+    imgMain: giayNuRoadSide,
+    imgHover: giayNuRoadBack,
+    images: [giayNuRoadSide, giayNuRoadBack],
+    sizes: ["37", "38"],
+  }, // --- Thêm 2 Giày Trail Nữ (women-shoes-trail) ---
+
+  {
+    id: "NEW-W-TRAIL-001",
+    name: "Giày Chạy Địa Hình Nữ On Running Cloudultra 2",
+    price: 5300000,
+    categoryId: "women-shoes-trail",
+    brandId: "on",
+    imgMain: giayNuTrailSide,
+    imgHover: giayNuTrailAngle,
+    images: [giayNuTrailSide, giayNuTrailAngle],
+    sizes: ["36", "37", "38", "39", "40"],
+    sale: "5%",
+
+    gift: true,
+  },
+  {
+    id: "NEW-W-TRAIL-002",
+    name: "Giày Chạy Địa Hình Nữ Hoka Tecton X",
+    price: 5500000,
+    categoryId: "women-shoes-trail",
+    brandId: "hoka",
+    imgMain: giayNuTrailAngle,
+    imgHover: giayNuTrailSide,
+    images: [giayNuTrailAngle, giayNuTrailSide],
+    sizes: ["38", "39"],
+  }, // --- Thêm 3 Quần Nữ (women-shorts) ---
+
+  {
+    id: "NEW-W-SHORT-001",
+    name: "Quần Chạy Bộ Nữ Hoka Glide 5 Inch",
+    price: 1700000,
+    categoryId: "women-shorts",
+    brandId: "hoka",
+    imgMain: QuanNuOnRunning,
+    imgHover: QuanNuOnRunning2,
+    images: [QuanNuOnRunning, QuanNuOnRunning2],
+    sizes: ["S", "M"],
+  },
+  {
+    id: "NEW-W-SHORT-002",
+    name: "Quần Đùi Nữ On Running Sprinter",
+    price: 2200000,
+    categoryId: "women-shorts",
+    brandId: "on",
+    imgMain: QuanNuOnRunning2,
+    imgHover: QuanNuOnRunning,
+    images: [QuanNuOnRunning2, QuanNuOnRunning],
+    sizes: ["XS", "S", "M", "L"],
+    sale: "10%",
+    gift: true,
+  },
+  {
+    id: "NEW-W-SHORT-003",
+    name: "Quần Legging Nữ Hoka",
+    price: 2500000,
+    categoryId: "women-shorts",
+    brandId: "hoka",
+    imgMain: QuanNuOnRunning,
+    imgHover: QuanNuOnRunning2,
+    images: [QuanNuOnRunning, QuanNuOnRunning2],
+    sizes: ["XS", "S"],
+  },
 ];
