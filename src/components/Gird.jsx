@@ -79,7 +79,7 @@ export default function Grid({ products: productsProp }) {
 
                 {/* Hộp quà chính giữa ảnh */}
                 {p.gift && (
-                  <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-yellow-400 text-black text-xs px-3 py-2 rounded-md shadow-md">
+                  <span className="absolute top-10 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-yellow-400 text-black text-xs px-3 py-2 rounded-md shadow-md">
                     🎁
                   </span>
                 )}
