@@ -206,7 +206,7 @@ function Collection() {
     </main>
   );
 }
-export default CollectionsPage;
+export default Collection;
 
 function CollectionSection({ title, image, products }) {
 

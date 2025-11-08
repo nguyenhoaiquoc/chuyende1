@@ -6,15 +6,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Detail from "./components/Detail";
 import Breadcrumb from "./components/Breadcrumb";
 
-<<<<<<< HEAD
-import App from "./App";
-import Gird from "./components/Product";
-import Detail from "./components/Detail";
-
-const router = createBrowserRouter([
-=======
 const routers = createBrowserRouter([
->>>>>>> origin
   {
     path: "/",
     children: [

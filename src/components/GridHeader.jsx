@@ -7,11 +7,6 @@ export default function GridHeader({ totalProducts }) {
   const handleSortChange = (e) => {
     setSortOption(e.target.value);
   };
-<<<<<<< HEAD
-
-  return (
-    <div className="w-full px-4 py-6">
-=======
 const categories = [
   {
     name: 'Đồ Nam',
@@ -52,23 +47,14 @@ const categories = [
   const pageTitle = getPageTitle(location.pathname);
   return (
     <div className="w-full border-b">
->>>>>>> origin
       {/* ===== Header ===== */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
         {/* Title + Total products (chỉ hiện ở desktop) */}
         <div className="flex items-baseline gap-2">
-<<<<<<< HEAD
-          <h1 className="text-xl md:text-3xl font-bold uppercase text-gray-900">
-            ĐỒ NAM
-          </h1>
-=======
           {/* <h1 className="text-xl md:text-3xl font-bold uppercase text-gray-900">
             ĐỒ NAM
           </h1> */}
-          <div className='flex justify-between items-center mb-4 pb-3'>
             <h1 className="text-xl md:text-2xl font-semibold uppercase text-gray-800 tracking-wide">{pageTitle}</h1>
-          </div>
->>>>>>> origin
           <span className="hidden md:inline text-sm text-gray-600">
             ({totalProducts} Sản phẩm)
           </span>
