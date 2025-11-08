@@ -79,9 +79,17 @@ export const products = [
     imgMain: corosGrey,
     imgHover: corosGrey,
     images: [corosGrey, corosNylonDark, corosNylonWhite],
-    sale: "5%",
-    gift: true,
-  }, // ===== NỮ: ÁO =====
+
+    // 👇 thêm block này
+    specs: {
+      battery: "38 giờ GPS full",
+      weight: "30g",
+      waterResist: "5 ATM",
+      gps: "Dual-band GNSS",
+      display: "1.2\" Memory-In-Pixel",
+    },
+  },
+  // ===== NỮ: ÁO =====
 
   {
     id: "AO-ON-LS-W-001",
