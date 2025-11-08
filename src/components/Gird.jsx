@@ -18,7 +18,6 @@ export default function Grid({ products: productsProp }) {
   // nếu cha không truyền props thì dùng toàn bộ data chung
   const products = productsProp ?? PRODUCT_DATA;
   const TOTAL_PAGES = Math.ceil(products.length / ITEMS_PER_PAGE);
-
   // Phân trang
   const paginatedProducts = useMemo(() => {
     const start = (currentPage - 1) * ITEMS_PER_PAGE;
