@@ -27,25 +27,19 @@ import { brands } from "../data/brands";
 export default function Detail() {
   const { productId } = useParams();
 
-  // Lấy toàn bộ sản phẩm từ data chung
   const allProducts = products;
-
-  // Tìm sản phẩm theo id trên URL
   const currentProduct = allProducts.find((p) => p.id === productId);
 
-  // Brand name (từ brandId)
   const brandName = currentProduct
     ? brands[currentProduct.brandId]?.name || currentProduct.brandId || ""
     : "";
 
-  // Thumbnails: ưu tiên dùng mảng images, nếu không có thì dùng imgMain/imgHover
   const thumbs = currentProduct
     ? currentProduct.images && currentProduct.images.length > 0
       ? currentProduct.images
       : [currentProduct.imgMain, currentProduct.imgHover].filter(Boolean)
     : [];
 
-  // Size: data trong products.mock là mảng string -> convert sang {label, available}
   const sizes = currentProduct
     ? Array.isArray(currentProduct.sizes)
       ? currentProduct.sizes.map((s) =>
@@ -54,10 +48,8 @@ export default function Detail() {
       : []
     : [];
 
-  // Mô tả: nếu chưa có trong data thì để mảng rỗng
   const description = currentProduct?.description || [];
 
-  // Format giá
   const priceDisplay = currentProduct
     ? typeof currentProduct.price === "number"
       ? `${currentProduct.price.toLocaleString("vi-VN")} VNĐ`
@@ -75,13 +67,18 @@ export default function Detail() {
       : saleRaw
     : priceDisplay;
 
-  // Loại sản phẩm (để truyền cho ProductDescription nếu cần)
   const categoryId = currentProduct?.categoryId || "";
+
+  // phân loại để dùng cho ProductDescription
   let productType = "ao";
   if (categoryId.includes("shoes")) productType = "giay";
   else if (categoryId.includes("shorts")) productType = "quan";
+  else if (categoryId === "watches" || categoryId.includes("watch"))
+    productType = "dongho";
 
-  // Ảnh chính đang chọn
+  const isWatch =
+    categoryId === "watches" || categoryId.toLowerCase().includes("watch");
+
   const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
@@ -90,17 +87,14 @@ export default function Detail() {
     }
   }, [currentProduct]);
 
-  // Cuộn lên đầu khi đổi sản phẩm
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [productId]);
 
-  // Zoom
   const [zoom, setZoom] = useState(false);
   const [zoomPos, setZoomPos] = useState({ x: 0, y: 0 });
   const ZOOM_SCALE = 3;
 
-  // Scroll thumbnails
   const scrollRef = useRef(null);
 
   const handleUp = () => {
@@ -116,19 +110,15 @@ export default function Detail() {
     scrollRef.current?.scrollBy({ left: 100, behavior: "smooth" });
   };
 
-  // Số lượng
   const [quantity, setQuantity] = useState(1);
-
-  // Size đang chọn
   const [selectedSize, setSelectedSize] = useState(null);
 
-  // Ảnh cuối cùng dùng trong mô tả HTML
   const lastThumb = thumbs.length > 0 ? thumbs[thumbs.length - 1] : mauAnh;
 
   const productDescriptionHTML = `
     <h3 style="font-size: 1.25rem; font-weight: 600;">Zoot Elite Tri Aero Fx Racesuit</h3>
     <p>Sự kết hợp hoàn hảo giữa tốc độ, độ thoải mái và phong cách, bộ trisuit Zoot Elite Tri Aero được thiết kế cho những vận động viên ba môn phối hợp tìm kiếm hiệu suất đỉnh cao.</p>
-    <img src="${lastThumb}" alt="Product detail" style="width:100%; margin: 1rem 0;" />
+    <img src="${lastThumb}" alt="Product detail" style="width:70%; margin: 1rem 0;" />
     <h4 style="font-weight: 600;">Tính năng nổi bật</h4>
     <ul>
       <li>Vải dệt Exo-Dry™ High Thread Count: hỗ trợ cơ bắp và tăng lưu thông máu.</li>
@@ -138,7 +128,6 @@ export default function Detail() {
     </ul>
   `;
 
-  // Nếu không tìm thấy sản phẩm
   if (!currentProduct) {
     return (
       <div className="flex flex-col">
@@ -151,11 +140,21 @@ export default function Detail() {
     );
   }
 
+  // nếu sau này cậu có thêm field currentProduct.specs cho đồng hồ,
+  // có thể map ra bảng từ đây:
+  const watchSpecs = currentProduct.specs || {
+    "Loại sản phẩm": "Đồng hồ chạy bộ GPS",
+    "Thương hiệu": brandName,
+    "Chống nước": "5 ATM",
+    "Thời lượng pin": "Tối đa 35 giờ ở chế độ GPS (tham khảo)",
+    "Trọng lượng": "Khoảng 30g với dây nylon",
+    "Kết nối": "Bluetooth, ANT+",
+  };
+
   return (
     <div className="overflow-hidden">
       <NavigationMenu />
       <div className="relative md:grid md:grid-cols-2 md:px-40">
-        {/* Khung zoom bên cạnh */}
         {zoom && (
           <div className="w-[500px] h-[500px] overflow-hidden border-4 border-black absolute right-[270px] top-0 bg-gray-200 z-20 ">
             <img
@@ -277,14 +276,16 @@ export default function Detail() {
             <p className="text-xl mb-1 ml-1">{salePriceDisplay}</p>
           </div>
 
-          {/* Chọn Size */}
-          <div>Chọn Size:</div>
-          <div className="flex items-center gap-2 min-w-11 text-center leading-[2] text-[#767676]">
-            {sizes.map(({ label, available }) => (
-              <div
-                key={label}
-                onClick={() => available && setSelectedSize(label)}
-                className={`border h-[30px] min-w-10 cursor-pointer relative transition-[box-shadow] duration-300 ease-out 
+          {/* === NẾU KHÔNG PHẢI ĐỒNG HỒ -> CHỌN SIZE === */}
+          {!isWatch && (
+            <>
+              <div>Chọn Size:</div>
+              <div className="flex items-center gap-2 min-w-11 text-center leading-[2] text-[#767676]">
+                {sizes.map(({ label, available }) => (
+                  <div
+                    key={label}
+                    onClick={() => available && setSelectedSize(label)}
+                    className={`border h-[30px] min-w-10 cursor-pointer relative transition-[box-shadow] duration-300 ease-out 
                 ${
                   available
                     ? selectedSize === label
@@ -292,11 +293,39 @@ export default function Detail() {
                       : "border-white [box-shadow:0_0_0_1px_#B8B8B8] hover:[box-shadow:0_0_2px_2px_#FF7A00]"
                     : "border border-white bg-gray-300 shadow-sm shadow-slate-500 before:content[''] before:w-[1px] before:h-[40px] before:bg-gray-600 before:absolute before:left-1/2 before:-top-[6px] before:rotate-[55deg] after:content[''] after:w-[1px] after:h-[40px] after:bg-gray-600 after:absolute after:left-1/2 after:-top-[6px] after:-rotate-[55deg]"
                 }`}
-              >
-                {label}
+                  >
+                    {label}
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </>
+          )}
+
+          {/* === NẾU LÀ ĐỒNG HỒ -> BẢNG THÔNG SỐ KỸ THUẬT === */}
+          {isWatch && (
+            <div className="border-b pb-6">
+              <h3 className="font-semibold mb-3 text-gray-800">
+                Thông số kỹ thuật
+              </h3>
+              <div className="overflow-hidden rounded-md border text-sm">
+                <table className="w-full">
+                  <tbody>
+                    {Object.entries(watchSpecs).map(([key, value]) => (
+                      <tr
+                        key={key}
+                        className="odd:bg-gray-50 even:bg-white border-b last:border-none"
+                      >
+                        <td className="px-3 py-2 font-medium text-gray-700 w-1/3">
+                          {key}
+                        </td>
+                        <td className="px-3 py-2 text-gray-600">{value}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
 
           {/* Số lượng */}
           <div>Số lượng:</div>
