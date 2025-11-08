@@ -5,6 +5,7 @@ import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Detail from "./components/Detail";
 import Breadcrumb from "./components/Breadcrumb";
+import ProductCard from "./components/ProductCard";
 
 const routers = createBrowserRouter([
   {

@@ -4,7 +4,7 @@ import BT from "./BT";
 import NavigationMenu from "./NavigationMenu";
 import CategoryDescription from "./CategoryDescription";
 import Grid from "./Gird";
-import ProductPage from "../ProductPage";
+import ProductPage from "./ProductPage";
 
 export default function Breadcrumb() {
   const { category, subCategory } = useParams();

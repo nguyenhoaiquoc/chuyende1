@@ -5,10 +5,10 @@ import ScrollTest from './ScrollTest.jsx';
 import Panel from "./components/Panel.jsx";
 import User0008 from "./components/User0008.jsx";
 import Policies from './components/Policies.jsx';
-import ProductPage from './ProductPage.jsx';
+import ProductPage from './components/ProductPage.jsx';
 import { Routes, Route, Outlet } from 'react-router-dom';
 import BT from './components/BT.jsx';
-import Collection from './collection.jsx';
+import Collection from './Collection.jsx';
 
 const ProductLayout = () => (
   <div className="bg-white flex flex-col min-h-screen">

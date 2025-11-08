@@ -172,14 +172,15 @@ export default function PriceFilter({ onSearch }) {
               aria-label="Max price"
             />
 
-            {/* Nhãn 2 đầu */}
-            <div className="flex justify-between text-sm text-gray-700 mt-2">
-              <span>0đ :</span>
-              <span>
-                {MAX_CAP.toLocaleString("vi-VN")}
-                đ
-              </span>
-            </div>
+       {/* Nhãn 2 đầu (theo giá đang chọn) */}
+<div className="flex justify-between text-sm text-gray-700 mt-2">
+  <span>
+    {minVal.toLocaleString("vi-VN")}đ
+  </span>
+  <span>
+    {maxVal.toLocaleString("vi-VN")}đ
+  </span>
+</div>
           </div>
 
           {/* Inputs */}
