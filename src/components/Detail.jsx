@@ -74,7 +74,6 @@ let productType = "ao";
   if (categoryPath.includes("giay")) productType = "giay"; 
   else if (categoryPath.includes("quan")) productType = "quan";
   else if (categoryPath.includes("dong-ho")) productType = "dongho";
-    productType = "dongho";
 
 const isWatch =
     categoryPath.includes("dong-ho") ||
