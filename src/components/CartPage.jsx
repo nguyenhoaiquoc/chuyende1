@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import NavigationMenu from "./NavigationMenu";
 import Breadcrumb from './Breadcrumb';
+import Footer from './Footer';
+import { Link } from 'react-router-dom';
 
 const CartItem = ({ item, onQuantityChange, onRemove, formatCurrency }) => {
   // Hàm xử lý tăng/giảm
@@ -185,42 +187,56 @@ export default function CartPage() {
               </span>
             </div>
             <div className="flex justify-end items-center space-x-4">
-              <a 
-                href="/" // Link về trang chủ
-                title="Tiếp tục mua hàng" // Tooltip
-                className="px-6 py-3 bg-gray-200 text-black font-semibold rounded-lg hover:bg-gray-300 transition"
-              >
-                Tiếp tục mua hàng
-              </a>
-              <button 
-                title="Tiến hành đặt hàng" // Tooltip
-                className="px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition cursor-pointer"
-              >
-                Đặt hàng
-              </button>
-            </div>
+  <Link
+    to="/"
+    title="Tiếp tục mua hàng"
+    className="inline-block px-8 py-3 bg-gray-200 text-black text-base font-semibold rounded-full shadow "
+  >
+    Tiếp tục mua hàng
+  </Link>
+
+  <Link
+    to="/checkout"
+    title="Tiến hành đặt hàng"
+    className="inline-block px-8 py-3 bg-purple-600 text-white text-base font-semibold rounded-full shadow"
+  >
+    Đặt hàng
+  </Link>
+</div>
           </div>
           
           {/* --- Bố cục Mobile --- */}
           <div className="md:hidden space-y-4">
-            <div className="flex justify-between items-center text-lg">
-              <span className="font-bold text-black">Tổng tiền</span>
-              <span className="font-bold text-purple-600">
-                {formatCurrency(total)}
-              </span>
-            </div>
-            <button className="w-full px-6 py-3 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition">
-              Tiến hành thanh toán
-            </button>
-            <a 
-              href="/" // Link về trang chủ
-              className="w-full block text-center px-6 py-3 bg-gray-200 text-black font-semibold rounded-lg hover:bg-gray-300 transition"
-            >
-              Tiếp tục mua hàng
-            </a>
-          </div>
+  <div className="flex justify-between items-center text-lg">
+    <span className="font-bold text-black">Tổng tiền</span>
+    <span className="font-bold text-purple-600">
+      {formatCurrency(total)}
+    </span>
+  </div>
+
+<Link
+  to="/checkout"
+  title="Tiến hành thanh toán"
+  className="flex items-center justify-center w-full px-8 py-3 bg-purple-600 text-white text-base font-semibold rounded-full shadow hover:bg-purple-700 transition duration-300 ease-in-out"
+>
+  Tiến hành thanh toán
+</Link>
+
+
+<Link
+  to="/"
+  title="Tiếp tục mua hàng"
+  className="flex items-center justify-center w-full px-8 py-3 bg-gray-200 text-black text-base font-semibold rounded-full shadow hover:bg-gray-300 transition duration-300 ease-in-out"
+>
+  Tiếp tục mua hàng
+</Link>
+
+</div>
+
         </div>
       </div>
+
+      <Footer/>
     </div>
   );
 }

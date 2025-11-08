@@ -17,6 +17,7 @@ import BrandFilter from "./BrandFilter";
 
 // 👉 DÙNG DATA CHUNG
 import { products as PRODUCT_DATA } from "../data/products.mock";
+import Breadcrumb from "./Breadcrumb";
 
 /* ================== CATEGORIES (THEO PATH) ================== */
 
@@ -81,11 +82,11 @@ Bạn đang tìm kiếm trang phục và giày chạy bộ cao cấp, đáp ứn
 
  {
     name: "Đồng Hồ",
-    path: "/dongho",
+    path: "/dong-ho",
     subcategories: [
-      { name: "Đồng hồ Suunto", path: "/dongho/suunto" },
-      { name: "Đồng hồ Garmin", path: "/dongho/garmin" },
-      { name: "Đồng hồ Coros",  path: "/dongho/coros"  },
+      { name: "Đồng hồ Suunto", path: "/dong-ho/suunto" },
+      { name: "Đồng hồ Garmin", path: "/dong-ho/garmin" },
+      { name: "Đồng hồ Coros",  path: "/dong-ho/coros"  },
     ],
   },
 ];
@@ -103,7 +104,7 @@ const CATEGORY_ID_TO_PATH = {
   "women-tops": "/do-nu/ao",
   "women-shorts": "/do-nu/quan",
 
-  watches: "/dongho",
+  watches: "/dong-ho",
 };
 
 /* ========== DÙNG DATA CHUNG THAY CHO ALL_PRODUCTS TỰ KHAI ========== */
@@ -119,29 +120,6 @@ const ALL_PRODUCTS = PRODUCT_DATA.map((p) => ({
 
 // Chuẩn hoá path: bỏ dấu "/" ở cuối để so sánh ổn định
 const norm = (s = "") => s.replace(/\/+$/, "");
-
-/* ================== BREADCRUMB (nếu cần bật lại) ================== */
-
-const Breadcrumb = () => {
-  const location = useLocation();
-  const pathnames = location.pathname.slice(1).split("/").filter(Boolean);
-  if (pathnames.length === 0) return null;
-
-  const findPathData = (pathSegment, index) => {
-    const fullPath = `/${pathnames.slice(0, index + 1).join("/")}`;
-    for (const cat of categories) {
-      if (cat.path === fullPath) return { name: cat.name, path: cat.path };
-      if (cat.subcategories) {
-        const sub = cat.subcategories.find((s) => s.path === fullPath);
-        if (sub) return { name: sub.name, path: sub.path };
-      }
-    }
-    return { name: pathSegment.replace(/-/g, " "), path: fullPath };
-  };
-
-  // đang tắt breadcrumb
-  return null;
-};
 
 /* ================== SIDEBAR ================== */
 
@@ -316,7 +294,9 @@ export default function ProductPage() {
   const pageDescription = currentCategory.description;
 
   return (
+    <>
     <div className="">
+      <Breadcrumb/>
       <div className="container mx-auto px-4 py-6 md:py-6">
         {/* Mobile Sidebar Toggle */}
         {!isSidebarOpen && (
@@ -402,5 +382,6 @@ export default function ProductPage() {
       <Panel />
       <ScrollTest />
     </div>
+    </>
   );
 }

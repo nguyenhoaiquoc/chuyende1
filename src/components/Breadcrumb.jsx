@@ -3,12 +3,11 @@
 import React from "react";
 // ✅ 1. Thêm 'useLocation' vào
 import { useParams, Link, useLocation } from "react-router-dom";
-import BT from "./BT";
 import NavigationMenu from "./NavigationMenu";
 
 export default function Breadcrumb() {
-  const params = useParams(); // Lấy params từ URL (ví dụ: /do-nu/quan)
-  const location = useLocation(); // Lấy thông tin đường dẫn (ví dụ: /cart)
+  const params = useParams(); 
+  const location = useLocation(); 
 
   // ✅ 2. Thêm logic để xử lý route tĩnh
   let category = params.category; // Lấy category từ param trước
@@ -27,25 +26,25 @@ export default function Breadcrumb() {
     "dong-ho": "Đồng Hồ",
     "thuong-hieu": "Thương Hiệu",
     "sale": "Khuyến Mãi 10.10",
-    "running-gears": "Running Gears",
-    "triathlon": "Triathlon",
-    "cart": "Giỏ hàng", // Dòng này của bạn đã đúng
-  }[category] || null; // Đổi "Danh mục" thành null để không hiển thị nếu không khớp
+    "cart": "Giỏ hàng",
+  }[category] || null;
 
   const subCategoryLabel = {
     ao: "Áo",
     quan: "Quần",
     "giay-chay-bo": "Giày Chạy Bộ",
     "giay-dia-hinh": "Giày Địa Hình",
-    suunto: "Suunto",
-    garmin: "Garmin",
-    coros: "Coros",
+    dongHo: "Đồng hồ",
+    "suunto": "Đồng hồ Suunto",
+    "garmin": "Đồng hồ Garmin",
+    "coros": "Đồng hồ Coros",
+
   }[subCategory] || null;
 
   return (
     <>
       {/* Header */}
-      <BT />
+      <NavigationMenu/>
 
       {/* Breadcrumb */}
       {/* ✅ 3. Chỉ hiển thị <header> nếu có category (bao gồm cả 'cart') */}
