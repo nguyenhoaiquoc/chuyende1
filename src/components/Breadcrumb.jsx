@@ -3,8 +3,8 @@
 import React from "react";
 // ✅ 1. Thêm 'useLocation' vào
 import { useParams, Link, useLocation } from "react-router-dom";
-import NavigationMenu from "./NavigationMenu"; 
 import BT from "./BT";
+import NavigationMenu from "./NavigationMenu";
 
 export default function Breadcrumb() {
   const params = useParams(); // Lấy params từ URL (ví dụ: /do-nu/quan)
