@@ -46,15 +46,17 @@ const categories = [
   };
   const pageTitle = getPageTitle(location.pathname);
   return (
-    <div className="w-full border-b">
+<div className="w-full border-b">
       {/* ===== Header ===== */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+      {/* THÊM 'pb-4' VÀO DÒNG DƯỚI ĐỂ TẠO KHOẢNG CÁCH VỚI CÁI border-b
+      */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 pb-4">
         {/* Title + Total products (chỉ hiện ở desktop) */}
         <div className="flex items-baseline gap-2">
           {/* <h1 className="text-xl md:text-3xl font-bold uppercase text-gray-900">
             ĐỒ NAM
           </h1> */}
-            <h1 className="text-xl md:text-2xl font-semibold uppercase text-gray-800 tracking-wide">{pageTitle}</h1>
+          <h1 className="text-xl md:text-2xl font-semibold uppercase text-gray-800 tracking-wide">{pageTitle}</h1>
           <span className="hidden md:inline text-sm text-gray-600">
             ({totalProducts} Sản phẩm)
           </span>
