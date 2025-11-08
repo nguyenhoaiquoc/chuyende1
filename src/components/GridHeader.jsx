@@ -54,9 +54,7 @@ const categories = [
           {/* <h1 className="text-xl md:text-3xl font-bold uppercase text-gray-900">
             ĐỒ NAM
           </h1> */}
-          <div className='flex justify-between items-center mb-4 pb-3'>
             <h1 className="text-xl md:text-2xl font-semibold uppercase text-gray-800 tracking-wide">{pageTitle}</h1>
-          </div>
           <span className="hidden md:inline text-sm text-gray-600">
             ({totalProducts} Sản phẩm)
           </span>
