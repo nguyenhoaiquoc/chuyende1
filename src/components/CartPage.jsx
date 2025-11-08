@@ -200,7 +200,7 @@ export default function CartPage() {
   </Link>
 
   <Link
-    to="/checkout"
+    to="#"
     title="Tiến hành đặt hàng"
     className="inline-block px-8 py-3 bg-purple-600 text-white text-base font-semibold rounded-full shadow"
   >
