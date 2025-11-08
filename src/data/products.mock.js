@@ -1,4 +1,4 @@
-// data/products.mock.js
+// src/data/products.mock.js
 import { brands } from "./brands";
 import { categories } from "./categories";
 
@@ -41,7 +41,8 @@ export const products = [
     imgHover: giayHokaBack,
     images: [giayHokaSide, giayHokaBack],
     sizes: ["40", "41", "42", "43", "44"],
-    sale: "10%", // có giảm giá
+    sale: "10%",
+    bestseller: true,   // 🔥 bestseller
   },
   {
     id: "AO-ON-001",
@@ -54,18 +55,19 @@ export const products = [
     images: [aoOnFlat],
     sizes: ["S", "M", "L", "XL"],
     sale: "20%",
+    gift: true,         // 🎁 có quà tặng
   },
   {
     id: "SANDAL-TRAIL-LUNA-001",
     name: "Dép Chạy Trail LUNA Mono",
     price: 2900000,
     categoryId: "men-shoes-trail",
-    brandId: "luna", // nhớ có 'luna' trong brands.js
+    brandId: "luna",
     imgMain: depTrailSide,
     imgHover: depTrailTop,
     images: [depTrailSide, depTrailTop],
     sizes: ["38", "39", "40", "41", "42"],
-    // không sale thì thôi
+    gift: true,
   },
 
   // ===== ĐỒNG HỒ =====
@@ -79,6 +81,7 @@ export const products = [
     imgHover: corosGrey,
     images: [corosGrey, corosNylonDark, corosNylonWhite],
     sale: "5%",
+    bestseller: true,
   },
 
   // ===== NỮ: ÁO =====
@@ -93,12 +96,13 @@ export const products = [
     images: [aoNuFlat, aoNuModel, aoNuBack],
     sizes: ["XS", "S", "M", "L"],
     sale: "15%",
+    gift: true,
   },
 
   // ===== NỮ: GIÀY ROAD =====
   {
     id: "GIAY-HOKA-ROAD-W-001",
-    name: "Giày Chạy Bộ Nữ HOKA Clifton 9 Wide",
+name: "Giày Chạy Bộ Nữ HOKA Clifton 9 Wide",
     price: 4300000,
     categoryId: "women-shoes-road",
     brandId: "hoka",
@@ -107,6 +111,7 @@ export const products = [
     images: [giayNuRoadSide, giayNuRoadBack],
     sizes: ["36", "37", "38", "39", "40"],
     sale: "20%",
+    bestseller: true,
   },
 
   // ===== NỮ: GIÀY TRAIL =====
@@ -121,14 +126,16 @@ export const products = [
     images: [giayNuTrailSide, giayNuTrailAngle],
     sizes: ["36", "37", "38", "39", "40"],
     sale: "25%",
+    gift: true,
+    bestseller: true,
   },
 
-  // ===== NỮ: QUẦN (MỚI THÊM) =====
+  // ===== NỮ: QUẦN =====
   {
     id: "W-SHORT-ON-001",
     name: "Quần Chạy Bộ Nữ On Running 3 Inch",
     price: 2100000,
-    categoryId: "women-shorts",   // phải khớp categories.js
+    categoryId: "women-shorts",
     brandId: "on",
     imgMain: QuanNuOnRunning,
     imgHover: QuanNuOnRunning2,
@@ -146,6 +153,7 @@ export const products = [
     imgHover: QuanNuOnRunning,
     images: [QuanNuOnRunning2, QuanNuOnRunning],
     sizes: ["XS", "S", "M", "L"],
-    // không sale cũng được
+    sale: "10%",
+    gift: true,
   },
 ];

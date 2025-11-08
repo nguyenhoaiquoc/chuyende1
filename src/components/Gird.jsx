@@ -7,7 +7,7 @@ import { faEye, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import GridHeader from "./GridHeader";
 import ProductPopup from "./ProductPopup";
 
-// 👉 DÙNG DATA CHUNG
+// 👉 Dữ liệu sản phẩm dùng chung
 import { products as PRODUCT_DATA } from "../data/products.mock";
 
 export default function Grid({ products: productsProp }) {
@@ -15,20 +15,21 @@ export default function Grid({ products: productsProp }) {
   const [quickViewProduct, setQuickViewProduct] = useState(null);
   const ITEMS_PER_PAGE = 12;
 
-  // nếu cha không truyền props thì dùng toàn bộ data chung
+  // Nếu component cha không truyền prop thì dùng data chung
   const products = productsProp ?? PRODUCT_DATA;
   const TOTAL_PAGES = Math.ceil(products.length / ITEMS_PER_PAGE);
+
   // Phân trang
   const paginatedProducts = useMemo(() => {
     const start = (currentPage - 1) * ITEMS_PER_PAGE;
     return products.slice(start, start + ITEMS_PER_PAGE);
   }, [products, currentPage]);
 
-  // Format giá
+  // Format giá tiền
   const formatPrice = (price) =>
     Number(price).toLocaleString("vi-VN") + " VNĐ";
 
-  // Xem nhanh
+  // Xử lý xem nhanh
   const handleQuickView = (product) => setQuickViewProduct(product);
   const handleCloseQuickView = () => setQuickViewProduct(null);
 
@@ -52,6 +53,7 @@ export default function Grid({ products: productsProp }) {
             state={{ product: p }}
             className="group relative block rounded-lg overflow-hidden text-center bg-white transform transition-all duration-300 hover:shadow-xl"
           >
+            {/* Vùng ảnh sản phẩm */}
             <div className="relative group">
               <div className="w-full h-full aspect-square overflow-hidden relative">
                 <img
@@ -66,8 +68,32 @@ export default function Grid({ products: productsProp }) {
                 />
               </div>
 
-              {/* Icon xem nhanh và chi tiết */}
-              <div className="absolute top-[10%] left-[10px] z-30 flex flex-col items-center">
+              {/* --- BADGES --- */}
+              <div className="absolute inset-0 z-30 pointer-events-none">
+                {/* Giảm giá góc trái */}
+                {p.sale && (
+<span className="absolute top-2 left-2 bg-purple-700 text-white text-xs font-semibold px-2 py-1 rounded-md shadow">
+                    {p.sale}
+                  </span>
+                )}
+
+                {/* Hộp quà chính giữa ảnh */}
+                {p.gift && (
+                  <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-yellow-400 text-black text-xs px-3 py-2 rounded-md shadow-md">
+                    🎁
+                  </span>
+                )}
+
+                {/* BEST SELLER góc phải */}
+                {p.bestseller && (
+                  <span className="absolute top-3 right-[-30px] bg-red-600 text-white text-[10px] font-bold px-6 py-1 rotate-45 shadow-md">
+                    BEST SELLER
+                  </span>
+                )}
+              </div>
+
+              {/* --- ICONS: Xem nhanh / Xem chi tiết --- */}
+              <div className="absolute top-[10%] left-[10px] z-40 flex flex-col items-center">
                 {/* Xem nhanh */}
                 <div className="relative group/zoom">
                   <button
@@ -103,13 +129,13 @@ export default function Grid({ products: productsProp }) {
                     />
                   </Link>
                   <span className="absolute left-full top-1/2 -translate-y-1/2 ml-2 bg-gray-800 text-white text-xs px-2 py-1 rounded-md opacity-0 group-hover/eye:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none z-40">
-                    Xem chi tiết
+Xem chi tiết
                   </span>
                 </div>
               </div>
             </div>
 
-            {/* Thông tin sản phẩm */}
+            {/* --- THÔNG TIN SẢN PHẨM --- */}
             <div className="mt-2 p-3 text-center">
               <div className="font-medium text-[14px] md:text-lg">{p.name}</div>
               <div className="flex flex-col items-center mt-1">
@@ -127,7 +153,7 @@ export default function Grid({ products: productsProp }) {
         ))}
       </div>
 
-      {/* Phân trang */}
+      {/* --- PHÂN TRANG --- */}
       <div className="flex justify-center mt-6 gap-2">
         {Array.from({ length: TOTAL_PAGES }, (_, i) => (
           <button
@@ -146,10 +172,7 @@ export default function Grid({ products: productsProp }) {
 
       {/* Popup xem nhanh */}
       {quickViewProduct && (
-        <ProductPopup
-          product={quickViewProduct}
-          onClose={handleCloseQuickView}
-        />
+        <ProductPopup product={quickViewProduct} onClose={handleCloseQuickView} />
       )}
     </div>
   );
