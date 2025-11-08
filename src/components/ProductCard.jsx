@@ -9,6 +9,7 @@ export default function ProductCard({ product, onQuickView }) {
   return (
     <div className="h-auto md:w-[233px] w-full flex-shrink-0 lg:w-[300px] xl:w-[233px]">
       <div className="relative group">
+        <Link to={`/product/${id}`} >
         <div className="w-full h-full overflow-hidden relative">
           <img
             src={imgHover}
@@ -21,6 +22,7 @@ export default function ProductCard({ product, onQuickView }) {
             className="object-cover w-full h-full group-hover:scale-0 transition-transform duration-500 ease-in-out delay-350 relative z-20"
           />
         </div>
+        </Link>
 
         <div className="absolute top-[10%] left-[10px]">
           <div className="flex flex-col items-center">

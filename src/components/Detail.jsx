@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import mauAnh from "../assets/mauanh.png";
 
@@ -26,7 +26,7 @@ import { brands } from "../data/brands";
 
 export default function Detail() {
   const { productId } = useParams();
-
+const navigate = useNavigate();
   const allProducts = products;
   const currentProduct = allProducts.find((p) => p.id === productId);
 
@@ -67,17 +67,19 @@ export default function Detail() {
       : saleRaw
     : priceDisplay;
 
-  const categoryId = currentProduct?.categoryId || "";
-
+ const categoryPath = currentProduct?.categoryPath || "";
+const categoryId = currentProduct?.categoryId || "";
   // phân loại để dùng cho ProductDescription
-  let productType = "ao";
-  if (categoryId.includes("shoes")) productType = "giay";
-  else if (categoryId.includes("shorts")) productType = "quan";
-  else if (categoryId === "watches" || categoryId.includes("watch"))
+let productType = "ao";
+  if (categoryPath.includes("giay")) productType = "giay"; 
+  else if (categoryPath.includes("quan")) productType = "quan";
+  else if (categoryPath.includes("dong-ho")) productType = "dongho";
     productType = "dongho";
 
-  const isWatch =
-    categoryId === "watches" || categoryId.toLowerCase().includes("watch");
+const isWatch =
+    categoryPath.includes("dong-ho") ||
+    categoryId === "watches" ||
+    categoryId.toLowerCase().includes("watch");
 
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -112,6 +114,42 @@ export default function Detail() {
 
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState(null);
+
+  const isAddDisabled = (!isWatch && !selectedSize) || quantity < 1;
+
+  const handleAddToCart = () => {
+    if (isAddDisabled) {
+      if (!isWatch && !selectedSize) {
+        alert("Vui lòng chọn size trước khi thêm vào giỏ.");
+      }
+      return;
+    }
+
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const sizeToSave = isWatch ? null : selectedSize;
+
+    const existingItemIndex = cart.findIndex(
+      (item) => item.id === currentProduct.id && item.size === sizeToSave
+    );
+
+    if (existingItemIndex >= 0) {
+      cart[existingItemIndex].quantity += quantity;
+    } else {
+      cart.push({
+        id: currentProduct.id,
+        name: currentProduct.name,
+        price: saleRaw, // Dùng giá sale (nếu có)
+        size: sizeToSave,
+        quantity: quantity,
+        image: currentProduct.imgMain,
+      });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    localStorage.setItem("cartCount", cart.length);
+    window.dispatchEvent(new Event("storage"));
+    navigate("/cart");
+  };
 
   const lastThumb = thumbs.length > 0 ? thumbs[thumbs.length - 1] : mauAnh;
 
@@ -364,31 +402,38 @@ export default function Detail() {
                   e.preventDefault();
                 }}
                 onChange={(e) => {
-                  let val = e.target.value;
-                  if (val === "") {
-                    setQuantity("");
-                    return;
-                  }
-                  val = val.replace(/\D/g, "");
-                  if (val !== "") {
-                    const num = Number(val);
-                    if (!Number.isNaN(num) && num >= 0) {
-                      setQuantity(num);
-                    }
-                  }
-                }}
-                onBlur={() => {
-                  if (quantity === "") {
-                    setQuantity(1);
-                  }
-                }}
-                className="border h-[50px] rounded-full text-center w-full md:w-[150px] pr-5 pl-8"
-              />
+                  let val = e.target.value;
+                  if (val === "") {
+                    setQuantity("");
+                    return;
+                  }
+                  val = val.replace(/\D/g, "");
+                  if (val !== "") {
+                    const num = Number(val);
+                    if (!Number.isNaN(num) && num >= 1) { 
+                      setQuantity(num);
+                    }
+                  }
+                }}
+                onBlur={() => {
+                  if (quantity === "" || quantity < 1) { 
+                    setQuantity(1);
+                  }
+                }}
+                className="border h-[50px] rounded-full text-center w-full md:w-[150px] pr-5 pl-8"
+              />
             </div>
             <div className="flex justify-center gap-2">
-              <button className="bg-[#673AB7] rounded-full text-white py-2.5 px-12">
-                THÊM VÀO GIỎ HÀNG
-              </button>
+           <button 
+  onClick={handleAddToCart}
+  disabled={isAddDisabled}
+  className={`rounded-full text-white py-2.5 px-12 transition-colors duration-200 ${
+    isAddDisabled ? "bg-gray-400 cursor-not-allowed" : "bg-[#673AB7] hover:bg-[#5a329f]"
+  }`}
+>
+  THÊM VÀO GIỎ HÀNG
+</button>
+
               <div className="border p-4 rounded-full cursor-pointer ">
                 <CiHeart />
               </div>
@@ -434,10 +479,10 @@ export default function Detail() {
 
       {/* Sản phẩm liên quan */}
       <RelatedProducts
-        allProducts={allProducts}
-        currentProductId={currentProduct.id}
-        currentCategory={currentProduct.categoryId}
-      />
+        allProducts={allProducts}
+        currentProductId={currentProduct.id}
+        currentCategory={currentProduct.categoryId}
+      />
 
       <Footer />
       <ScrollTest />

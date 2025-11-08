@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../css/ProductPopup.css";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const ProductPopup = ({ product, onClose }) => {
   if (!product) return null;
@@ -8,7 +8,9 @@ const ProductPopup = ({ product, onClose }) => {
   const [selectedSize, setSelectedSize] = useState(null);
   const navigate = useNavigate(); // ✅ để chuyển trang cùng tab
 
-  const sizes = product?.sizes || ["S", "M", "L"];
+  const sizes = product?.sizes || [];
+  const hasSizes = sizes.length > 0;
+
   const image = product?.imgMain || "https://via.placeholder.com/300x400.png?text=Áo+Khoác";
   const name = product?.name || "Tên sản phẩm";
   const price = product?.price || "0";
@@ -29,38 +31,46 @@ const ProductPopup = ({ product, onClose }) => {
 
   // ✅ Xử lý khi nhấn "Thêm vào giỏ hàng"
 const handleAddToCart = () => {
-  if (!selectedSize || quantity <= 0) return;
+    // Kiểm tra lại điều kiện disable
+    if ((hasSizes && !selectedSize) || quantity <= 0) {
+      if (hasSizes && !selectedSize) {
+        alert("Vui lòng chọn size.");
+      }
+      return;
+    }
 
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-  const existingItemIndex = cart.findIndex(
-    (item) => item.id === product.id && item.size === selectedSize
-  );
+    // ✅ 4. Quyết định size lưu vào giỏ (nếu không có size, lưu là null)
+    const sizeToSave = hasSizes ? selectedSize : null;
 
-  if (existingItemIndex >= 0) {
-    cart[existingItemIndex].quantity += quantity;
-  } else {
-    cart.push({
-      id: product.id,
-      name,
-      price,
-      size: selectedSize,
-      quantity,
-      image,
-    });
-  }
+    const existingItemIndex = cart.findIndex(
+      // ✅ 5. So sánh dựa trên sizeToSave
+      (item) => item.id === product.id && item.size === sizeToSave
+    );
 
-  localStorage.setItem("cart", JSON.stringify(cart));
+    if (existingItemIndex >= 0) {
+      cart[existingItemIndex].quantity += quantity;
+    } else {
+      cart.push({
+        id: product.id,
+        name,
+        price,
+        size: sizeToSave, // ✅ 6. Lưu sizeToSave
+        quantity,
+        image,
+      });
+    }
 
-  // ✅ Cập nhật badge theo số dòng sản phẩm
-  localStorage.setItem("cartCount", cart.length);
-  window.dispatchEvent(new Event("storage"));
+    localStorage.setItem("cart", JSON.stringify(cart));
+    localStorage.setItem("cartCount", cart.length);
+    window.dispatchEvent(new Event("storage"));
 
-  navigate("/cart");
-};
+    navigate("/cart");
+    window.scrollTo(0, 0);
+  };
 
-
-  const isAddDisabled = !selectedSize || quantity <= 0;
+const isAddDisabled = (hasSizes && !selectedSize) || quantity <= 0;
 
   return (
     <div className="popup-overlay" onClick={onClose}>
@@ -78,7 +88,15 @@ const handleAddToCart = () => {
           </div>
 
           <div className="popup-info">
-            <h3 className="product-name">{name}</h3>
+            <h3 className="product-name">
+  <Link 
+    to={`/product/${product.id}`} 
+    onClick={onClose} 
+  >
+    {name}
+  </Link>
+</h3>
+
 
             <div className="qv-header-info">
               <span><b>Mã SP:</b> {product.id || "39113978"}</span>
@@ -90,19 +108,21 @@ const handleAddToCart = () => {
             <hr className="divider" />
 
             {/* === Size chọn === */}
-            <div className="sizes">
-              <div className="size-list">
-                {sizes.map((size) => (
-                  <div
-                    key={size}
-                    className={`size-box ${selectedSize === size ? "selected" : ""}`}
-                    onClick={() => handleSizeClick(size)}
-                  >
-                    {size}
-                  </div>
-                ))}
+            {hasSizes && (
+              <div className="sizes">
+                <div className="size-list">
+                  {sizes.map((size) => (
+                    <div
+                      key={size}
+                      className={`size-box ${selectedSize === size ? "selected" : ""}`}
+                      onClick={() => handleSizeClick(size)}
+                    >
+                      {size}
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* === Số lượng + nút thêm === */}
             <div className="quantity-add">

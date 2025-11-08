@@ -1,18 +1,11 @@
-// (Trong RelatedProducts.jsx)
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaSearchPlus, FaRegEye } from "react-icons/fa";
 import ProductPopup from "./ProductPopup"; 
 
-// === 1. BỎ IMPORT CÁC MODULE KHÔNG DÙNG ===
 import { Swiper, SwiperSlide } from 'swiper/react';
-// import { Pagination, Scrollbar } from 'swiper/modules'; // <-- XÓA DÒNG NÀY
 
-// === 2. BỎ IMPORT CSS CỦA CÁC MODULE KHÔNG DÙNG ===
 import 'swiper/css';
-// import 'swiper/css/pagination'; // <-- XÓA DÒNG NÀY
-// import 'swiper/css/scrollbar'; // <-- XÓA DÒNG NÀY
 
 
 export default function RelatedProducts({
@@ -23,10 +16,9 @@ export default function RelatedProducts({
   const [showPopup, setShowPopup] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
-  const relatedProducts = allProducts.filter(
-    (p) => p.category === currentCategory && p.id !== currentProductId
-  );
-
+const relatedProducts = allProducts.filter(
+    (p) => p.categoryId === currentCategory && p.id !== currentProductId
+  );
   const handleOpenPopup = (e, product) => {
     e.preventDefault(); 
     e.stopPropagation(); 
@@ -50,23 +42,16 @@ export default function RelatedProducts({
       </div>
 
       <Swiper
-        // === 3. XÓA BỎ "Pagination" và "Scrollbar" khỏi modules ===
-        // modules={[Pagination, Scrollbar]} // <-- DÒNG CŨ
-        modules={[]} // <-- DÒNG MỚI: Không cần module nào nếu không có pagination/scrollbar/navigation
+        modules={[]}
         
         spaceBetween={24} 
         slidesPerView={2}  
         loop={true} 
-        // === 4. XÓA BỎ CÁC THUỘC TÍNH pagination và scrollbar ===
-        // pagination={{ clickable: true }} // <-- XÓA DÒNG NÀY
-        // scrollbar={{ draggable: true }} // <-- XÓA DÒNG NÀY
-        
         breakpoints={{
           768: {
             slidesPerView: 4, 
           },
         }}
-        // className="pb-10" // <-- Dòng này cũng không cần nữa nếu không có pagination/scrollbar
       >
         {relatedProducts.map((p) => (
           <SwiperSlide key={p.id}>

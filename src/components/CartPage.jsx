@@ -3,6 +3,8 @@ import NavigationMenu from "./NavigationMenu";
 import Breadcrumb from './Breadcrumb';
 import Footer from './Footer';
 import { Link } from 'react-router-dom';
+import ScrollTest from '../ScrollTest';
+import Panel from './Panel';
 
 const CartItem = ({ item, onQuantityChange, onRemove, formatCurrency }) => {
   // Hàm xử lý tăng/giảm
@@ -14,6 +16,7 @@ const handleInputChange = (e) => {
     const newQuantity = parseInt(e.target.value) || 1;
     onQuantityChange(item.id, item.size, newQuantity > 0 ? newQuantity : 1);
   };
+
   return (
     <div className="border-b py-6">
        {/* === Bố cục Mobile === */}
@@ -191,6 +194,7 @@ export default function CartPage() {
     to="/"
     title="Tiếp tục mua hàng"
     className="inline-block px-8 py-3 bg-gray-200 text-black text-base font-semibold rounded-full shadow "
+    onClick={() => window.scrollTo(0, 0)}
   >
     Tiếp tục mua hàng
   </Link>
@@ -236,7 +240,9 @@ export default function CartPage() {
         </div>
       </div>
 
-      <Footer/>
+      <Footer />
+      <ScrollTest />
+      <Panel />
     </div>
   );
 }
