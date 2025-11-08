@@ -390,7 +390,7 @@ export default function ProductPage() {
           <main className="flex-1">
             {/* TODO: nếu Gird nhận props, truyền productsInCategory vào */}
             <div className="min-h-[60vh] rounded-md flex items-center justify-center">
-              <Gird />
+              <Gird products={productsInCategory} />
             </div>
 
             <CategoryDescription description={pageDescription} />
