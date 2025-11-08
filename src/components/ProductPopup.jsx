@@ -3,6 +3,7 @@ import "../css/ProductPopup.css";
 import { Link } from "react-router-dom";
 
 const ProductPopup = ({ product, onClose }) => {
+  if (!product) return null;
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState(null);
 
@@ -87,11 +88,11 @@ const ProductPopup = ({ product, onClose }) => {
               </div>
 
             </div>
-
           </div>
         </div>
       </div>
     </div>
+
   );
 };
 
