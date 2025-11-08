@@ -1,119 +1,23 @@
+// src/components/Grid.jsx
 import React, { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
-// Assets
-import Ao from "../assets/Aoremove.png";
-import sanPham2 from "../assets/sanpham2.jpg";
-import sanPham2Load from "../assets/sanpham2Load.jpg";
-import mauAnh from "../assets/mauAnh.png";
-
-// Components
 import GridHeader from "./GridHeader";
 import ProductPopup from "./ProductPopup";
 
-export default function Grid() {
+// 👉 DÙNG DATA CHUNG
+import { products as PRODUCT_DATA } from "../data/products.mock";
+
+export default function Grid({ products: productsProp }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [quickViewProduct, setQuickViewProduct] = useState(null);
   const ITEMS_PER_PAGE = 12;
 
-  // Dữ liệu sản phẩm
-  const products = [
-    {
-      id: "SP002",
-      name: "Áo Khoác Nữ On Running Weather",
-      price: 7060000,
-      imgMain: sanPham2,
-      imgHover: sanPham2Load,
-      sale: "20%",
-      sizes: ["S", "M", "L", "XL"],
-    },
-    {
-      id: "1ME1031315",
-      name: "Áo Khoác Nam On Running Weather Jacket",
-      price: 7060000,
-      imgMain: Ao,
-      imgHover: mauAnh,
-      sale: "20%",
-      sizes: ["S", "M", "L", "XL"],
-    },
-    {
-      id: "GIAY-HOKA-002",
-      name: "Giày Chạy Trail Hoka Speedgoat 5",
-      price: 5100000,
-      imgMain: sanPham2,
-      imgHover: sanPham2Load,
-      sale: "",
-      sizes: ["S", "M", "L", "XL"],
-    },
-    {
-      id: "AO-NIKE-003",
-      name: "Áo Thun Chạy Bộ Nike Dri-Fit",
-      price: 1200000,
-      imgMain: Ao,
-      imgHover: mauAnh,
-      sale: "25%",
-      sizes: ["S", "M", "L", "XL"],
-    },
-    {
-      id: "GIAY-ADI-003",
-      name: "Giày Adidas Adizero Boston 12",
-      price: 4200000,
-      imgMain: sanPham2Load,
-      imgHover: sanPham2,
-      sale: "",
-      sizes: ["S", "M", "L", "XL"],
-    },
-    {
-      id: "AO-ADIDAS-004",
-      name: "Áo Ba Lỗ Adidas Running",
-      price: 950000,
-      imgMain: Ao,
-      imgHover: mauAnh,
-      sale: "",
-      sizes: ["S", "M", "L", "XL"],
-    },
-    {
-      id: "QUAN-ON-001",
-      name: "Quần Đùi Chạy Bộ On Running 5 Inch",
-      price: 2300000,
-      imgMain: Ao,
-      imgHover: mauAnh,
-      sale: "",
-      sizes: ["S", "M", "L", "XL"],
-    },
-    {
-      id: "SP003",
-      name: "Giày Chạy Bộ Siêu Bền",
-      price: 4500000,
-      imgMain: mauAnh,
-      imgHover: Ao,
-      sale: "10%",
-      sizes: ["S", "M", "L", "XL"],
-    },
-    {
-      id: "GIAY-BROOKS-005",
-      name: "Giày Brooks Ghost 15",
-      price: 3900000,
-      imgMain: sanPham2,
-      imgHover: mauAnh,
-      sale: "10%",
-      sizes: ["S", "M", "L", "XL"],
-    },
-    {
-      id: "AO-SALOMON-006",
-      name: "Áo Thun Dài Tay Salomon",
-      price: 1800000,
-      imgMain: Ao,
-      imgHover: mauAnh,
-      sale: "15%",
-      sizes: ["S", "M", "L", "XL"],
-    },
-  ];
-
+  // nếu cha không truyền props thì dùng toàn bộ data chung
+  const products = productsProp ?? PRODUCT_DATA;
   const TOTAL_PAGES = Math.ceil(products.length / ITEMS_PER_PAGE);
-
   // Phân trang
   const paginatedProducts = useMemo(() => {
     const start = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -122,7 +26,7 @@ export default function Grid() {
 
   // Format giá
   const formatPrice = (price) =>
-    price.toLocaleString("vi-VN") + " VNĐ";
+    Number(price).toLocaleString("vi-VN") + " VNĐ";
 
   // Xem nhanh
   const handleQuickView = (product) => setQuickViewProduct(product);
@@ -151,7 +55,7 @@ export default function Grid() {
             <div className="relative group">
               <div className="w-full h-full aspect-square overflow-hidden relative">
                 <img
-                  src={p.imgHover}
+                  src={p.imgHover || p.imgMain}
                   alt={p.name}
                   className="object-cover w-full h-full absolute -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-in-out z-10"
                 />
@@ -167,6 +71,7 @@ export default function Grid() {
                 {/* Xem nhanh */}
                 <div className="relative group/zoom">
                   <button
+                    type="button"
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
@@ -241,7 +146,10 @@ export default function Grid() {
 
       {/* Popup xem nhanh */}
       {quickViewProduct && (
-        <ProductPopup product={quickViewProduct} onClose={handleCloseQuickView} />
+        <ProductPopup
+          product={quickViewProduct}
+          onClose={handleCloseQuickView}
+        />
       )}
     </div>
   );
