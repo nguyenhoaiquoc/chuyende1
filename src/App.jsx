@@ -69,7 +69,7 @@ import ScrollTest from './ScrollTest.jsx';
 import Panel from "./components/Panel.jsx";
 import User0008 from "./components/User0008.jsx";
 import Policies from './components/Policies.jsx';
-import Collection from './collection.jsx';
+import Collection from './Collection.jsx';
 
 export default function App() {
   return (
