@@ -68,11 +68,6 @@ import xemthem4 from './assets/xemthem4.jpeg';
 import xemthem5 from './assets/xemthem5.jpeg';
 import xemthem6 from './assets/xemthem6.jpg';
 import { Link } from "react-router-dom";
-<<<<<<< HEAD
-
-=======
-import ProductPopup from "./components/ProductPopup";
->>>>>>> 1467ac228e80d51688a6ceabb791993b0915ceab
 // Dữ liệu
 
 const collectionsData = [
@@ -93,11 +88,7 @@ const collectionsData = [
     title: "Women",
     image: nu,
     products: [
-<<<<<<< HEAD
       { id: 1, name: "Áo croptop nữ", price: "280.000₫", oldPrice: "350.000₫", image: nu1, hoverImage: nu2, discountPercent: 20, isBestSeller: true ,isGift: true },
-=======
-      { id: 1, name: "Áo croptop nữ", price: "280.000₫", oldPrice: "350.000₫", image: nu1, hoverImage: nu2, discountPercent: 20, isBestSeller: true, isGift: true },
->>>>>>> 1467ac228e80d51688a6ceabb791993b0915ceab
       { id: 2, name: "Quần legging tập gym", price: "410.000₫", image: nu2, hoverImage: nu3 },
       { id: 3, name: "Giày thể thao nữ", price: "860.000₫", oldPrice: "980.000₫", image: nu3, hoverImage: nu4, isBestSeller: true },
       { id: 4, name: "Áo khoác tập yoga", price: "520.000₫", image: nu4, hoverImage: nu5 },
@@ -110,19 +101,11 @@ const collectionsData = [
     title: "Phụ kiện",
     image: phukien,
     products: [
-<<<<<<< HEAD
       { id: 1, name: "Kính chạy 100%", price: "3.874.000₫", oldPrice: "4.500.000₫", image: phukien1, hoverImage: phukien2, discountPercent: 14,isBestSeller: true ,isGift: true },
       { id: 2, name: "Mũ FRACTEL", price: "1.350.000₫", image: phukien2, hoverImage: phukien3, isGift: true },
       { id: 3, name: "Tất Injinji RUN", price: "369.000₫", oldPrice: "450.000₫", image: phukien3, hoverImage: phukien4, discountPercent: 18, isBestSeller: true ,isGift: true },
       { id: 4, name: "Đèn đội đầu Nitecore", price: "1.050.000₫", image: phukien4, hoverImage: phukien5 },
       { id: 5, name: "Thắt lưng Naked", price: "890.000₫", image: phukien5, hoverImage: phukien6, isBestSeller: true,discountPercent: 22, isGift: true },
-=======
-      { id: 1, name: "Kính chạy 100%", price: "3.874.000₫", oldPrice: "4.500.000₫", image: phukien1, hoverImage: phukien2, discountPercent: 14, isBestSeller: true, isGift: true },
-      { id: 2, name: "Mũ FRACTEL", price: "1.350.000₫", image: phukien2, hoverImage: phukien3, isGift: true },
-      { id: 3, name: "Tất Injinji RUN", price: "369.000₫", oldPrice: "450.000₫", image: phukien3, hoverImage: phukien4, discountPercent: 18, isBestSeller: true, isGift: true },
-      { id: 4, name: "Đèn đội đầu Nitecore", price: "1.050.000₫", image: phukien4, hoverImage: phukien5 },
-      { id: 5, name: "Thắt lưng Naked", price: "890.000₫", image: phukien5, hoverImage: phukien6, isBestSeller: true, discountPercent: 22, isGift: true },
->>>>>>> 1467ac228e80d51688a6ceabb791993b0915ceab
       { id: 6, name: "Bình nước UltraSpine", price: "420.000₫", image: phukien6, hoverImage: phukien1 },
     ],
   },
@@ -188,19 +171,11 @@ const collectionsData = [
       { id: 3, name: "Giày Chạy Bộ Nữ ON", price: "5.890.000₫", image: lifestyleSports3, hoverImage: lifestyleSports4 },
       { id: 4, name: "Giày Chạy Bộ Nữ ON", price: "2.450.000₫", image: lifestyleSports4, hoverImage: lifestyleSports5 },
       { id: 5, name: "Giày Chạy Bộ Nữ ON", price: "190.000₫", image: lifestyleSports5, hoverImage: lifestyleSports6 },
-<<<<<<< HEAD
       { id: 6, name: "Giày Chạy Bộ Nữ ON", price: "420.000₫", image: lifestyleSports6, hoverImage: lifestyleSports1,discountPercent: 15, isBestSeller: true ,isGift: true },
     ],     
   },
   // OUTLET
   {   
-=======
-      { id: 6, name: "Giày Chạy Bộ Nữ ON", price: "420.000₫", image: lifestyleSports6, hoverImage: lifestyleSports1, discountPercent: 15, isBestSeller: true, isGift: true },
-    ],
-  },
-  // OUTLET
-  {
->>>>>>> 1467ac228e80d51688a6ceabb791993b0915ceab
     title: "OUTLET Xem thêm ...",
     image: xemthem,
     products: [
@@ -209,11 +184,7 @@ const collectionsData = [
       { id: 3, name: "Giày Chạy Bộ Nữ ON", price: "5.890.000₫", image: xemthem3, hoverImage: xemthem4 },
       { id: 4, name: "Giày Chạy Bộ Nữ ON", price: "2.450.000₫", image: xemthem4, hoverImage: xemthem5 },
       { id: 5, name: "Giày Chạy Bộ Nữ ON", price: "190.000₫", image: xemthem5, hoverImage: xemthem6 },
-<<<<<<< HEAD
       { id: 6, name: "Giày Chạy Bộ Nữ ON", price: "420.000₫", image: xemthem6, hoverImage: xemthem1,discountPercent: 25, isBestSeller: true ,isGift: true },
-=======
-      { id: 6, name: "Giày Chạy Bộ Nữ ON", price: "420.000₫", image: xemthem6, hoverImage: xemthem1, discountPercent: 25, isBestSeller: true, isGift: true },
->>>>>>> 1467ac228e80d51688a6ceabb791993b0915ceab
     ],
   },
 ];
@@ -234,29 +205,17 @@ function Collection() {
     </main>
   );
 }
-<<<<<<< HEAD
 export default Collection;
 
 function CollectionSection({ title, image, products }) {
   
  const [selectedProduct, setSelectedProduct] = useState(null);
 
-  const handleOpenPopup = (product) => {
-    console.log("Mở popup với:", product);
-    setSelectedProduct(product);
-  };
 
   const handleClosePopup = () => {
     console.log("Đóng popup");
     setSelectedProduct(null);
   };
-=======
-export default CollectionsPage;
-
-function CollectionSection({ title, image, products }) {
-
- const [selectedProduct, setSelectedProduct] = useState(null);
->>>>>>> 1467ac228e80d51688a6ceabb791993b0915ceab
 
 const handleOpenPopup = (product) => {
   setSelectedProduct(product);
@@ -286,7 +245,6 @@ const handleOpenPopup = (product) => {
                 {p.isGift && <div className="icon gift">🎁</div>}
                 {p.isBestSeller && <div className="ribbon bestseller">BEST SELLER</div>}
                 <div className="hover-icons">
-<<<<<<< HEAD
                    <button
                     className="zoom-in"
                     onClick={() => handleOpenPopup(p)}
@@ -295,13 +253,6 @@ const handleOpenPopup = (product) => {
                     <MdOutlineZoomIn />
                   </button>
                   <Link to="/Detail" className="eye"  title="Xem chi tiết">
-=======
-
-                  <button onClick={() => handleOpenPopup(p)} title="Xem nhanh">
-                  <MdOutlineZoomIn />
-                  </button>
-                  <Link to={`/product/:id`} title="Xem chi tiết">
->>>>>>> 1467ac228e80d51688a6ceabb791993b0915ceab
                     <FaEye />
                   </Link>
                 </div>

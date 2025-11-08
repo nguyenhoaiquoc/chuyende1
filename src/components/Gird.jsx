@@ -27,6 +27,8 @@ export default function Grid() {
       imgMain: sanPham2,
       imgHover: sanPham2Load,
       sale: "20%",
+      gift: true,
+      bestseller: true,
       sizes: ["S", "M", "L", "XL"],
     },
     {
@@ -36,6 +38,8 @@ export default function Grid() {
       imgMain: Ao,
       imgHover: mauAnh,
       sale: "20%",
+      gift: false,
+      bestseller: true,
       sizes: ["S", "M", "L", "XL"],
     },
     {
@@ -45,6 +49,8 @@ export default function Grid() {
       imgMain: sanPham2,
       imgHover: sanPham2Load,
       sale: "",
+      gift: false,
+      bestseller: false,
       sizes: ["S", "M", "L", "XL"],
     },
     {
@@ -54,6 +60,8 @@ export default function Grid() {
       imgMain: Ao,
       imgHover: mauAnh,
       sale: "25%",
+      gift: true,
+      bestseller: false,
       sizes: ["S", "M", "L", "XL"],
     },
     {
@@ -63,6 +71,8 @@ export default function Grid() {
       imgMain: sanPham2Load,
       imgHover: sanPham2,
       sale: "",
+      gift: false,
+      bestseller: true,
       sizes: ["S", "M", "L", "XL"],
     },
     {
@@ -72,6 +82,8 @@ export default function Grid() {
       imgMain: Ao,
       imgHover: mauAnh,
       sale: "",
+      gift: false,
+      bestseller: false,
       sizes: ["S", "M", "L", "XL"],
     },
     {
@@ -81,6 +93,8 @@ export default function Grid() {
       imgMain: Ao,
       imgHover: mauAnh,
       sale: "",
+      gift: false,
+      bestseller: false,
       sizes: ["S", "M", "L", "XL"],
     },
     {
@@ -90,6 +104,8 @@ export default function Grid() {
       imgMain: mauAnh,
       imgHover: Ao,
       sale: "10%",
+      gift: true,
+      bestseller: false,
       sizes: ["S", "M", "L", "XL"],
     },
     {
@@ -99,6 +115,8 @@ export default function Grid() {
       imgMain: sanPham2,
       imgHover: mauAnh,
       sale: "10%",
+      gift: false,
+      bestseller: true,
       sizes: ["S", "M", "L", "XL"],
     },
     {
@@ -108,6 +126,8 @@ export default function Grid() {
       imgMain: Ao,
       imgHover: mauAnh,
       sale: "15%",
+      gift: true,
+      bestseller: false,
       sizes: ["S", "M", "L", "XL"],
     },
   ];
@@ -162,8 +182,36 @@ export default function Grid() {
                 />
               </div>
 
+              {/* Badges góc trên */}
+              <div className="absolute top-2 left-2 right-2 flex justify-between items-center z-30">
+                {/* Trái: giảm giá */}
+                {/* Giảm giá góc trái */}
+                {p.sale && (
+                  <span className="absolute top-2 left-2 bg-purple-700 text-white text-xs font-semibold px-2 py-1 rounded-md shadow">
+                    {p.sale}
+                  </span>
+                )}
+
+                {/* Hộp quà ở giữa tùy vị trí */}
+                {/* Hộp quà nằm chính giữa ảnh */}
+                {p.gift && (
+                  <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
+                   bg-yellow-400 text-black text-xs px-2 py-1 rounded-md shadow-md">
+                    🎁
+                  </span>
+                )}
+
+                {/* BEST SELLER ribbon góc phải */}
+                {p.bestseller && (
+                  <span className="absolute top-3 right-[-30px] bg-red-600 text-white text-[10px] font-bold px-6 py-1 rotate-45 shadow-md">
+                    BEST SELLER
+                  </span>
+                )}
+
+              </div>
+
               {/* Icon xem nhanh và chi tiết */}
-              <div className="absolute top-[10%] left-[10px] z-30 flex flex-col items-center">
+              <div className="absolute top-[20%] left-[10px] z-30 flex flex-col items-center">
                 {/* Xem nhanh */}
                 <div className="relative group/zoom">
                   <button
@@ -172,7 +220,7 @@ export default function Grid() {
                       e.stopPropagation();
                       handleQuickView(p);
                     }}
-                    className="hover:bg-purple-800 bg-white p-4 rounded-md mb-4 hover:text-white z-10 transition-colors duration-300 hidden md:block"
+                    className="hover:bg-purple-800 bg-white p-2 rounded-md mb-4 hover:text-white z-10 transition-colors duration-300 hidden md:block"
                   >
                     <FontAwesomeIcon
                       icon={faMagnifyingGlass}
@@ -190,7 +238,7 @@ export default function Grid() {
                     to={`/product/${p.id}`}
                     state={{ product: p }}
                     onClick={(e) => e.stopPropagation()}
-                    className="bg-white hover:bg-purple-800 p-4 rounded-md hover:text-white z-10 transition-colors duration-300"
+                    className="bg-white hover:bg-purple-800 p-2 rounded-md hover:text-white z-10 transition-colors duration-300"
                   >
                     <FontAwesomeIcon
                       icon={faEye}
@@ -216,6 +264,10 @@ export default function Grid() {
                     {formatPrice(p.oldPrice)}
                   </div>
                 )}
+                {/* Hiển thị sizes */}
+                <div className="text-gray-600 text-xs mt-1">
+                  Sizes: {p.sizes.join(", ")}
+                </div>
               </div>
             </div>
           </Link>
@@ -228,11 +280,10 @@ export default function Grid() {
           <button
             key={i}
             onClick={() => handlePageChange(i + 1)}
-            className={`px-4 py-1.5 border rounded-md text-sm font-medium ${
-              currentPage === i + 1
-                ? "bg-blue-600 text-white border-blue-600"
-                : "hover:bg-gray-100"
-            }`}
+            className={`px-4 py-1.5 border rounded-md text-sm font-medium ${currentPage === i + 1
+              ? "bg-blue-600 text-white border-blue-600"
+              : "hover:bg-gray-100"
+              }`}
           >
             {i + 1}
           </button>
