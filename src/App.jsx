@@ -17,16 +17,8 @@ import ProductPage from './ProductPage.jsx';
 import { Routes, Route, Outlet } from 'react-router-dom';
 
 import BT from './components/BT.jsx';
-<<<<<<< HEAD
-
-import Collection from './collection.jsx';
-
-
-
-=======
 import Detail from "./components/Detail.jsx";
 import ProductPopup from './components/ProductPopup.jsx';
->>>>>>> 1467ac228e80d51688a6ceabb791993b0915ceab
 const ProductLayout = () => (
 
   <div className="bg-white flex flex-col min-h-screen">
@@ -114,11 +106,7 @@ function App() {
       {/* Các trang sản phẩm dùng ProductLayout */}
 
       <Route element={<ProductLayout />}>
-<<<<<<< HEAD
-
-=======
        <Route path="/product/:id" element={<Detail />} />
->>>>>>> 1467ac228e80d51688a6ceabb791993b0915ceab
         <Route path="/*" element={<ProductPage />} />
 
       </Route>
@@ -128,11 +116,4 @@ function App() {
   );
 
 }
-<<<<<<< HEAD
-
-
-
-export default App; 
-=======
 export default App;
->>>>>>> 1467ac228e80d51688a6ceabb791993b0915ceab
