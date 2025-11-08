@@ -14,7 +14,7 @@ export default function Grid({ products: productsProp }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [quickViewProduct, setQuickViewProduct] = useState(null);
   const [goToPageInput, setGoToPageInput] = useState("");
-  const ITEMS_PER_PAGE = 12;
+  const ITEMS_PER_PAGE = 15;
 
   // Nếu component cha không truyền prop thì dùng data chung
   const products = productsProp ?? PRODUCT_DATA;

@@ -20,40 +20,49 @@ const handleInputChange = (e) => {
   return (
     <div className="border-b py-6">
        {/* === Bố cục Mobile === */}
-       <div className="md:hidden grid grid-cols-[auto_1fr_auto] grid-rows-3 gap-x-4"> {/* ✅ Thêm 1 hàng cho size */}
-         {/* Hàng 1: Ảnh (chiếm 3 hàng), Tên, Nút số lượng */}
-         <img 
-           src={item.image} 
-           alt={item.name} 
-           className="w-20 h-auto row-span-3 self-start" // row-span-3
-         />
-         <p className="font-semibold  col-start-2 row-start-1 self-start">
-           {item.name}
-         </p>
-         <div className="flex items-center col-start-3 row-start-1 self-start">
-           <input
-             type="number"
-             value={item.quantity}
-             onChange={handleInputChange}
-             className="w-10 text-center border-t border-b focus:outline-none"
-           />
-         </div>
- 
-         {/* Hàng 2: (Trống), Size */}
-         <p className="text-gray-500 text-sm col-start-2 row-start-2 self-start"> {/* ✅ Hiển thị size */}
-           Size: {item.size}
-         </p>
+      <div className="md:hidden grid grid-cols-[auto_1fr_auto] grid-rows-1 gap-x-4"> 
+    {/* Cột 1: Ảnh */}
+    {/* ✅ Bỏ row-span-3 và self-start */}
+    <img 
+        src={item.image} 
+        alt={item.name} 
+        className="w-20 h-auto" 
+    />
 
-         {/* Hàng 3: (Trống), Giá, Nút Xóa */}
-         <p className="text-gray-700 col-start-2 row-start-3 self-start"> {/* ✅ Đẩy xuống row-start-3 */}
-           {formatCurrency(item.price)}
-         </p>
-         <div className="col-start-3 row-start-3 flex justify-end items-start pt-1"> {/* ✅ Đẩy xuống row-start-3 */}
-           <button onClick={() => onRemove(item.id, item.size)} className="text-gray-500 hover:text-red-600 text-sm"> {/* ✅ Thêm size */}
-             Xóa
-           </button>
-         </div>
-       </div>
+    {/* Cột 2: Thông tin (Tên, Size, Giá) */}
+    {/* ✅ Nhóm Tên, Size, Giá vào một flex-col */}
+    <div className="flex flex-col col-start-2">
+        <p className="font-semibold">
+            {item.name}
+        </p>
+        <p className="text-gray-500 text-sm mt-1"> {/* Thêm 1 chút margin-top nếu muốn */}
+            Size: {item.size}
+        </p>
+        <p className="text-gray-700 mt-1"> {/* Thêm 1 chút margin-top nếu muốn */}
+            {formatCurrency(item.price)}
+        </p>
+    </div>
+
+    {/* Cột 3: Hành động (Số lượng, Xóa) */}
+    {/* ✅ Nhóm Số lượng và Xóa. Dùng justify-between để đẩy 2 đầu */}
+    <div className="flex flex-col col-start-3 justify-between items-end">
+        {/* Nhóm số lượng (căn lề phải) */}
+        <div className="flex items-center self-end"> 
+            <input
+                type="number"
+                value={item.quantity}
+                onChange={handleInputChange}
+                className="w-10 text-center border-t border-b focus:outline-none"
+            />
+        </div>
+        {/* Nút Xóa (căn lề phải và đẩy xuống dưới) */}
+        <div className="flex justify-end">
+            <button onClick={() => onRemove(item.id, item.size)} className="text-gray-500 hover:text-red-600 text-sm">
+                Xóa
+            </button>
+        </div>
+    </div>
+</div>
 
       {/* === Bố cục Desktop === */}
       <div className="hidden md:grid md:grid-cols-[100px_3fr_1.5fr_1fr_1.5fr_100px] gap-4 items-center">
@@ -148,7 +157,7 @@ export default function CartPage() {
       <div className="max-w-6xl mx-auto bg-white p-6 md:p-8 shadow-sm">
         {/* === TITLE === */}
         <h1 className="text-3xl font-bold mb-2 text-left">GIỎ HÀNG</h1>
-        <p className="md:hidden mb-6 text-gray-600">giỏ hàng của bạn</p>
+        <p className="md:hidden mb-6 text-gray-600">Giỏ hàng của bạn</p>
 
         {/* === HEADER CỦA BẢNG (DESKTOP) === */}
         <div className="hidden md:grid md:grid-cols-[100px_3fr_1.5fr_1fr_1.5fr_100px] gap-4 items-center font-bold uppercase text-sm mb-4 border-b pb-4">
@@ -185,7 +194,7 @@ export default function CartPage() {
           <div className="hidden md:block">
             <div className="flex justify-end items-center mb-4">
               <span className="text-xl font-bold">Tổng tiền:</span>
-              <span className="text-xl font-bold text-red-600 ml-4">
+              <span className="text-xl font-bold text-purple-600 ml-4">
                 {formatCurrency(total)}
               </span>
             </div>
