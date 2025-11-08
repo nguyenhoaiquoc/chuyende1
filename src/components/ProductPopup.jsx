@@ -27,9 +27,14 @@ const ProductPopup = ({ product, onClose }) => {
   return (
     <div className="popup-overlay" onClick={onClose}>
       <div className="popup-container" onClick={(e) => e.stopPropagation()}>
-        <button className="popup-close" onClick={onClose}>
-          &times;
-        </button>
+     <button
+  onClick={onClose}
+  className="absolute top-[7px] right-[13px] w-[30px] h-[30px] text-[20px] bg-[#673ab7] cursor-pointer rounded-full font-bold text-white flex items-center justify-center"
+>
+  &times;
+</button>
+
+
 
         <div className="popup-content">
           <div className="popup-image">
@@ -72,7 +77,12 @@ const ProductPopup = ({ product, onClose }) => {
     onChange={handleQuantityChange}
     className="quantity-input"
   />
-  <button className="add-to-cart">THÊM VÀO GIỎ HÀNG</button>
+<button
+  className="h-[45px] bg-[#673ab7] text-white px-5 border border-transparent rounded-full cursor-pointer hover:bg-[#6f4fb9] hover:border-[#333]"
+>
+  THÊM VÀO GIỎ HÀNG
+</button>
+
 </div>
 
 </div>
