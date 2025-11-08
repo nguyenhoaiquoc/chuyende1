@@ -24,7 +24,7 @@ export default function ScrollTest() {
       {showButton && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-20 right-4 bg-black text-white p-3  shadow-lg  cursor-pointer "
+          className="fixed bottom-20 right-4 bg-black text-white p-3  shadow-lg  cursor-pointer z-[999]"
         >
           <IoIosArrowUp size={26} />
         </button>
