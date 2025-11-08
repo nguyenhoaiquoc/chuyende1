@@ -13,17 +13,46 @@ import { products as PRODUCT_DATA } from "../data/products.mock";
 export default function Grid({ products: productsProp }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [quickViewProduct, setQuickViewProduct] = useState(null);
+  const [goToPageInput, setGoToPageInput] = useState("");
   const ITEMS_PER_PAGE = 12;
 
   // Nếu component cha không truyền prop thì dùng data chung
   const products = productsProp ?? PRODUCT_DATA;
   const TOTAL_PAGES = Math.ceil(products.length / ITEMS_PER_PAGE);
 
+
   // Phân trang
   const paginatedProducts = useMemo(() => {
     const start = (currentPage - 1) * ITEMS_PER_PAGE;
     return products.slice(start, start + ITEMS_PER_PAGE);
   }, [products, currentPage]);
+
+  const pagesToShow = useMemo(() => {
+    const maxPages = 4; // Hiển thị tối đa 4 nút số
+    
+    // Nếu tổng số trang ít hơn hoặc bằng 4, hiển thị tất cả
+    if (TOTAL_PAGES <= maxPages) {
+      return Array.from({ length: TOTAL_PAGES }, (_, i) => i + 1);
+    }
+    
+    // Nếu tổng số trang nhiều hơn 4
+    let startPage = 1;
+    
+    if (currentPage <= 2) {
+      // Trang 1, 2: Hiển thị [1, 2, 3, 4]
+      startPage = 1;
+    } else if (currentPage >= TOTAL_PAGES - 1) {
+      // Trang cuối, kế cuối: Hiển thị [..., TOTAL-3, TOTAL-2, TOTAL-1, TOTAL]
+      startPage = TOTAL_PAGES - (maxPages - 1);
+    } else {
+      // Các trang ở giữa: Trang hiện tại sẽ ở vị trí thứ 2
+      startPage = currentPage - 1;
+    }
+    
+    // Tạo mảng 4 số từ startPage
+    return Array.from({ length: maxPages }, (_, i) => startPage + i);
+
+  }, [currentPage, TOTAL_PAGES]);
 
   // Format giá tiền
   const formatPrice = (price) =>
@@ -41,6 +70,27 @@ export default function Grid({ products: productsProp }) {
     }
   };
 
+  const handleGoToPage = () => {
+    const pageNum = parseInt(goToPageInput, 10);
+    
+    // Kiểm tra xem số nhập vào có hợp lệ không
+    if (pageNum >= 1 && pageNum <= TOTAL_PAGES) {
+      handlePageChange(pageNum); // Nếu hợp lệ thì nhảy trang
+      setGoToPageInput(""); // Xóa input sau khi nhảy
+    } else {
+      // THAY ĐỔI Ở ĐÂY:
+      // Nếu không hợp lệ, hiện thông báo lỗi
+      alert(`Trang không tồn tại! Vui lòng chỉ nhập số từ 1 đến ${TOTAL_PAGES}.`);
+      setGoToPageInput(""); // Vẫn xóa input đi cho sạch
+    }
+  };
+
+  // HÀM MỚI: Xử lý khi bấm "Enter" trong ô input
+  const handleGoToPageKey = (e) => {
+    if (e.key === 'Enter') {
+      handleGoToPage();
+    }
+  };
   return (
     <div className="container mx-auto py-5">
       <GridHeader totalProducts={products.length} />
@@ -154,20 +204,67 @@ Xem chi tiết
       </div>
 
       {/* --- PHÂN TRANG --- */}
-      <div className="flex justify-center mt-6 gap-2">
-        {Array.from({ length: TOTAL_PAGES }, (_, i) => (
+      <div className="flex flex-wrap justify-center items-center mt-6 gap-4">
+        
+        {/* Cụm điều hướng chính */}
+        <div className="flex items-center">
+          {/* Nút Trang Trước - Ẩn khi ở trang 1 */}
           <button
-            key={i}
-            onClick={() => handlePageChange(i + 1)}
-            className={`px-4 py-1.5 border rounded-md text-sm font-medium ${
-              currentPage === i + 1
-                ? "bg-blue-600 text-white border-blue-600"
-                : "hover:bg-gray-100"
+            onClick={() => handlePageChange(currentPage - 1)}
+            className={`px-4 py-1.5 border rounded-l-md text-sm font-medium hover:bg-gray-100 ${
+              currentPage === 1 ? "invisible" : "" 
             }`}
           >
-            {i + 1}
+            &lt;
           </button>
-        ))}
+
+          {/* Các nút số trang (tính toán từ logic pagesToShow) */}
+          {pagesToShow.map((page) => (
+            <button
+              key={page}
+              onClick={() => handlePageChange(page)}
+              disabled={currentPage === page}
+              className={`px-4 py-1.5 border-t border-b border-l-0 text-sm font-medium ${
+                currentPage === page
+                  ? "bg-gray-900 text-white cursor-not-allowed" // Kiểu active
+                  : "hover:bg-gray-100" // Kiểu bình thường
+              }`}
+            >
+              {page}
+            </button>
+          ))}
+
+          {/* Nút Trang Sau - Ẩn khi ở trang cuối */}
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            className={`px-4 py-1.5 border border-l-0 rounded-r-md text-sm font-medium hover:bg-gray-100 ${
+              currentPage === TOTAL_PAGES ? "invisible" : "" 
+            }`}
+          >
+            &gt;
+          </button>
+        </div>
+
+        {/* Box nhảy đến trang */}
+        <div className="flex items-center gap-2">
+          <input
+            type="number"
+            value={goToPageInput}
+            onChange={(e) => setGoToPageInput(e.target.value)}
+            onKeyDown={handleGoToPageKey}
+            className="w-20 px-2 py-1.5 border rounded-md text-sm text-center"
+            placeholder="Đi đến..."
+            min="1"
+            max={TOTAL_PAGES}
+          />
+          <button
+            onClick={handleGoToPage}
+            className="px-4 py-1.5 border rounded-md text-sm font-medium bg-gray-700 text-white hover:bg-gray-900 transition-colors"
+          >
+            Đi
+          </button>
+        </div>
+
       </div>
 
       {/* Popup xem nhanh */}
