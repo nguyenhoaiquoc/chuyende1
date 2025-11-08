@@ -71,9 +71,10 @@ const navigate = useNavigate();
 const categoryId = currentProduct?.categoryId || "";
   // phân loại để dùng cho ProductDescription
 let productType = "ao";
-  if (categoryPath.includes("giay")) productType = "giay"; 
-  else if (categoryPath.includes("quan")) productType = "quan";
-  else if (categoryPath.includes("dong-ho")) productType = "dongho";
+  if (categoryId.includes("shoes")) productType = "giay";
+  else if (categoryId.includes("shorts")) productType = "quan";
+  else if (categoryId === "watches" || categoryId.includes("watch"))
+    productType = "dongho";
 
 const isWatch =
     categoryPath.includes("dong-ho") ||
