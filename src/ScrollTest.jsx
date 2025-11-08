@@ -7,7 +7,7 @@ export default function ScrollTest() {
 
   useEffect(() => {
     const handleScroll = () => {
-      console.log("scrollY:", window.scrollY); 
+      console.log("scrollY:", window.scrollY);
       setShowButton(window.scrollY > 50);
     };
 
@@ -20,18 +20,15 @@ export default function ScrollTest() {
   };
 
   return (
-    <div className="min-h-[200vh] p-6 space-y-6">
+    <div className=" p-6 space-y-6 text-center">
       {showButton && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-20 right-4 z-[99999] bg-black text-white p-3  shadow-lg  cursor-pointer "
+          className="fixed bottom-20 right-4 bg-black text-white p-3  shadow-lg  cursor-pointer z-[999]"
         >
-          
-          <IoIosArrowUp  size={26}/>
-
+          <IoIosArrowUp size={26} />
         </button>
       )}
-
     </div>
   );
 }

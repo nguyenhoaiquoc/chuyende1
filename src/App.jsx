@@ -8,83 +8,114 @@ import Panel from "./components/Panel.js";
 import User0008 from "./components/User0008.jsx";
 import Policies from './components/Policies.js';
 
-const menuItems = [
-  { id: 'intro', label: 'Giới Thiệu', link: '#' },
-  {
-    id: 'men', label: 'Đồ Nam', link: '#',
-    submenu: [{ label: 'Áo', link: '#' }, { label: 'Quần', link: '#' }, { label: 'Giày chạy bộ', link: '#' }, { label: 'Giày địa hình', link: '#' }]
-  },
-  {
-    id: 'women', label: 'Đồ Nữ', link: '#',
-    submenu: [{ label: 'Áo', link: '#' }, { label: 'Quần', link: '#' }, { label: 'Giày chạy bộ', link: '#' }, { label: 'Giày địa hình', link: '#' }]
-  },
-  {
-    id: 'watch-earphone', label: 'Đồng Hồ', link: '#',
-    submenu: [{ label: 'Suunto', link: '#' }, { label: 'Garmin', link: '#' }, { label: 'Coros', link: '#' }]
-  },
-  { id: 'brands', label: 'Thương Hiệu', link: '#' },
-  { id: 'sale', label: 'SALE 10.10', link: '#sale', highlight: true }
-];
+import Panel from "./components/Panel.jsx";
 
-export default function App() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [mobileSubmenu, setMobileSubmenu] = useState(null);
-  const menuRef = useRef(null);
+import User0008 from "./components/User0008.jsx";
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setIsMobileMenuOpen(false);
-        setMobileSubmenu(null);
-      }
-    };
-    if (isMobileMenuOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.body.style.overflow = 'unset';
-    };
-  }, [isMobileMenuOpen]);
+import Policies from './components/Policies.jsx';
 
-  const handleMobileMenuToggle = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-    setMobileSubmenu(null);
-  };
+import ProductPage from './ProductPage.jsx';
 
-  const handleSubmenuToggle = (itemId) => {
-    setMobileSubmenu(mobileSubmenu === itemId ? null : itemId);
-  };
+import { Routes, Route, Outlet } from 'react-router-dom';
 
-  const handleLinkClick = () => {
-    setIsMobileMenuOpen(false);
-    setMobileSubmenu(null);
-  };
+import BT from './components/BT.jsx';
+import Detail from "./components/Detail.jsx";
+import ProductPopup from './components/ProductPopup.jsx';
+const ProductLayout = () => (
+
+  <div className="bg-white flex flex-col min-h-screen">
+
+    <BT />
+
+    <main className="flex-grow">
+
+      <Outlet />
+
+    </main>
+
+    <Footer />
+
+  </div>
+
+);
+
+
+
+// Layout cho Home Page
+
+const HomeLayout = () => (
+
+  <div className="bg-white flex flex-col min-h-screen">
+
+    <main className="flex-grow">
+
+      <Outlet />
+
+    </main>
+
+    <Panel />
+
+  </div>
+
+);
+
+
+
+// Nội dung trang chủ
+
+const HomePageContent = () => (
+
+  <>
+
+     <NavigationMenu/>
+
+    <Banner />
+
+    <User0008 />
+
+    <Collection/>
+
+    <ScrollTest />
+
+    <Policies />
+
+    <Footer/>
+
+    <Panel/>
+
+  </>
+
+);
+
+
+
+function App() {
 
   return (
-    <div className="bg-white">
-      <header className="bg-white shadow-sm">
-        <BT onMenuToggle={handleMobileMenuToggle} />
-        <NavigationMenu
-          isMobileMenuOpen={isMobileMenuOpen}
-          mobileSubmenu={mobileSubmenu}
-          menuRef={menuRef}
-          menuItems={menuItems}
-          handleMobileMenuToggle={handleMobileMenuToggle}
-          handleSubmenuToggle={handleSubmenuToggle}
-          handleLinkClick={handleLinkClick}
-        />
-      </header>
 
-      <Banner />
-      <User0008 />
-      <ScrollTest />
-      <Policies />
-      <Footer />
-      <Panel />
-    </div>
+    <Routes>
+
+      {/* Trang chủ dùng HomeLayout */}
+
+      <Route element={<HomeLayout />}>
+
+        <Route path="/" element={<HomePageContent />} />
+
+      </Route>
+
+
+
+      {/* Các trang sản phẩm dùng ProductLayout */}
+
+      <Route element={<ProductLayout />}>
+       <Route path="/product/:id" element={<Detail />} />
+        <Route path="/*" element={<ProductPage />} />
+
+      </Route>
+
+    </Routes>
+
   );
+
 }
+export default App;
