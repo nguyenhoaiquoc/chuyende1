@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaUser, FaSearch, FaBars } from "react-icons/fa";
 import { HiShoppingBag } from "react-icons/hi2";
@@ -9,6 +9,23 @@ import eng from "../assets/eng.png";
 
 export default function BT({ onMenuToggle }) {
   const [showSearch, setShowSearch] = useState(false);
+const [cartCount, setCartCount] = useState(0);
+
+useEffect (() => {
+    const savedCount = Number(localStorage.getItem("cartCount")) || 0;
+setCartCount(savedCount);
+})
+
+  // 🔁 Theo dõi thay đổi (khi component khác update)
+  useEffect(() => {
+    const handleStorageChange = () => {
+  const updatedCart = JSON.parse(localStorage.getItem("cart")) || [];
+  setCartCount(updatedCart.length);
+};
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
 
   return (
     <div className="w-full mt-5">
@@ -35,12 +52,16 @@ export default function BT({ onMenuToggle }) {
             </form>
 
             <Link> <FaUser className="hidden md:block mb-1 hover:text-purple-500 ml-3" /> </Link>
-            <Link className="relative"> <HiShoppingBag className="  ml-3 text-xl lg:mb-1 hover:text-purple-500 hidden md:block" />
-
+            <Link to="/cart" className="relative">
+              <HiShoppingBag className="ml-3 text-xl lg:mb-1 hover:text-purple-500 hidden md:block" />
               <IoMdCart className="text-xl lg:mb-1 block md:hidden" />
-              <span className="absolute -right-4 -top-3 bg-red-500 text-white px-[8px] py-[2px] text-[12px] rounded-full">0</span>
-            </Link>
+              {cartCount > 0 && (
+  <span className="absolute -right-4 -top-3 bg-red-500 text-white px-[8px] py-[2px] text-[12px] rounded-full">
+    {cartCount}
+  </span>
+)}
 
+            </Link>
             <div className="pl-3">
               <Link><img className="md:w-[24px] md:h-[24px] w-[18px] h-[18px] " src={vn} alt="" /></Link>
             </div>
@@ -68,8 +89,5 @@ export default function BT({ onMenuToggle }) {
 
       </div>
     </div>
-     
-
-    
   );
 }

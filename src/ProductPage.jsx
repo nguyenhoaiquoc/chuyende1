@@ -10,6 +10,7 @@ import ScrollTest from './ScrollTest';
 import PriceFilter from './components/PriceFilter';
 import SizeFilter from './components/SizeFilter';
 import BrandFilter from './components/BrandFilter';
+import Breadcrumb from './components/Breadcrumb';
 
 /* ================== MOCK DATA & CATEGORIES ================== */
 
@@ -158,43 +159,6 @@ const norm = (s = '') => s.replace(/\/+$/, '');
 
 /* ================== BREADCRUMB (nếu cần bật lại) ================== */
 
-const Breadcrumb = () => {
-  const location = useLocation();
-  const pathnames = location.pathname.slice(1).split('/').filter(Boolean);
-  if (pathnames.length === 0) return null;
-
-  const findPathData = (pathSegment, index) => {
-    const fullPath = `/${pathnames.slice(0, index + 1).join('/')}`;
-    for (const cat of categories) {
-      if (cat.path === fullPath) return { name: cat.name, path: cat.path };
-      if (cat.subcategories) {
-        const sub = cat.subcategories.find(s => s.path === fullPath);
-        if (sub) return { name: sub.name, path: sub.path };
-      }
-    }
-    return { name: pathSegment.replace(/-/g, ' '), path: fullPath };
-  };
-
-  // Nếu muốn hiển thị, bỏ comment block dưới
-  // return (
-  //   <nav className="text-sm text-gray-500 capitalize">
-  //     <Link to="/" className="hover:text-purple-500 transition-colors">Trang chủ</Link>
-  //     {pathnames.map((value, index) => {
-  //       const pathData = findPathData(value, index);
-  //       const isValidLink = categories.some(cat => cat.path === pathData.path || cat.subcategories?.some(sub => sub.path === pathData.path));
-  //       if (!isValidLink) return null;
-  //       return (
-  //         <span key={pathData.path}>
-  //           <span className="mx-2 text-gray-400">/</span>
-  //           <Link to={pathData.path} className="hover:text-purple-500 transition-colors">{pathData.name}</Link>
-  //         </span>
-  //       );
-  //     })}
-  //   </nav>
-  // );
-  return null;
-};
-
 /* ================== SIDEBAR ================== */
 
 const CategorySidebar = ({ onLinkClick }) => {
@@ -338,6 +302,7 @@ export default function ProductPage() {
 
   return (
     <div className="">
+      <Breadcrumb/>
       <div className="container mx-auto px-4 py-6 md:py-6">
         {/* Mobile Sidebar Toggle */}
         {!isSidebarOpen && (

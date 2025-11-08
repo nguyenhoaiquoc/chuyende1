@@ -21,7 +21,7 @@ import ProductDescription from "./ProductDescription";
 import ProductComposition from "./ProductComposition";
 import Panel from "./Panel";
 import Footer from "./Footer";
-import RelatedProducts from "./RelatedProducts"; // Đã import
+import RelatedProducts from "./RelatedProducts"; 
 
 // === DỮ LIỆU GIẢ LẬP (GIỮ NGUYÊN) ===
 const DUMMY_ALL_PRODUCTS = [

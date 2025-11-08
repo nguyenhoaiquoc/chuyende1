@@ -4,17 +4,21 @@ import App from "./App";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Detail from "./components/Detail";
-import Breadcrumb from "./components/Breadcrumb";
+import CartPage from "./components/CartPage";
+import ProductPage from "./ProductPage";
 
 const routers = createBrowserRouter([
   {
     path: "/",
     children: [
       { index: true, element: <App /> }, // Trang chủ
-
       { path: "product/:productId", element: <Detail /> },
-      { path: ":category", element: <Breadcrumb /> }, 
-      { path: ":category/:subCategory", element: <Breadcrumb /> },
+      
+      { path: "cart", element: <CartPage /> },
+      
+      { path: ":category", element: <ProductPage /> }, 
+      { path: ":category/:subCategory", element: <ProductPage /> },
+      
     ],
   },
 ]);

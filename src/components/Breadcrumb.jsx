@@ -1,13 +1,25 @@
+// src/components/Breadcrumb.js
+
 import React from "react";
-import { useParams, Link } from "react-router-dom";
+// ✅ 1. Thêm 'useLocation' vào
+import { useParams, Link, useLocation } from "react-router-dom";
+import NavigationMenu from "./NavigationMenu"; 
 import BT from "./BT";
-import NavigationMenu from "./NavigationMenu";
-import CategoryDescription from "./CategoryDescription";
-import Grid from "./Gird";
-import ProductPage from "../ProductPage";
 
 export default function Breadcrumb() {
-  const { category, subCategory } = useParams();
+  const params = useParams(); // Lấy params từ URL (ví dụ: /do-nu/quan)
+  const location = useLocation(); // Lấy thông tin đường dẫn (ví dụ: /cart)
+
+  // ✅ 2. Thêm logic để xử lý route tĩnh
+  let category = params.category; // Lấy category từ param trước
+  
+  // Nếu không có category param, kiểm tra xem có phải trang cart không
+  if (!category && location.pathname === '/cart') {
+    category = 'cart'; // Tự gán 'cart'
+  }
+  
+  // Giữ nguyên subCategory
+  const subCategory = params.subCategory;
 
   const categoryLabel = {
     "do-nam": "Đồ Nam",
@@ -15,9 +27,10 @@ export default function Breadcrumb() {
     "dong-ho": "Đồng Hồ",
     "thuong-hieu": "Thương Hiệu",
     "sale": "Khuyến Mãi 10.10",
-    "running-gears":"Running Gears",
-    "triathlon":"Triathlon",
-  }[category] || "Danh mục";
+    "running-gears": "Running Gears",
+    "triathlon": "Triathlon",
+    "cart": "Giỏ hàng", // Dòng này của bạn đã đúng
+  }[category] || null; // Đổi "Danh mục" thành null để không hiển thị nếu không khớp
 
   const subCategoryLabel = {
     ao: "Áo",
@@ -27,53 +40,50 @@ export default function Breadcrumb() {
     suunto: "Suunto",
     garmin: "Garmin",
     coros: "Coros",
-
   }[subCategory] || null;
 
   return (
-    <div className="min-h-screen bg-white">
+    <>
       {/* Header */}
       <BT />
 
       {/* Breadcrumb */}
-      <header className="bg-gray-100 px-4 py-10">
-        <nav className="max-w-7xl mx-auto flex items-center text-lg text-gray-700 select-none">
-          {/* Trang chủ */}
-          <Link
-            to="/"
-            className="hover:text-purple-600 transition-colors cursor-pointer"
-          >
-            Trang chủ
-          </Link>
+      {/* ✅ 3. Chỉ hiển thị <header> nếu có category (bao gồm cả 'cart') */}
+      {category && (
+        <header className="bg-gray-100 px-4 py-10">
+          <nav className="max-w-7xl mx-auto flex items-center text-lg text-gray-700 select-none">
+            {/* Trang chủ */}
+            <Link
+              to="/"
+              className="hover:text-purple-600 transition-colors cursor-pointer"
+            >
+              Trang chủ
+            </Link>
 
-          {/* Danh mục cha */}
-          {category && (
-            <>
-              <span className="mx-2 text-gray-400">/</span>
-              <Link
-                to={`/${category}`}
-                className="hover:text-purple-600 transition-colors cursor-pointer"
-              >
-                {categoryLabel}
-              </Link>
-            </>
-          )}
+            {/* Danh mục cha (Bây giờ sẽ hiển thị 'Giỏ hàng') */}
+            <span className="mx-2 text-gray-400">/</span>
+            <Link
+              to={`/${category}`}
+              className="hover:text-purple-600 transition-colors cursor-pointer"
+            >
+              {categoryLabel}
+            </Link>
 
-          {/* Danh mục con (clickable luôn) */}
-          {subCategory && (
-            <>
-              <span className="mx-2 text-gray-400">/</span>
-              <Link
-                to={`/${category}/${subCategory}`}
-                className="hover:text-purple-600 transition-colors cursor-pointer"
-              >
-                {subCategoryLabel}
-              </Link>
-            </>
-          )}
-        </nav>
-      </header>
-      <ProductPage/>
-    </div>
+            {/* Danh mục con (sẽ không hiển thị cho 'cart') */}
+            {subCategory && (
+              <>
+                <span className="mx-2 text-gray-400">/</span>
+                <Link
+                  to={`/${category}/${subCategory}`}
+                  className="hover:text-purple-600 transition-colors cursor-pointer"
+                >
+                  {subCategoryLabel}
+                </Link>
+              </>
+            )}
+          </nav>
+        </header>
+      )}
+    </>
   );
 }
