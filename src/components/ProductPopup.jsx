@@ -35,17 +35,18 @@ const ProductPopup = ({ product, onClose }) => {
           &times;
         </button>
 
-
-
         <div className="popup-content">
           <div className="popup-image">
             <img src={image} alt={name} />
           </div>
 
           <div className="popup-info">
-            <Link to="/Detail">
+            
+            {/* === ĐÂY LÀ DÒNG ĐÃ SỬA === */}
+            <Link to={`/product/${product.id}`}>
               <h3 className="product-name">{name}</h3>
             </Link>
+            {/* ========================== */}
 
             <div className="qv-header-info">
               <span><b>Mã SP:</b> 39113978</span>

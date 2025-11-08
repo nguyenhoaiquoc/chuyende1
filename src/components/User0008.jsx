@@ -144,7 +144,7 @@ const handleScroll = (direction, ref) => {
       <div className="relative">
         <div className="hidden md:block">
               <div className="absolute w-[233px] h-full z-40 bg-white/60 lg:hidden xl:block"></div>
-        <div className="absolute w-[242px] h-full z-40 bg-white/60 right-2 lg:hidden xl:block"></div>
+        <div className="absolute w-[242px] h-full z-40 bg-white/60 right-0 lg:hidden xl:block"></div>
 
         <button
          onClick={() => handleScroll("prev", newProductsRef)}
