@@ -3,6 +3,7 @@ import "../css/ProductPopup.css";
 import { useNavigate } from "react-router-dom";
 
 const ProductPopup = ({ product, onClose }) => {
+  if (!product) return null;
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState(null);
   const navigate = useNavigate(); // ✅ để chuyển trang cùng tab
@@ -132,6 +133,7 @@ const handleAddToCart = () => {
         </div>
       </div>
     </div>
+
   );
 };
 
