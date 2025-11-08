@@ -68,7 +68,7 @@ import xemthem4 from './assets/xemthem4.jpeg';
 import xemthem5 from './assets/xemthem5.jpeg';
 import xemthem6 from './assets/xemthem6.jpg';
 import { Link } from "react-router-dom";
-import ProductPopup from "./components/ProductPopup";
+
 // Dữ liệu
 
 const collectionsData = [
@@ -89,7 +89,7 @@ const collectionsData = [
     title: "Women",
     image: nu,
     products: [
-      { id: 1, name: "Áo croptop nữ", price: "280.000₫", oldPrice: "350.000₫", image: nu1, hoverImage: nu2, discountPercent: 20, isBestSeller: true, isGift: true },
+      { id: 1, name: "Áo croptop nữ", price: "280.000₫", oldPrice: "350.000₫", image: nu1, hoverImage: nu2, discountPercent: 20, isBestSeller: true ,isGift: true },
       { id: 2, name: "Quần legging tập gym", price: "410.000₫", image: nu2, hoverImage: nu3 },
       { id: 3, name: "Giày thể thao nữ", price: "860.000₫", oldPrice: "980.000₫", image: nu3, hoverImage: nu4, isBestSeller: true },
       { id: 4, name: "Áo khoác tập yoga", price: "520.000₫", image: nu4, hoverImage: nu5 },
@@ -102,11 +102,11 @@ const collectionsData = [
     title: "Phụ kiện",
     image: phukien,
     products: [
-      { id: 1, name: "Kính chạy 100%", price: "3.874.000₫", oldPrice: "4.500.000₫", image: phukien1, hoverImage: phukien2, discountPercent: 14, isBestSeller: true, isGift: true },
+      { id: 1, name: "Kính chạy 100%", price: "3.874.000₫", oldPrice: "4.500.000₫", image: phukien1, hoverImage: phukien2, discountPercent: 14,isBestSeller: true ,isGift: true },
       { id: 2, name: "Mũ FRACTEL", price: "1.350.000₫", image: phukien2, hoverImage: phukien3, isGift: true },
-      { id: 3, name: "Tất Injinji RUN", price: "369.000₫", oldPrice: "450.000₫", image: phukien3, hoverImage: phukien4, discountPercent: 18, isBestSeller: true, isGift: true },
+      { id: 3, name: "Tất Injinji RUN", price: "369.000₫", oldPrice: "450.000₫", image: phukien3, hoverImage: phukien4, discountPercent: 18, isBestSeller: true ,isGift: true },
       { id: 4, name: "Đèn đội đầu Nitecore", price: "1.050.000₫", image: phukien4, hoverImage: phukien5 },
-      { id: 5, name: "Thắt lưng Naked", price: "890.000₫", image: phukien5, hoverImage: phukien6, isBestSeller: true, discountPercent: 22, isGift: true },
+      { id: 5, name: "Thắt lưng Naked", price: "890.000₫", image: phukien5, hoverImage: phukien6, isBestSeller: true,discountPercent: 22, isGift: true },
       { id: 6, name: "Bình nước UltraSpine", price: "420.000₫", image: phukien6, hoverImage: phukien1 },
     ],
   },
@@ -172,11 +172,11 @@ const collectionsData = [
       { id: 3, name: "Giày Chạy Bộ Nữ ON", price: "5.890.000₫", image: lifestyleSports3, hoverImage: lifestyleSports4 },
       { id: 4, name: "Giày Chạy Bộ Nữ ON", price: "2.450.000₫", image: lifestyleSports4, hoverImage: lifestyleSports5 },
       { id: 5, name: "Giày Chạy Bộ Nữ ON", price: "190.000₫", image: lifestyleSports5, hoverImage: lifestyleSports6 },
-      { id: 6, name: "Giày Chạy Bộ Nữ ON", price: "420.000₫", image: lifestyleSports6, hoverImage: lifestyleSports1, discountPercent: 15, isBestSeller: true, isGift: true },
-    ],
+      { id: 6, name: "Giày Chạy Bộ Nữ ON", price: "420.000₫", image: lifestyleSports6, hoverImage: lifestyleSports1,discountPercent: 15, isBestSeller: true ,isGift: true },
+    ],     
   },
   // OUTLET
-  {
+  {   
     title: "OUTLET Xem thêm ...",
     image: xemthem,
     products: [
@@ -185,7 +185,7 @@ const collectionsData = [
       { id: 3, name: "Giày Chạy Bộ Nữ ON", price: "5.890.000₫", image: xemthem3, hoverImage: xemthem4 },
       { id: 4, name: "Giày Chạy Bộ Nữ ON", price: "2.450.000₫", image: xemthem4, hoverImage: xemthem5 },
       { id: 5, name: "Giày Chạy Bộ Nữ ON", price: "190.000₫", image: xemthem5, hoverImage: xemthem6 },
-      { id: 6, name: "Giày Chạy Bộ Nữ ON", price: "420.000₫", image: xemthem6, hoverImage: xemthem1, discountPercent: 25, isBestSeller: true, isGift: true },
+      { id: 6, name: "Giày Chạy Bộ Nữ ON", price: "420.000₫", image: xemthem6, hoverImage: xemthem1,discountPercent: 25, isBestSeller: true ,isGift: true },
     ],
   },
 ];
@@ -209,14 +209,20 @@ function Collection() {
 export default Collection;
 
 function CollectionSection({ title, image, products }) {
-
+  
  const [selectedProduct, setSelectedProduct] = useState(null);
 
-const handleOpenPopup = (product) => {
-  setSelectedProduct(product);
-  setShowPopup(true);
-};
-  return (  
+  const handleOpenPopup = (product) => {
+    console.log("Mở popup với:", product);
+    setSelectedProduct(product);
+  };
+
+  const handleClosePopup = () => {
+    console.log("Đóng popup");
+    setSelectedProduct(null);
+  };
+
+  return (
     <section className="collection">
       <h2 className="collection-title">{title}</h2>
 
@@ -226,8 +232,8 @@ const handleOpenPopup = (product) => {
         </div>
 
         <div className="collection-products">
-          {products.map((p) => (          
-            <a href="#" key={p.id} className="product">
+          {products.map((p) => (
+            <div key={p.id} className="product">
               <div className="product-image-wrapper">
                 <img
                   src={p.image}
@@ -240,25 +246,28 @@ const handleOpenPopup = (product) => {
                 {p.isGift && <div className="icon gift">🎁</div>}
                 {p.isBestSeller && <div className="ribbon bestseller">BEST SELLER</div>}
                 <div className="hover-icons">
-
-                  <button onClick={() => handleOpenPopup(p)} title="Xem nhanh">
-                  <MdOutlineZoomIn />
+                   <button
+                    className="zoom-in"
+                    onClick={() => handleOpenPopup(p)}
+                    title="Xem nhanh"
+                  >
+                    <MdOutlineZoomIn />
                   </button>
-                  <Link to={`/product/:id`} title="Xem chi tiết">
+                  <Link to="/Detail" className="eye"  title="Xem chi tiết">
                     <FaEye />
                   </Link>
                 </div>
               </div>
+
               <h3>{p.name}</h3>
               <p className="price">
                 {p.oldPrice && <span className="old-price">{p.oldPrice}</span>} {p.price}
               </p>
-              <a href="#" className="addtocart">Thêm vào giỏ hàng</a>
-            </a>  
+              <p className="add-to-cart">Thêm vào giỏ hàng</p>
+            </div>
           ))}
         </div>
       </div>
     </section>
-   
   );
 }
