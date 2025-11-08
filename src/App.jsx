@@ -19,6 +19,7 @@ import { Routes, Route, Outlet } from 'react-router-dom';
 import BT from './components/BT.jsx';
 import Detail from "./components/Detail.jsx";
 import ProductPopup from './components/ProductPopup.jsx';
+import Collection from './Collection.jsx';
 const ProductLayout = () => (
 
   <div className="bg-white flex flex-col min-h-screen">
