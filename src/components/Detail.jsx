@@ -420,7 +420,7 @@ const isWatch =
         <ProductTabs
           descriptionContent={
             <ProductDescription
-              productType={productType}
+              sizeTypeId={currentProduct.sizeTypeId}
             />
           }
           compositionContent={<ProductComposition />}
@@ -429,10 +429,10 @@ const isWatch =
 
       {/* Sản phẩm liên quan */}
       <RelatedProducts
-        allProducts={allProducts}
-        currentProductId={currentProduct.id}
-        currentCategory={currentProduct.categoryId}
-      />
+        allProducts={allProducts}
+        currentProductId={currentProduct.id}
+        currentCategory={currentProduct.categoryId}
+      />
 
       <Footer />
       <ScrollTest />

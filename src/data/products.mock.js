@@ -33,6 +33,7 @@ export const products = [
     name: "Giày Chạy Trail Hoka Speedgoat 5",
     price: 5100000,
     categoryId: 1,
+    sizeTypeId: 1, // <-- GIÀY NAM
     brandId: "hoka",
     imgMain: giayHokaSide,
     imgHover: giayHokaBack,
@@ -46,6 +47,7 @@ export const products = [
     name: "Áo Khoác Nam On Running Weather Jacket",
     price: 7060000,
     categoryId: 1,
+    sizeTypeId: 4,
     brandId: "on",
     imgMain: aoOnFlat,
     imgHover: aoOnFlat,
@@ -100,6 +102,7 @@ export const products = [
     name: "Giày Chạy Bộ Nữ HOKA Clifton 9 Wide",
     price: 4300000,
     categoryId: 2,
+    sizeTypeId: 1, // <-- GIÀY NAM
     brandId: "hoka",
     imgMain: giayNuRoadSide,
     imgHover: giayNuRoadBack,

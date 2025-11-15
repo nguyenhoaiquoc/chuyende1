@@ -1,3 +1,6 @@
+import { sizeTypes } from "../data/sizeTypes";
+import { sizes } from "../data/sizes";
+
 const ClothingSizeChart = () => (
   <table className="min-w-full divide-y divide-gray-200 border my-4">
     <thead className="bg-gray-50">
@@ -61,7 +64,10 @@ const ShoeSizeChart = () => (
   </table>
 );
 
-export default function ProductDescription({ descriptionHtml, productType }) {
+export default function ProductDescription({ descriptionHtml, sizeTypeId }) {
+  const type = sizeTypes.find((t) => t.id === sizeTypeId);
+  const sizeRows = sizes.filter((s) => s.sizeTypeId === sizeTypeId);
+
   return (
     <div>
       <div
@@ -69,11 +75,35 @@ export default function ProductDescription({ descriptionHtml, productType }) {
         dangerouslySetInnerHTML={{ __html: descriptionHtml }}
       />
 
-      {(productType === "ao" || productType === "giay") && (
+      {type && sizeRows.length > 0 && (
         <div className="mt-8">
-          <h3 className="text-xl font-semibold mb-2">Bảng size tham khảo</h3>
-          {productType === "ao" && <ClothingSizeChart />}
-          {productType === "giay" && <ShoeSizeChart />}
+          <h3 className="text-xl font-semibold mb-2">Bảng size ({type.name})</h3>
+
+          <table className="min-w-full divide-y divide-gray-200 border my-4">
+            <thead className="bg-gray-50">
+              <tr>
+                {type.columns.map((col) => (
+                  <th
+                    key={col}
+                    className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase"
+                  >
+                    {col}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {sizeRows.map((row) => (
+                <tr key={row.id}>
+                  {type.columns.map((col) => (
+                    <td className="px-4 py-2 text-sm" key={col}>
+                      {row[col]}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>
