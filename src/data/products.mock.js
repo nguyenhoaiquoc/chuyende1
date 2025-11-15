@@ -159,5 +159,4 @@ export const products = [
     sale: "10%",
     gift: true,
   },
-  // ... tiếp tục tương tự cho tất cả sản phẩm, tăng id 11, 12, 13...
 ];
