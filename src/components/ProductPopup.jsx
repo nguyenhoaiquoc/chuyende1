@@ -15,7 +15,7 @@ const ProductPopup = ({ product, onClose }) => {
   const name = product?.name || "Tên sản phẩm";
   const price = product?.price || "0";
 
-  // ✅ Xử lý thay đổi số lượng
+  
   const handleQuantityChange = (e) => {
     const value = e.target.value;
     if (/^\d+$/.test(value) && Number(value) > 0) {

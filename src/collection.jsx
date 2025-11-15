@@ -20,19 +20,19 @@ const collectionsConfig = [
     key: "men",
     title: "Men",
     image: nam,
-    filter: (p) => p.categoryId?.startsWith("men-"),
+    filter: (p) => p.categoryId === 1, // <- so sánh số trực tiếp
   },
   {
     key: "women",
     title: "Women",
     image: nu,
-    filter: (p) => p.categoryId?.startsWith("women-"),
+    filter: (p) => p.categoryId === 2,
   },
   {
     key: "watches",
     title: "ĐỒNG HỒ - TAI NGHE",
     image: dongho,
-    filter: (p) => p.categoryId === "watches",
+    filter: (p) => p.categoryId === 3,
   },
 ];
 

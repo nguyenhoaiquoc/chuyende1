@@ -22,17 +22,16 @@ import Footer from "./Footer";
 import RelatedProducts from "./RelatedProducts";
 
 import { products } from "../data/products.mock";
-import { brands } from "../data/brands";
 
 export default function Detail() {
   const { productId } = useParams();
 const navigate = useNavigate();
   const allProducts = products;
-  const currentProduct = allProducts.find((p) => p.id === productId);
+  const currentProduct = allProducts.find((p) => p.id === Number(productId));
 
-  const brandName = currentProduct
-    ? brands[currentProduct.brandId]?.name || currentProduct.brandId || ""
-    : "";
+// Thay vì dùng brands
+const brandName = currentProduct?.brandId || "";
+
 
   const thumbs = currentProduct
     ? currentProduct.images && currentProduct.images.length > 0
@@ -71,15 +70,15 @@ const navigate = useNavigate();
 const categoryId = currentProduct?.categoryId || "";
   // phân loại để dùng cho ProductDescription
 let productType = "ao";
-  if (categoryId.includes("shoes")) productType = "giay";
-  else if (categoryId.includes("shorts")) productType = "quan";
-  else if (categoryId === "watches" || categoryId.includes("watch"))
-    productType = "dongho";
+  if (categoryId === 1) productType = "giay";
+  else if (categoryId === 2) productType = "quan";
+  else if (categoryId === 3)  productType  = "dongho"
 
 const isWatch =
     categoryPath.includes("dong-ho") ||
-    categoryId === "watches" ||
-    categoryId.toLowerCase().includes("watch");
+    categoryId === 3 ||
+      (typeof categoryId === "string" && categoryId.toLowerCase().includes("watch"));
+
 
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -153,18 +152,6 @@ const isWatch =
 
   const lastThumb = thumbs.length > 0 ? thumbs[thumbs.length - 1] : mauAnh;
 
-  const productDescriptionHTML = `
-    <h3 style="font-size: 1.25rem; font-weight: 600;">Zoot Elite Tri Aero Fx Racesuit</h3>
-    <p>Sự kết hợp hoàn hảo giữa tốc độ, độ thoải mái và phong cách, bộ trisuit Zoot Elite Tri Aero được thiết kế cho những vận động viên ba môn phối hợp tìm kiếm hiệu suất đỉnh cao.</p>
-    <img src="${lastThumb}" alt="Product detail" style="width:70%; margin: 1rem 0;" />
-    <h4 style="font-weight: 600;">Tính năng nổi bật</h4>
-    <ul>
-      <li>Vải dệt Exo-Dry™ High Thread Count: hỗ trợ cơ bắp và tăng lưu thông máu.</li>
-      <li>Highway Ribbed Fabric: cấu trúc gân khí động học giảm lực cản gió.</li>
-      <li>Aeromax™ Mesh Back Panel: phần lưng bằng lưới siêu thoáng, thoát nhiệt.</li>
-      <li>Đệm PRO Carbon Tri Chamois: thiết kế riêng cho tư thế aero, êm ái và khô thoáng.</li>
-    </ul>
-  `;
 
   if (!currentProduct) {
     return (
@@ -177,17 +164,6 @@ const isWatch =
       </div>
     );
   }
-
-  // nếu sau này cậu có thêm field currentProduct.specs cho đồng hồ,
-  // có thể map ra bảng từ đây:
-  const watchSpecs = currentProduct.specs || {
-    "Loại sản phẩm": "Đồng hồ chạy bộ GPS",
-    "Thương hiệu": brandName,
-    "Chống nước": "5 ATM",
-    "Thời lượng pin": "Tối đa 35 giờ ở chế độ GPS (tham khảo)",
-    "Trọng lượng": "Khoảng 30g với dây nylon",
-    "Kết nối": "Bluetooth, ANT+",
-  };
 
   return (
     <div className="overflow-hidden">
@@ -339,31 +315,6 @@ const isWatch =
             </>
           )}
 
-          {/* === NẾU LÀ ĐỒNG HỒ -> BẢNG THÔNG SỐ KỸ THUẬT === */}
-          {isWatch && (
-            <div className="border-b pb-6">
-              <h3 className="font-semibold mb-3 text-gray-800">
-                Thông số kỹ thuật
-              </h3>
-              <div className="overflow-hidden rounded-md border text-sm">
-                <table className="w-full">
-                  <tbody>
-                    {Object.entries(watchSpecs).map(([key, value]) => (
-                      <tr
-                        key={key}
-                        className="odd:bg-gray-50 even:bg-white border-b last:border-none"
-                      >
-                        <td className="px-3 py-2 font-medium text-gray-700 w-1/3">
-                          {key}
-                        </td>
-                        <td className="px-3 py-2 text-gray-600">{value}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
 
           {/* Số lượng */}
           <div>Số lượng:</div>
@@ -469,7 +420,6 @@ const isWatch =
         <ProductTabs
           descriptionContent={
             <ProductDescription
-              descriptionHtml={productDescriptionHTML}
               productType={productType}
             />
           }

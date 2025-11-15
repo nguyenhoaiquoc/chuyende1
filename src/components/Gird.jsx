@@ -17,7 +17,7 @@ export default function Grid({ products: productsProp }) {
   const ITEMS_PER_PAGE = 15;
 
   // Nếu component cha không truyền prop thì dùng data chung
-  const products = productsProp ?? PRODUCT_DATA;
+const products = productsProp ?? PRODUCT_DATA.filter(p => p.categoryId === categoryFilter);
   const TOTAL_PAGES = Math.ceil(products.length / ITEMS_PER_PAGE);
 
 
