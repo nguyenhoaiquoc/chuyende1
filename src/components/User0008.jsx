@@ -77,6 +77,7 @@ const handleScroll = (direction, ref) => {
       <ProductCard
         key={p.id}
         product={p}
+        hideSale={true}
         onQuickView={handleOpenPopup}
       />
     ))}

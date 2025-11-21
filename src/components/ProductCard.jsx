@@ -3,30 +3,30 @@ import { Link } from "react-router-dom";
 import { FaSearchPlus, FaRegEye } from "react-icons/fa";
 import ProductPopup from "./ProductPopup"; // nếu card tự không xử popup thì bỏ
 
-export default function ProductCard({ product, onQuickView }) {
+export default function ProductCard({ product, onQuickView, hideSale  }) {
   const { id, name, price, imgMain, imgHover, sale } = product;
 
   return (
     <div className="h-auto md:w-[233px] w-full flex-shrink-0 lg:w-[300px] xl:w-[233px]">
       <div className="relative group">
         <Link to={`/product/${id}`} >
-        <div className="w-full h-full overflow-hidden relative">
-          <img
-            src={imgHover}
-            alt={name}
-            className="object-cover w-full h-full absolute -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-in-out z-10"
-          />
-          <img
-            src={imgMain}
-            alt={name}
-            className="object-cover w-full h-full group-hover:scale-0 transition-transform duration-500 ease-in-out delay-350 relative z-20"
-          />
-        </div>
+          <div className="w-full h-full overflow-hidden relative">
+            <img
+              src={imgHover}
+              alt={name}
+              className="object-cover w-full h-full absolute -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-in-out z-10"
+            />
+            <img
+              src={imgMain}
+              alt={name}
+              className="object-cover w-full h-full group-hover:scale-0 transition-transform duration-500 ease-in-out delay-350 relative z-20"
+            />
+          </div>
         </Link>
 
         <div className="absolute top-[10%] left-[10px]">
           <div className="flex flex-col items-center">
-            {sale && (
+            {!hideSale && sale && (
               <div className="relative flex items-center justify-center pb-1 bg-purple-800 text-white text-[10px] font-bold mb-6 rounded-b-full z-30 w-[33px] h-[33px] before:content-[''] before:absolute before:inset-0.5 before:border before:z-0 before:rounded-b-full">
                 {sale}%
               </div>
