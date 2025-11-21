@@ -1,43 +1,40 @@
-// src/components/Grid.jsx
 import React, { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-
+import { products as PRODUCT_DATA } from "../data/products.mock.js";
 import GridHeader from "./GridHeader";
 import ProductPopup from "./ProductPopup";
 
-// 👉 Dữ liệu sản phẩm dùng chung
-import { products as PRODUCT_DATA } from "../data/products.mock";
-
-export default function Grid({ products: productsProp }) {
+export default function Grid() {
   const [currentPage, setCurrentPage] = useState(1);
   const [quickViewProduct, setQuickViewProduct] = useState(null);
+  // State mới cho ô nhập trang
   const [goToPageInput, setGoToPageInput] = useState("");
   const ITEMS_PER_PAGE = 15;
 
   // Nếu component cha không truyền prop thì dùng data chung
-const products = productsProp ?? PRODUCT_DATA;
+const products = productsProp ?? PRODUCT_DATA.filter(p => p.categoryId === categoryFilter);
   const TOTAL_PAGES = Math.ceil(products.length / ITEMS_PER_PAGE);
 
-
-  // Phân trang
+  // Phân trang: Lấy sản phẩm cho trang hiện tại
   const paginatedProducts = useMemo(() => {
     const start = (currentPage - 1) * ITEMS_PER_PAGE;
-    return products.slice(start, start + ITEMS_PER_PAGE);
-  }, [products, currentPage]);
+    return PRODUCT_DATA.slice(start, start + ITEMS_PER_PAGE);
+  }, [PRODUCT_DATA, currentPage]);
 
+  // Logic tính toán 4 trang hiển thị
   const pagesToShow = useMemo(() => {
     const maxPages = 4; // Hiển thị tối đa 4 nút số
-    
+
     // Nếu tổng số trang ít hơn hoặc bằng 4, hiển thị tất cả
     if (TOTAL_PAGES <= maxPages) {
       return Array.from({ length: TOTAL_PAGES }, (_, i) => i + 1);
     }
-    
+
     // Nếu tổng số trang nhiều hơn 4
     let startPage = 1;
-    
+
     if (currentPage <= 2) {
       // Trang 1, 2: Hiển thị [1, 2, 3, 4]
       startPage = 1;
@@ -48,17 +45,17 @@ const products = productsProp ?? PRODUCT_DATA;
       // Các trang ở giữa: Trang hiện tại sẽ ở vị trí thứ 2
       startPage = currentPage - 1;
     }
-    
+
     // Tạo mảng 4 số từ startPage
     return Array.from({ length: maxPages }, (_, i) => startPage + i);
 
   }, [currentPage, TOTAL_PAGES]);
 
-  // Format giá tiền
+  // Format giá
   const formatPrice = (price) =>
-    Number(price).toLocaleString("vi-VN") + " VNĐ";
+    price.toLocaleString("vi-VN") + " VNĐ";
 
-  // Xử lý xem nhanh
+  // Xem nhanh
   const handleQuickView = (product) => setQuickViewProduct(product);
   const handleCloseQuickView = () => setQuickViewProduct(null);
 
@@ -70,30 +67,29 @@ const products = productsProp ?? PRODUCT_DATA;
     }
   };
 
+  // HÀM MỚI: Xử lý khi bấm nút "Đi"
   const handleGoToPage = () => {
     const pageNum = parseInt(goToPageInput, 10);
-    
+
     // Kiểm tra xem số nhập vào có hợp lệ không
     if (pageNum >= 1 && pageNum <= TOTAL_PAGES) {
       handlePageChange(pageNum); // Nếu hợp lệ thì nhảy trang
       setGoToPageInput(""); // Xóa input sau khi nhảy
     } else {
-      // THAY ĐỔI Ở ĐÂY:
-      // Nếu không hợp lệ, hiện thông báo lỗi
       alert(`Trang không tồn tại! Vui lòng chỉ nhập số từ 1 đến ${TOTAL_PAGES}.`);
-      setGoToPageInput(""); // Vẫn xóa input đi cho sạch
+      setGoToPageInput("");
     }
   };
 
-  // HÀM MỚI: Xử lý khi bấm "Enter" trong ô input
   const handleGoToPageKey = (e) => {
     if (e.key === 'Enter') {
       handleGoToPage();
     }
   };
+
   return (
     <div className="container mx-auto py-5">
-      <GridHeader totalProducts={products.length} />
+      <GridHeader totalProducts={PRODUCT_DATA.length} />
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mt-4">
         {paginatedProducts.map((p) => (
@@ -103,11 +99,10 @@ const products = productsProp ?? PRODUCT_DATA;
             state={{ product: p }}
             className="group relative block rounded-lg overflow-hidden text-center bg-white transform transition-all duration-300 hover:shadow-xl"
           >
-            {/* Vùng ảnh sản phẩm */}
             <div className="relative group">
               <div className="w-full h-full aspect-square overflow-hidden relative">
                 <img
-                  src={p.imgHover || p.imgMain}
+                  src={p.imgHover}
                   alt={p.name}
                   className="object-cover w-full h-full absolute -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-in-out z-10"
                 />
@@ -118,36 +113,11 @@ const products = productsProp ?? PRODUCT_DATA;
                 />
               </div>
 
-              {/* --- BADGES --- */}
-              <div className="absolute inset-0 z-30 pointer-events-none">
-                {/* Giảm giá góc trái */}
-                {p.sale && (
-<span className="absolute top-2 left-2 bg-purple-700 text-white text-xs font-semibold px-2 py-1 rounded-md shadow">
-                    {p.sale}
-                  </span>
-                )}
-
-                {/* Hộp quà chính giữa ảnh */}
-                {p.gift && (
-                  <span className="absolute top-10 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-yellow-400 text-black text-xs px-3 py-2 rounded-md shadow-md">
-                    🎁
-                  </span>
-                )}
-
-                {/* BEST SELLER góc phải */}
-                {p.bestseller && (
-                  <span className="absolute top-3 right-[-30px] bg-red-600 text-white text-[10px] font-bold px-6 py-1 rotate-45 shadow-md">
-                    BEST SELLER
-                  </span>
-                )}
-              </div>
-
-              {/* --- ICONS: Xem nhanh / Xem chi tiết --- */}
-              <div className="absolute top-[10%] left-[10px] z-40 flex flex-col items-center">
+              {/* Icon xem nhanh và chi tiết */}
+              <div className="absolute top-[10%] left-[10px] z-30 flex flex-col items-center">
                 {/* Xem nhanh */}
                 <div className="relative group/zoom">
                   <button
-                    type="button"
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
@@ -179,13 +149,13 @@ const products = productsProp ?? PRODUCT_DATA;
                     />
                   </Link>
                   <span className="absolute left-full top-1/2 -translate-y-1/2 ml-2 bg-gray-800 text-white text-xs px-2 py-1 rounded-md opacity-0 group-hover/eye:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none z-40">
-Xem chi tiết
+                    Xem chi tiết
                   </span>
                 </div>
               </div>
             </div>
 
-            {/* --- THÔNG TIN SẢN PHẨM --- */}
+            {/* Thông tin sản phẩm */}
             <div className="mt-2 p-3 text-center">
               <div className="font-medium text-[14px] md:text-lg">{p.name}</div>
               <div className="flex flex-col items-center mt-1">
@@ -203,69 +173,67 @@ Xem chi tiết
         ))}
       </div>
 
-      {/* --- PHÂN TRANG --- */}
-      <div className="flex flex-wrap justify-center items-center mt-6 gap-4">
-        
-        {/* Cụm điều hướng chính */}
-        <div className="flex items-center">
-          {/* Nút Trang Trước - Ẩn khi ở trang 1 */}
-          <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            className={`px-4 py-1.5 border rounded-l-md text-sm font-medium hover:bg-gray-100 ${
-              currentPage === 1 ? "invisible" : "" 
-            }`}
-          >
-            &lt;
-          </button>
+      {/* Phân trang MỚI */}
+      {TOTAL_PAGES > 1 && (
+        <div className="flex flex-wrap justify-center items-center mt-6 gap-4">
 
-          {/* Các nút số trang (tính toán từ logic pagesToShow) */}
-          {pagesToShow.map((page) => (
+          {/* Cụm điều hướng chính */}
+          <div className="flex items-center">
+            {/* Nút Trang Trước - Ẩn khi ở trang 1 */}
             <button
-              key={page}
-              onClick={() => handlePageChange(page)}
-              disabled={currentPage === page}
-              className={`px-4 py-1.5 border-t border-b border-l-0 text-sm font-medium ${
-                currentPage === page
-                  ? "bg-gray-900 text-white cursor-not-allowed" // Kiểu active
-                  : "hover:bg-gray-100" // Kiểu bình thường
-              }`}
+              onClick={() => handlePageChange(currentPage - 1)}
+              className={`px-4 py-1.5 border rounded-l-md text-sm font-medium hover:bg-gray-100 ${currentPage === 1 ? "invisible" : ""
+                }`}
             >
-              {page}
+              &lt;
             </button>
-          ))}
 
-          {/* Nút Trang Sau - Ẩn khi ở trang cuối */}
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            className={`px-4 py-1.5 border border-l-0 rounded-r-md text-sm font-medium hover:bg-gray-100 ${
-              currentPage === TOTAL_PAGES ? "invisible" : "" 
-            }`}
-          >
-            &gt;
-          </button>
+            {/* Các nút số trang (tính toán từ logic pagesToShow) */}
+            {pagesToShow.map((page) => (
+              <button
+                key={page}
+                onClick={() => handlePageChange(page)}
+                disabled={currentPage === page}
+                className={`px-4 py-1.5 border-t border-b border-l-0 text-sm font-medium ${currentPage === page
+                    ? "bg-gray-900 text-white cursor-not-allowed" // Kiểu active
+                    : "hover:bg-gray-100" // Kiểu bình thường
+                  }`}
+              >
+                {page}
+              </button>
+            ))}
+
+            {/* Nút Trang Sau - Ẩn khi ở trang cuối */}
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              className={`px-4 py-1.5 border border-l-0 rounded-r-md text-sm font-medium hover:bg-gray-100 ${currentPage === TOTAL_PAGES ? "invisible" : ""
+                }`}
+            >
+              &gt;
+            </button>
+          </div>
+
+          {/* Box nhảy đến trang */}
+          <div className="flex items-center gap-2">
+            <input
+              type="number"
+              value={goToPageInput}
+              onChange={(e) => setGoToPageInput(e.target.value)}
+              onKeyDown={handleGoToPageKey}
+              className="w-20 px-2 py-1.5 border rounded-md text-sm text-center"
+              placeholder="Đi đến..."
+              min="1"
+              max={TOTAL_PAGES}
+            />
+            <button
+              onClick={handleGoToPage}
+              className="px-4 py-1.5 border rounded-md text-sm font-medium bg-gray-700 text-white hover:bg-gray-900 transition-colors"
+            >
+              Đi
+            </button>
+          </div>
         </div>
-
-        {/* Box nhảy đến trang */}
-        <div className="flex items-center gap-2">
-          <input
-            type="number"
-            value={goToPageInput}
-            onChange={(e) => setGoToPageInput(e.target.value)}
-            onKeyDown={handleGoToPageKey}
-            className="w-20 px-2 py-1.5 border rounded-md text-sm text-center"
-            placeholder="Đi đến..."
-            min="1"
-            max={TOTAL_PAGES}
-          />
-          <button
-            onClick={handleGoToPage}
-            className="px-4 py-1.5 border rounded-md text-sm font-medium bg-gray-700 text-white hover:bg-gray-900 transition-colors"
-          >
-            Đi
-          </button>
-        </div>
-
-      </div>
+      )}
 
       {/* Popup xem nhanh */}
       {quickViewProduct && (
