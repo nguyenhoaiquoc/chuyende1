@@ -26,11 +26,11 @@ const menuItems = [
     ]
   },
   {
-    id: 'watch-earphone', label: 'Đồng Hồ', link: '/dong-ho',
+    id: 'watch-earphone', label: 'Đồng Hồ', link: '/dongho',
     submenu: [ 
-        { label: 'Suunto', link: '/dong-ho/suunto' }, 
-        { label: 'Garmin', link: '/dong-ho/garmin' }, 
-        { label: 'Coros', link: '/dong-ho/coros' } 
+        { label: 'Suunto', link: '/dongho/suunto' }, 
+        { label: 'Garmin', link: '/dongho/garmin' }, 
+        { label: 'Coros', link: '/dongho/coros' } 
     ]
   },
   { id: 'sale', label: 'SALE', link: '/sale', highlight: true }

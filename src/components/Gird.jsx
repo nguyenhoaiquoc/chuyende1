@@ -12,8 +12,9 @@ export default function Grid() {
   // State mới cho ô nhập trang
   const [goToPageInput, setGoToPageInput] = useState("");
   const ITEMS_PER_PAGE = 15;
-  
-  // const products = productsProp ?? PRODUCT_DATA.filter(p => p.categoryId === categoryFilter);
+
+
+
   const TOTAL_PAGES = Math.ceil(PRODUCT_DATA.length / ITEMS_PER_PAGE);
 
   // Phân trang: Lấy sản phẩm cho trang hiện tại
