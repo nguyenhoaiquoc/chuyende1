@@ -25,8 +25,11 @@ import NavigationMenu from "./NavigationMenu";
 
 const categories = categoriesType.map((cat) => ({
   ...cat,
-  subcategories: subcategories.filter((s) => s.categoryTypeId === cat.id)
+  // đảm bảo luôn có path, ví dụ: "/do-nam", "/do-nu", "/dong-ho"
+  path: cat.path || `/${cat.slug}`,
+  subcategories: subcategories.filter((s) => s.categoryTypeId === cat.id),
 }));
+
 
 
 /* ================== UTILS ================== */
@@ -85,7 +88,7 @@ const CategorySidebar = ({ onLinkClick }) => {
                 ? "font-semibold text-purple-600"
                 : "text-gray-700"
             }`}
-          >
+          > 
             {item.name}
           </Link>
           {item.subcategories && (
@@ -139,7 +142,12 @@ const CategorySidebar = ({ onLinkClick }) => {
         <h3 className="font-bold uppercase text-[18px] mb-2 text-gray-800 border-b pb-1">
           Danh mục
         </h3>
-        <ul>{categories.map((item) => <MenuItem key={item.path} item={item} />)}</ul>
+       <ul>
+  {categories.map((item) => (
+    <MenuItem key={item.id} item={item} />
+  ))}
+</ul>
+
       </div>
     </aside>
   );
@@ -149,6 +157,11 @@ const CategorySidebar = ({ onLinkClick }) => {
 
 export default function ProductPage() {
   const location = useLocation();
+const [priceRange, setPriceRange] = useState([null, null]);
+const [sizeFilterCodes, setSizeFilterCodes] = useState(null); 
+const [brandFilter, setBrandFilter] = useState(null); // mảng thương hiệu đang chọn
+
+// null = không lọc theo size, [] / ['1','2'] = đang lọc
 
   // Xác định các path đang active: nếu đang ở cha (có sub) -> gom cả sub; ngược lại -> chỉ đúng path hiện tại
   const activePaths = useMemo(() => {
@@ -161,22 +174,7 @@ export default function ProductPage() {
   }, [location.pathname]);
 
   // Lọc sản phẩm thuộc danh mục hiện tại
-const productsInCategory = useMemo(() => {
-  const curr = norm(location.pathname);
-  const isParent = categories.some(
-    (c) => norm(c.path) === curr && c.subcategories?.length
-  );
 
-  if (isParent) {
-    return products.filter((p) => {
-      const pPath = norm(p.categoryPath);
-      return pPath === curr || pPath.startsWith(curr + "/");
-    });
-  }
-
-  return products.filter((p) => norm(p.categoryPath) === curr);
-}, [products, location.pathname]);
-;
 
 
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -225,9 +223,78 @@ const productsInCategory = useMemo(() => {
     }
     return { name: getPageTitle(pathname), description: null };
   };
+const currentCategory = useMemo(() => {
+  const currPath = location.pathname;
 
-  const currentCategory = getCurrentCategoryData(location.pathname);
-  const pageDescription = currentCategory.description;
+  // Tìm category cha
+  const cat = categoriesType.find(c => `/` + c.slug === currPath);
+  if (cat) return cat;
+
+  // Tìm subcategory
+  const sub = subcategories.find(s => s.path === currPath);
+  if (sub) {
+    // Lấy luôn thông tin category cha để map sản phẩm
+    const parent = categoriesType.find(c => c.id === sub.categoryTypeId);
+    return { ...parent, subcategory: sub };
+  }
+
+  return null;
+}, [location.pathname]);
+
+const productsInCategory = useMemo(() => {
+  if (!currentCategory) return [];
+
+  if (currentCategory.subcategory) {
+    return products.filter(
+      (p) => p.subcategoryId === currentCategory.subcategory.id
+    );
+  }
+  return products.filter((p) => p.categoryId === currentCategory.id);
+}, [currentCategory]);
+// TÍNH GIÁ MIN/MAX THEO SẢN PHẨM TRONG DANH MỤC
+const [minPriceInCategory, maxPriceInCategory] = useMemo(() => {
+  if (!productsInCategory.length) return [0, 0];
+
+  let min = Infinity;
+  let max = -Infinity;
+
+  for (const p of productsInCategory) {
+    if (typeof p.price !== "number") continue;
+    if (p.price < min) min = p.price;
+    if (p.price > max) max = p.price;
+  }
+
+  if (!Number.isFinite(min) || !Number.isFinite(max)) return [0, 0];
+  return [min, max];
+}, [productsInCategory]);
+
+// LỌC THEO GIÁ
+const filteredProducts = useMemo(() => {
+  const [min, max] = priceRange;
+
+  return productsInCategory.filter((p) => {
+    // Lọc theo giá
+    if (min != null && p.price < min) return false;
+    if (max != null && p.price > max) return false;
+
+    // Lọc theo size (nếu có)
+    if (sizeFilterCodes && sizeFilterCodes.length > 0) {
+      const code = p.code || p.sku || String(p.id ?? "");
+      if (!sizeFilterCodes.includes(code)) return false;
+    }
+
+    // Lọc theo thương hiệu (brandFilter là mảng 'hoka', 'on', ...)
+    if (brandFilter && brandFilter.length > 0) {
+      const brand = p.brandId || p.brand || p.brandName || "";
+      if (!brandFilter.includes(brand)) return false;
+    }
+
+    return true;
+  });
+}, [productsInCategory, priceRange, sizeFilterCodes, brandFilter]);
+
+
+const pageDescription = currentCategory?.description || null;
 
   return (
     <div className="">
@@ -276,13 +343,27 @@ const productsInCategory = useMemo(() => {
           <div className="p-4 overflow-y-auto h-full">
             <CategorySidebar onLinkClick={() => setSidebarOpen(false)} />
             <div className="mt-6">
-              <PriceFilter />
+            <PriceFilter
+  onSearch={(min, max) => setPriceRange([min, max])}
+/>
             </div>
             <div className="mt-6">
-              <SizeFilter products={productsInCategory} />
+            <SizeFilter
+    products={productsInCategory}
+    onChange={(_sizesSelected, codes) => {
+      f
+      setSizeFilterCodes(codes && codes.length ? codes : null);
+    }}
+  />
             </div>
             <div className="mt-6">
-              <BrandFilter products={productsInCategory} />
+               <BrandFilter
+    products={productsInCategory}
+    onChange={(brands) => {
+      // brands là mảng ['hoka', 'on', ...]
+      setBrandFilter(brands.length ? brands : null);
+    }}
+  />
             </div>
           </div>
         </div>
@@ -292,20 +373,32 @@ const productsInCategory = useMemo(() => {
           <div className="hidden md:block w-60 lg:w-64 flex-shrink-0">
             <CategorySidebar />
             <div className="mt-6">
-              <PriceFilter />
+             <PriceFilter
+    onSearch={(min, max) => setPriceRange([min, max])}
+  />
             </div>
             <div className="mt-6">
-              <SizeFilter products={productsInCategory} />
+  <SizeFilter
+    products={productsInCategory}
+    onChange={(_sizesSelected, codes) => {
+      setSizeFilterCodes(codes && codes.length ? codes : null);
+    }}
+  />
             </div>
             <div className="mt-6">
-              <BrandFilter products={productsInCategory} />
+               <BrandFilter
+    products={productsInCategory}
+    onChange={(brands) => {
+      setBrandFilter(brands.length ? brands : null);
+    }}
+  />
             </div>
           </div>
 
           <main className="flex-1">
             {/* TODO: nếu Gird nhận props, truyền productsInCategory vào */}
             <div className="min-h-[60vh] rounded-md flex items-center justify-center">
-              <Gird products={productsInCategory} />
+<Gird products={filteredProducts} />
             </div>
 
             <CategoryDescription description={pageDescription} />

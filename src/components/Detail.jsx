@@ -25,20 +25,21 @@ import { products } from "../data/products.mock";
 
 export default function Detail() {
   const { productId } = useParams();
-const navigate = useNavigate();
+  const navigate = useNavigate();
   const allProducts = products;
   const currentProduct = allProducts.find((p) => p.id === Number(productId));
 
-// Thay vì dùng brands
-const brandName = currentProduct?.brandId || "";
+  // Thương hiệu
+  const brandName = currentProduct?.brandId || "";
 
-
+  // Ảnh thumbnails
   const thumbs = currentProduct
     ? currentProduct.images && currentProduct.images.length > 0
       ? currentProduct.images
       : [currentProduct.imgMain, currentProduct.imgHover].filter(Boolean)
     : [];
 
+  // Size hiển thị (string → {label, available})
   const sizes = currentProduct
     ? Array.isArray(currentProduct.sizes)
       ? currentProduct.sizes.map((s) =>
@@ -49,37 +50,54 @@ const brandName = currentProduct?.brandId || "";
 
   const description = currentProduct?.description || [];
 
-  const priceDisplay = currentProduct
-    ? typeof currentProduct.price === "number"
-      ? `${currentProduct.price.toLocaleString("vi-VN")} VNĐ`
-      : currentProduct.price
-    : "";
+  // ==== TÍNH GIÁ: GIÁ GỐC + % GIẢM (Number) → GIÁ SALE ====
 
-  const saleRaw =
-    currentProduct && "salePrice" in currentProduct
-      ? currentProduct.salePrice
-      : currentProduct?.price;
+  // Giá gốc dạng số
+  const basePrice =
+    currentProduct && typeof currentProduct.price === "number"
+      ? currentProduct.price
+      : 0;
 
-  const salePriceDisplay = saleRaw
-    ? typeof saleRaw === "number"
-      ? `${saleRaw.toLocaleString("vi-VN")} VNĐ`
-      : saleRaw
-    : priceDisplay;
+  // % giảm: sale là Number
+  const salePercent =
+    currentProduct && typeof currentProduct.sale === "number"
+      ? currentProduct.sale
+      : 0;
 
- const categoryPath = currentProduct?.categoryPath || "";
-const categoryId = currentProduct?.categoryId || "";
-  // phân loại để dùng cho ProductDescription
-let productType = "ao";
+  // Tính giá sale nếu có giảm
+  let salePriceNumber = null;
+  if (salePercent > 0 && basePrice > 0) {
+    salePriceNumber = Math.round(basePrice * (1 - salePercent / 100));
+  }
+
+  const hasSale = salePriceNumber !== null;
+
+  const priceDisplay =
+    basePrice > 0
+      ? `${basePrice.toLocaleString("vi-VN")} VNĐ`
+      : currentProduct?.price || "";
+
+  const salePriceDisplay =
+    hasSale && salePriceNumber !== null
+      ? `${salePriceNumber.toLocaleString("vi-VN")} VNĐ`
+      : priceDisplay;
+
+  // ==== PHÂN LOẠI SẢN PHẨM / ĐỒNG HỒ HAY KHÔNG ====
+  const categoryPath = currentProduct?.categoryPath || "";
+  const categoryId = currentProduct?.categoryId || "";
+
+  let productType = "ao";
   if (categoryId === 1) productType = "giay";
   else if (categoryId === 2) productType = "quan";
-  else if (categoryId === 3)  productType  = "dongho"
+  else if (categoryId === 3) productType = "dongho";
 
-const isWatch =
-    categoryPath.includes("dong-ho") ||
-    categoryId === 3 ||
-      (typeof categoryId === "string" && categoryId.toLowerCase().includes("watch"));
+  const isWatch =
+    categoryPath.includes("dong-ho") ||
+    categoryId === 3 ||
+    (typeof categoryId === "string" &&
+      categoryId.toLowerCase().includes("watch"));
 
-
+  // ==== ZOOM & ẢNH CHÍNH ====
   const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
@@ -111,6 +129,7 @@ const isWatch =
     scrollRef.current?.scrollBy({ left: 100, behavior: "smooth" });
   };
 
+  // ==== SỐ LƯỢNG & SIZE ====
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState(null);
 
@@ -127,6 +146,10 @@ const isWatch =
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     const sizeToSave = isWatch ? null : selectedSize;
 
+    // Giá lưu giỏ: có sale thì dùng giá sale, không thì giá gốc
+    const priceForCart =
+      hasSale && salePriceNumber !== null ? salePriceNumber : basePrice;
+
     const existingItemIndex = cart.findIndex(
       (item) => item.id === currentProduct.id && item.size === sizeToSave
     );
@@ -137,7 +160,7 @@ const isWatch =
       cart.push({
         id: currentProduct.id,
         name: currentProduct.name,
-        price: saleRaw, // Dùng giá sale (nếu có)
+        price: priceForCart,
         size: sizeToSave,
         quantity: quantity,
         image: currentProduct.imgMain,
@@ -151,7 +174,6 @@ const isWatch =
   };
 
   const lastThumb = thumbs.length > 0 ? thumbs[thumbs.length - 1] : mauAnh;
-
 
   if (!currentProduct) {
     return (
@@ -282,12 +304,24 @@ const isWatch =
             </div>
           </div>
 
+          {/* GIÁ + GIÁ SALE */}
           <div className="flex items-center">
             <p className="mr-2">Giá:</p>
-            <div className="inline-block text-lg text-gray-500 relative before:content-[''] before:left-0 before:top-1/2 before:h-[1px] before:w-full before:bg-gray-300 before:absolute">
-              {priceDisplay}
-            </div>
-            <p className="text-xl mb-1 ml-1">{salePriceDisplay}</p>
+            {hasSale ? (
+              <>
+                <div className="inline-block text-lg text-gray-500 relative before:content-[''] before:left-0 before:top-1/2 before:h-[1px] before:w-full before:bg-gray-300 before:absolute">
+                  {priceDisplay}
+                </div>
+                <p className="text-xl mb-1 ml-2 text-red-600 font-semibold">
+                  {salePriceDisplay}
+                </p>
+                <span className="ml-2 text-sm text-red-600 font-semibold">
+                  -{salePercent}%
+                </span>
+              </>
+            ) : (
+              <p className="text-xl mb-1 ml-1">{priceDisplay}</p>
+            )}
           </div>
 
           {/* === NẾU KHÔNG PHẢI ĐỒNG HỒ -> CHỌN SIZE === */}
@@ -314,7 +348,6 @@ const isWatch =
               </div>
             </>
           )}
-
 
           {/* Số lượng */}
           <div>Số lượng:</div>
@@ -353,37 +386,39 @@ const isWatch =
                   e.preventDefault();
                 }}
                 onChange={(e) => {
-                  let val = e.target.value;
-                  if (val === "") {
-                    setQuantity("");
-                    return;
-                  }
-                  val = val.replace(/\D/g, "");
-                  if (val !== "") {
-                    const num = Number(val);
-                    if (!Number.isNaN(num) && num >= 1) { 
-                      setQuantity(num);
-                    }
-                  }
-                }}
-                onBlur={() => {
-                  if (quantity === "" || quantity < 1) { 
-                    setQuantity(1);
-                  }
-                }}
-                className="border h-[50px] rounded-full text-center w-full md:w-[150px] pr-5 pl-8"
-              />
+                  let val = e.target.value;
+                  if (val === "") {
+                    setQuantity("");
+                    return;
+                  }
+                  val = val.replace(/\D/g, "");
+                  if (val !== "") {
+                    const num = Number(val);
+                    if (!Number.isNaN(num) && num >= 1) {
+                      setQuantity(num);
+                    }
+                  }
+                }}
+                onBlur={() => {
+                  if (quantity === "" || quantity < 1) {
+                    setQuantity(1);
+                  }
+                }}
+                className="border h-[50px] rounded-full text-center w-full md:w-[150px] pr-5 pl-8"
+              />
             </div>
             <div className="flex justify-center gap-2">
-           <button 
-  onClick={handleAddToCart}
-  disabled={isAddDisabled}
-  className={`rounded-full text-white py-2.5 px-12 transition-colors duration-200 ${
-    isAddDisabled ? "bg-gray-400 cursor-not-allowed" : "bg-[#673AB7] hover:bg-[#5a329f]"
-  }`}
->
-  THÊM VÀO GIỎ HÀNG
-</button>
+              <button
+                onClick={handleAddToCart}
+                disabled={isAddDisabled}
+                className={`rounded-full text-white py-2.5 px-12 transition-colors duration-200 ${
+                  isAddDisabled
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-[#673AB7] hover:bg-[#5a329f]"
+                }`}
+              >
+                THÊM VÀO GIỎ HÀNG
+              </button>
 
               <div className="border p-4 rounded-full cursor-pointer ">
                 <CiHeart />
@@ -419,9 +454,7 @@ const isWatch =
       <div className="md:px-40 px-4 mt-8">
         <ProductTabs
           descriptionContent={
-            <ProductDescription
-              sizeTypeId={currentProduct.sizeTypeId}
-            />
+            <ProductDescription sizeTypeId={currentProduct.sizeTypeId} />
           }
           compositionContent={<ProductComposition />}
         />

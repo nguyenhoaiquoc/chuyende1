@@ -4,9 +4,25 @@ import { useSearchParams } from "react-router-dom";
 
 const PURPLE = "#673AB7";
 
-// lấy brand từ product với vài key phổ biến
+// Map mã brand -> label đẹp (tùy bạn, có thể bỏ nếu không cần)
+const BRAND_LABELS = {
+  hoka: "HOKA",
+  on: "On Running",
+  luna: "LUNA",
+  coros: "COROS",
+};
+
+// lấy brand từ product với vài key phổ biến + brandId của bạn
 const pickBrand = (p) =>
-  (p.brandCode ?? p.brand_code ?? p.brand ?? p.brandName ?? p.brand_name ?? "")
+  (
+    p.brandId ??          // ✅ thêm dòng này cho đúng với data của bạn
+    p.brandCode ??
+    p.brand_code ??
+    p.brand ??
+    p.brandName ??
+    p.brand_name ??
+    ""
+  )
     .toString()
     .trim();
 
@@ -35,7 +51,6 @@ export default function BrandFilter({ products = [], onChange }) {
       .map((s) => s.trim())
       .filter(Boolean);
     const values = new Set([...multi, ...comma]);
-    // chỉ giữ những brand đang có trong list hiện tại
     const next = new Set([...values].filter((v) => brandList.includes(v)));
     setSelected(next);
   }, [searchParams, brandList]);
@@ -51,7 +66,7 @@ export default function BrandFilter({ products = [], onChange }) {
     [...next].forEach((b) => params.append("brand", b));
     setSearchParams(params, { replace: true });
 
-    onChange?.([...next]);
+    onChange?.([...next]); // trả về danh sách brand đang chọn
   };
 
   return (
@@ -91,7 +106,7 @@ export default function BrandFilter({ products = [], onChange }) {
                       : "text-gray-800 hover:text-[#673AB7]",
                   ].join(" ")}
                 >
-                  {brand}
+                  {BRAND_LABELS[brand] || brand}
                 </button>
               );
             })}
@@ -108,7 +123,7 @@ export default function BrandFilter({ products = [], onChange }) {
       <style>{`
         .brands-scroll::-webkit-scrollbar { width: 8px; }
         .brands-scroll::-webkit-scrollbar-thumb { background: ${PURPLE}; border-radius: 6px; }
-        .brands-scroll::-webkit-scrollbar-track { background: #e5e7eb; } /* gray-200 */
+        .brands-scroll::-webkit-scrollbar-track { background: #e5e7eb; }
         .brands-scroll { scrollbar-color: ${PURPLE} #e5e7eb; scrollbar-width: thin; }
       `}</style>
     </div>

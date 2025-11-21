@@ -28,7 +28,7 @@ export default function ProductCard({ product, onQuickView }) {
           <div className="flex flex-col items-center">
             {sale && (
               <div className="relative flex items-center justify-center pb-1 bg-purple-800 text-white text-[10px] font-bold mb-6 rounded-b-full z-30 w-[33px] h-[33px] before:content-[''] before:absolute before:inset-0.5 before:border before:z-0 before:rounded-b-full">
-                {sale}
+                {sale}%
               </div>
             )}
 

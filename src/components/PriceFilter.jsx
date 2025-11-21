@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 const MIN_CAP = 0;
-const MAX_CAP = 2_000_000; // max mặc định
+const MAX_CAP = 2_000_000_0; // max mặc định
 const STEP = 10_000;
 
 export default function PriceFilter({ onSearch }) {
