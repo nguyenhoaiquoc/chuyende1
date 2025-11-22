@@ -6,24 +6,40 @@ export const sizes = [
     eu: "40",
     us: "7",
     uk: "6.5",
-    ep: "250"
+    ep: "250",
   },
   {
-    id: 2,
+    id: 3,
     sizeTypeId: 1,
-    eu: "41",
+    eu: "42",
     us: "8",
     uk: "7.5",
-    ep: "260"
+    ep: "260",
+  },
+  {
+    id: 4,
+    sizeTypeId: 1,
+    eu: "43",
+    us: "8",
+    uk: "7.5",
+    ep: "260",
+  },
+  {
+    id: 5,
+    sizeTypeId: 1,
+    eu: "44",
+    us: "8",
+    uk: "7.5",
+    ep: "260",
   },
   // ... tiếp tục 42, 43, 44,...
-    {
+  {
     id: 21,
     sizeTypeId: 2,
     eu: "36",
     us: "5",
     uk: "4",
-    ep: "225"
+    ep: "225",
   },
   {
     id: 21,
@@ -31,37 +47,54 @@ export const sizes = [
     eu: "36",
     us: "5",
     uk: "4",
-    ep: "225"
+    ep: "225",
   },
   {
     id: 50,
     sizeTypeId: 3,
     chest: 90,
-    label: "S"
+    label: "S",
   },
   {
     id: 51,
     sizeTypeId: 3,
     chest: 96,
-    label: "M"
+    label: "M",
+  },
+  {
+    id: 67,
+    sizeTypeId: 4,
+    chest: 82,
+    label: "S",
   },
   {
     id: 70,
     sizeTypeId: 4,
     chest: 82,
-    label: "XS"
+    label: "XS",
+  },
+  {
+    id: 68,
+    sizeTypeId: 4,
+    chest: 85,
+    label: "L",
+  },
+  {
+    id: 69,
+    sizeTypeId: 4,
+    chest: 86,
+    label: "XL",
   },
   {
     id: 90,
     sizeTypeId: 5,
     waist: 74,
-    label: "S"
+    label: "S",
   },
   {
     id: 120,
     sizeTypeId: 6,
     waist: 62,
-    label: "XS"
+    label: "XS",
   },
 ];
-

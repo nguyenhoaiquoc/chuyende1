@@ -1,104 +1,75 @@
-//data
-const productData = {
-  name: "Zoot Elite Tri Aero Fx Racesuit",
-  brand: "Zoot",
-  sizes: [
-    "S (Ngực 86-91cm, Eo 71-76cm)",
-    "M (Ngực 92-97cm, Eo 77-82cm)",
-    "L (Ngực 98-103cm, Eo 83-88cm)",
-  ],
-  features: [
-    "Vải dệt Exo-Dry™ High Thread Count",
-    "Highway Ribbed Fabric (Vải gân)",
-    "Aeromax™ Mesh Back Panel (Lưới lưng)",
-    "Đệm PRO Carbon Tri Chamois",
-  ],
+import React from "react";
+
+// Helper để làm đẹp tên thương hiệu (nếu cần)
+const formatBrand = (brandId) => {
+  const brands = {
+    hoka: "Hoka One One",
+    on: "On Running",
+    coros: "COROS",
+    luna: "LUNA Sandals",
+  };
+  return brands[brandId] || brandId.toUpperCase();
 };
 
-export default function ProductComposition() {
+export default function ProductComposition({ product }) {
+  // 1. Tạo mảng thông tin cơ bản từ product gốc
+  const basicSpecs = [
+    { label: "Tên sản phẩm", value: product.name },
+    { label: "Thương hiệu", value: formatBrand(product.brandId) },
+  ];
+
+  // 2. Gộp với mảng specifications (nếu có)
+  // Nếu product.specifications không có thì dùng mảng rỗng để tránh lỗi
+  const fullSpecs = [...basicSpecs, ...(product.specifications || [])];
+
   return (
-    // Không dùng 'prose' ở đây để kiểm soát style của bảng tốt hơn
     <div className="text-sm text-gray-700">
       {/* --- Giao diện Mobile (List) --- */}
-      {/* Trên mobile, bảng 2 cột thường xấu, nên ta dùng danh sách */}
-      <div className="md:hidden space-y-4">
-        <div>
-          <h4 className="font-semibold text-gray-800">Tên sản phẩm</h4>
-          <p>{productData.name}</p>
-        </div>
-        <div>
-          <h4 className="font-semibold text-gray-800">Thương hiệu</h4>
-          <p>{productData.brand}</p>
-        </div>
-        <div>
-          <h4 className="font-semibold text-gray-800">Kích cỡ</h4>
-          <ul className="list-disc pl-5 space-y-1 mt-1">
-            {productData.sizes.map((size, index) => (
-              <li key={index}>{size}</li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <h4 className="font-semibold text-gray-800">Đặc điểm</h4>
-          <ul className="list-disc pl-5 space-y-1 mt-1">
-            {productData.features.map((feature, index) => (
-              <li key={index}>{feature}</li>
-            ))}
-          </ul>
-        </div>
+      <div className="md:hidden space-y-6">
+        {fullSpecs.map((item, index) => (
+          <div key={index} className="border-b pb-4 last:border-0">
+            <h4 className="font-semibold text-gray-900 mb-1">{item.label}</h4>
+            {item.isList ? (
+              <ul className="list-disc pl-5 space-y-1 text-gray-600">
+                {item.value.map((line, i) => (
+                  <li key={i}>{line}</li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-gray-600">{item.value}</p>
+            )}
+          </div>
+        ))}
       </div>
 
       {/* --- Giao diện Desktop (Table) --- */}
-      {/* Bảng 2 cột 4 hàng cho Desktop */}
-      <table className="hidden md:table min-w-full border border-gray-200 divide-y divide-gray-200">
-        <tbody className="bg-white divide-y divide-gray-200">
-          {/* Hàng 1: Tên sản phẩm */}
-          <tr>
-            <td className="px-4 py-3 font-semibold text-gray-800 bg-gray-50 w-1/3">
-              Tên sản phẩm
-            </td>
-            <td className="px-4 py-3">{productData.name}</td>
-          </tr>
+      <div className="hidden md:block overflow-hidden rounded-lg border border-gray-200">
+        <table className="min-w-full divide-y divide-gray-200">
+          <tbody className="bg-white divide-y divide-gray-200">
+            {fullSpecs.map((item, index) => (
+              <tr key={index}>
+                {/* Cột Label */}
+                <td className="px-6 py-4 font-semibold text-gray-800 bg-gray-50 w-1/3 align-top">
+                  {item.label}
+                </td>
 
-          {/* Hàng 2: Thương hiệu */}
-          <tr>
-            <td className="px-4 py-3 font-semibold text-gray-800 bg-gray-50 w-1/3">
-              Thương hiệu
-            </td>
-            <td className="px-4 py-3">{productData.brand}</td>
-          </tr>
-
-          {/* Hàng 3: Kích cỡ */}
-          <tr>
-            <td className="px-4 py-3 font-semibold text-gray-800 bg-gray-50 w-1/3">
-              Kích cỡ
-            </td>
-            <td className="px-4 py-3">
-              {/* Yêu cầu: có dấu chấm trước mỗi dòng */}
-              <ul className="list-disc pl-5 space-y-1">
-                {productData.sizes.map((size, index) => (
-                  <li key={index}>{size}</li>
-                ))}
-              </ul>
-            </td>
-          </tr>
-
-          {/* Hàng 4: Đặc điểm */}
-          <tr>
-            <td className="px-4 py-3 font-semibold text-gray-800 bg-gray-50 w-1/3">
-              Đặc điểm
-            </td>
-            <td className="px-4 py-3">
-              {/* Yêu cầu: có dấu chấm trước mỗi dòng */}
-              <ul className="list-disc pl-5 space-y-1">
-                {productData.features.map((feature, index) => (
-                  <li key={index}>{feature}</li>
-                ))}
-              </ul>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+                {/* Cột Value */}
+                <td className="px-6 py-4 align-top text-gray-600">
+                  {item.isList ? (
+                    <ul className="list-disc pl-5 space-y-1">
+                      {item.value.map((line, i) => (
+                        <li key={i}>{line}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <span>{item.value}</span>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

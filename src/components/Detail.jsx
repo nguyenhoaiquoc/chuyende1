@@ -299,8 +299,7 @@ export default function Detail() {
               </span>
             </div>
             <div>
-              Mã SP:{" "}
-              <span className="text-gray-400">{currentProduct.id}</span>
+              Mã SP: <span className="text-gray-400">{currentProduct.id}</span>
             </div>
           </div>
 
@@ -454,9 +453,14 @@ export default function Detail() {
       <div className="md:px-40 px-4 mt-8">
         <ProductTabs
           descriptionContent={
-            <ProductDescription sizeTypeId={currentProduct.sizeTypeId} />
+            <ProductDescription
+              // 1. Lấy description từ object product
+              descriptionHtml={currentProduct.descriptionHtml}
+              imgUrl={currentProduct.imgMain}
+              sizeTypeId={currentProduct.sizeTypeId}
+            />
           }
-          compositionContent={<ProductComposition />}
+          compositionContent={<ProductComposition product={currentProduct} />}
         />
       </div>
 

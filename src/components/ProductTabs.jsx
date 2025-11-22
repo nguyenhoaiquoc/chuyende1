@@ -1,10 +1,6 @@
-// Tên file: ProductTabs.jsx
-
 import React, { useState } from "react";
-// Cài đặt: npm install @heroicons/react
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 
-// Dữ liệu 2 tab đúng theo yêu cầu US020
 const tabs = [
   { id: "description", label: "Mô tả chi tiết" },
   { id: "composition", label: "Thành phần" },
@@ -38,7 +34,6 @@ export default function ProductTabs({
                   <ChevronDownIcon className="w-5 h-5 text-gray-500" />
                 )}
               </button>
-
             </div>
           );
         })}
