@@ -1,4 +1,3 @@
-import React from "react";
 import { sizeTypes } from "../data/sizeTypes";
 import { sizes } from "../data/sizes";
 
@@ -6,7 +5,7 @@ const COLUMN_LABELS = {
   eu: "EU",
   us: "US",
   uk: "UK",
-  ep: "Nhật (mm)",
+  ep: "JP",
   label: "Size",
   chest: "Vòng ngực (cm)",
   waist: "Vòng eo (cm)",
@@ -58,7 +57,7 @@ export default function ProductDescription({
                   {type.columns.map((col) => (
                     <th
                       key={col}
-                      className="px-6 py-3 border-b border-r last:border-r-0 whitespace-nowrap"
+                      className="px-6 py-3 border-b border-r last:border-r-0 whitespace-nowrap text-center "
                     >
                       {COLUMN_LABELS[col] || col.toUpperCase()}
                     </th>
