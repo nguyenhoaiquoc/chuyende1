@@ -1,137 +1,22 @@
+// src/components/Grid.jsx
 import React, { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
-// Assets
-import Ao from "../assets/Aoremove.png";
-import sanPham2 from "../assets/sanpham2.jpg";
-import sanPham2Load from "../assets/sanpham2Load.jpg";
-import mauAnh from "../assets/mauAnh.png";
-
-// Components
 import GridHeader from "./GridHeader";
 import ProductPopup from "./ProductPopup";
 
-export default function Grid() {
+// 👉 Dữ liệu sản phẩm dùng chung
+import { products as PRODUCT_DATA } from "../data/products.mock";
+
+export default function Grid({ products: productsProp }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [quickViewProduct, setQuickViewProduct] = useState(null);
   const ITEMS_PER_PAGE = 12;
 
-  // Dữ liệu sản phẩm
-  const products = [
-    {
-      id: "SP002",
-      name: "Áo Khoác Nữ On Running Weather",
-      price: 7060000,
-      imgMain: sanPham2,
-      imgHover: sanPham2Load,
-      sale: "20%",
-      gift: true,
-      bestseller: true,
-      sizes: ["S", "M", "L", "XL"],
-    },
-    {
-      id: "1ME1031315",
-      name: "Áo Khoác Nam On Running Weather Jacket",
-      price: 7060000,
-      imgMain: Ao,
-      imgHover: mauAnh,
-      sale: "20%",
-      gift: false,
-      bestseller: true,
-      sizes: ["S", "M", "L", "XL"],
-    },
-    {
-      id: "GIAY-HOKA-002",
-      name: "Giày Chạy Trail Hoka Speedgoat 5",
-      price: 5100000,
-      imgMain: sanPham2,
-      imgHover: sanPham2Load,
-      sale: "",
-      gift: false,
-      bestseller: false,
-      sizes: ["S", "M", "L", "XL"],
-    },
-    {
-      id: "AO-NIKE-003",
-      name: "Áo Thun Chạy Bộ Nike Dri-Fit",
-      price: 1200000,
-      imgMain: Ao,
-      imgHover: mauAnh,
-      sale: "25%",
-      gift: true,
-      bestseller: false,
-      sizes: ["S", "M", "L", "XL"],
-    },
-    {
-      id: "GIAY-ADI-003",
-      name: "Giày Adidas Adizero Boston 12",
-      price: 4200000,
-      imgMain: sanPham2Load,
-      imgHover: sanPham2,
-      sale: "",
-      gift: false,
-      bestseller: true,
-      sizes: ["S", "M", "L", "XL"],
-    },
-    {
-      id: "AO-ADIDAS-004",
-      name: "Áo Ba Lỗ Adidas Running",
-      price: 950000,
-      imgMain: Ao,
-      imgHover: mauAnh,
-      sale: "",
-      gift: false,
-      bestseller: false,
-      sizes: ["S", "M", "L", "XL"],
-    },
-    {
-      id: "QUAN-ON-001",
-      name: "Quần Đùi Chạy Bộ On Running 5 Inch",
-      price: 2300000,
-      imgMain: Ao,
-      imgHover: mauAnh,
-      sale: "",
-      gift: false,
-      bestseller: false,
-      sizes: ["S", "M", "L", "XL"],
-    },
-    {
-      id: "SP003",
-      name: "Giày Chạy Bộ Siêu Bền",
-      price: 4500000,
-      imgMain: mauAnh,
-      imgHover: Ao,
-      sale: "10%",
-      gift: true,
-      bestseller: false,
-      sizes: ["S", "M", "L", "XL"],
-    },
-    {
-      id: "GIAY-BROOKS-005",
-      name: "Giày Brooks Ghost 15",
-      price: 3900000,
-      imgMain: sanPham2,
-      imgHover: mauAnh,
-      sale: "10%",
-      gift: false,
-      bestseller: true,
-      sizes: ["S", "M", "L", "XL"],
-    },
-    {
-      id: "AO-SALOMON-006",
-      name: "Áo Thun Dài Tay Salomon",
-      price: 1800000,
-      imgMain: Ao,
-      imgHover: mauAnh,
-      sale: "15%",
-      gift: true,
-      bestseller: false,
-      sizes: ["S", "M", "L", "XL"],
-    },
-  ];
-
+  // Nếu component cha không truyền prop thì dùng data chung
+  const products = productsProp ?? PRODUCT_DATA;
   const TOTAL_PAGES = Math.ceil(products.length / ITEMS_PER_PAGE);
 
   // Phân trang
@@ -140,11 +25,11 @@ export default function Grid() {
     return products.slice(start, start + ITEMS_PER_PAGE);
   }, [products, currentPage]);
 
-  // Format giá
+  // Format giá tiền
   const formatPrice = (price) =>
-    price.toLocaleString("vi-VN") + " VNĐ";
+    Number(price).toLocaleString("vi-VN") + " VNĐ";
 
-  // Xem nhanh
+  // Xử lý xem nhanh
   const handleQuickView = (product) => setQuickViewProduct(product);
   const handleCloseQuickView = () => setQuickViewProduct(null);
 
@@ -168,10 +53,11 @@ export default function Grid() {
             state={{ product: p }}
             className="group relative block rounded-lg overflow-hidden text-center bg-white transform transition-all duration-300 hover:shadow-xl"
           >
+            {/* Vùng ảnh sản phẩm */}
             <div className="relative group">
               <div className="w-full h-full aspect-square overflow-hidden relative">
                 <img
-                  src={p.imgHover}
+                  src={p.imgHover || p.imgMain}
                   alt={p.name}
                   className="object-cover w-full h-full absolute -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-in-out z-10"
                 />
@@ -182,9 +68,8 @@ export default function Grid() {
                 />
               </div>
 
-              {/* Badges góc trên */}
-              <div className="absolute top-2 left-2 right-2 flex justify-between items-center z-30">
-                {/* Trái: giảm giá */}
+              {/* --- BADGES --- */}
+              <div className="absolute inset-0 z-30 pointer-events-none">
                 {/* Giảm giá góc trái */}
                 {p.sale && (
                   <span className="absolute top-2 left-2 bg-purple-700 text-white text-xs font-semibold px-2 py-1 rounded-md shadow">
@@ -192,35 +77,33 @@ export default function Grid() {
                   </span>
                 )}
 
-                {/* Hộp quà ở giữa tùy vị trí */}
-                {/* Hộp quà nằm chính giữa ảnh */}
+                {/* Hộp quà chính giữa ảnh */}
                 {p.gift && (
-                  <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
-                   bg-yellow-400 text-black text-xs px-2 py-1 rounded-md shadow-md">
+                  <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-yellow-400 text-black text-xs px-3 py-2 rounded-md shadow-md">
                     🎁
                   </span>
                 )}
 
-                {/* BEST SELLER ribbon góc phải */}
+                {/* BEST SELLER góc phải */}
                 {p.bestseller && (
                   <span className="absolute top-3 right-[-30px] bg-red-600 text-white text-[10px] font-bold px-6 py-1 rotate-45 shadow-md">
                     BEST SELLER
                   </span>
                 )}
-
               </div>
 
-              {/* Icon xem nhanh và chi tiết */}
-              <div className="absolute top-[20%] left-[10px] z-30 flex flex-col items-center">
+              {/* --- ICONS: Xem nhanh / Xem chi tiết --- */}
+              <div className="absolute top-[10%] left-[10px] z-40 flex flex-col items-center">
                 {/* Xem nhanh */}
                 <div className="relative group/zoom">
                   <button
+                    type="button"
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
                       handleQuickView(p);
                     }}
-                    className="hover:bg-purple-800 bg-white p-2 rounded-md mb-4 hover:text-white z-10 transition-colors duration-300 hidden md:block"
+                    className="hover:bg-purple-800 bg-white p-4 rounded-md mb-4 hover:text-white z-10 transition-colors duration-300 hidden md:block"
                   >
                     <FontAwesomeIcon
                       icon={faMagnifyingGlass}
@@ -238,7 +121,7 @@ export default function Grid() {
                     to={`/product/${p.id}`}
                     state={{ product: p }}
                     onClick={(e) => e.stopPropagation()}
-                    className="bg-white hover:bg-purple-800 p-2 rounded-md hover:text-white z-10 transition-colors duration-300"
+                    className="bg-white hover:bg-purple-800 p-4 rounded-md hover:text-white z-10 transition-colors duration-300"
                   >
                     <FontAwesomeIcon
                       icon={faEye}
@@ -252,7 +135,7 @@ export default function Grid() {
               </div>
             </div>
 
-            {/* Thông tin sản phẩm */}
+            {/* --- THÔNG TIN SẢN PHẨM --- */}
             <div className="mt-2 p-3 text-center">
               <div className="font-medium text-[14px] md:text-lg">{p.name}</div>
               <div className="flex flex-col items-center mt-1">
@@ -264,25 +147,21 @@ export default function Grid() {
                     {formatPrice(p.oldPrice)}
                   </div>
                 )}
-                {/* Hiển thị sizes */}
-                <div className="text-gray-600 text-xs mt-1">
-                  Sizes: {p.sizes.join(", ")}
-                </div>
               </div>
             </div>
           </Link>
         ))}
       </div>
 
-      {/* Phân trang */}
+      {/* --- PHÂN TRANG --- */}
       <div className="flex justify-center mt-6 gap-2">
         {Array.from({ length: TOTAL_PAGES }, (_, i) => (
           <button
             key={i}
             onClick={() => handlePageChange(i + 1)}
             className={`px-4 py-1.5 border rounded-md text-sm font-medium ${currentPage === i + 1
-              ? "bg-blue-600 text-white border-blue-600"
-              : "hover:bg-gray-100"
+                ? "bg-blue-600 text-white border-blue-600"
+                : "hover:bg-gray-100"
               }`}
           >
             {i + 1}

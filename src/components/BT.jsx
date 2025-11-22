@@ -8,11 +8,28 @@ import vn from "../assets/vn.png";
 import eng from "../assets/eng.png";
 
 export default function BT({ onMenuToggle }) {
+  const [cartItems, setCartItems] = useState([]); // Mảng sản phẩm
+
   const [showSearch, setShowSearch] = useState(false);
+  const addToCart = (product) => {
+    setCartItems(prev => {
+      const existing = prev.find(item => item.id === product.id);
+      if (existing) {
+        // Nếu sản phẩm đã có, tăng số lượng
+        return prev.map(item =>
+          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+        );
+      } else {
+        // Nếu sản phẩm chưa có, thêm mới
+        return [...prev, { ...product, quantity: 1 }];
+      }
+    });
+  };
+
 
   return (
     <div className="w-full mt-5">
- <div className={`md:px-12 md:mt-7 pb-8 w-full px-2`}>
+      <div className={`md:px-12 md:mt-7 pb-8 w-full px-2`}>
 
         <div className="flex justify-between items-center ">
           <div className="block md:hidden">
@@ -38,7 +55,10 @@ export default function BT({ onMenuToggle }) {
             <Link className="relative"> <HiShoppingBag className="  ml-3 text-xl lg:mb-1 hover:text-purple-500 hidden md:block" />
 
               <IoMdCart className="text-xl lg:mb-1 block md:hidden" />
-              <span className="absolute -right-4 -top-3 bg-red-500 text-white px-[8px] py-[2px] text-[12px] rounded-full">0</span>
+              <span className="absolute -right-4 -top-3 bg-red-500 text-white px-[8px] py-[2px] text-[12px] rounded-full">
+                {cartItems.reduce((total, item) => total + item.quantity, 0)}
+              </span>
+
             </Link>
 
             <div className="pl-3">
@@ -68,8 +88,8 @@ export default function BT({ onMenuToggle }) {
 
       </div>
     </div>
-     
 
-    
+
+
   );
 }
