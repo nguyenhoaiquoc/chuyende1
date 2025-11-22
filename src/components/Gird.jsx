@@ -17,9 +17,25 @@ export default function Grid({ products: productsProp }) {
   const ITEMS_PER_PAGE = 15;
 
   // Nếu component cha không truyền prop thì dùng data chung
-const products = productsProp ?? PRODUCT_DATA;
+  const products = productsProp ?? PRODUCT_DATA;
   const TOTAL_PAGES = Math.ceil(products.length / ITEMS_PER_PAGE);
 
+  // 👉 Giá gốc: ưu tiên oldPrice nếu có, không thì dùng price
+  const getOldPrice = (p) => {
+    return typeof p.oldPrice === "number" ? p.oldPrice : p.price;
+  };
+
+  // 👉 Giá sau giảm theo % sale (nếu có)
+  const getSalePrice = (p) => {
+    const oldPrice = getOldPrice(p);
+    if (!p.sale || p.sale <= 0) return oldPrice;
+    const discounted = oldPrice * (1 - p.sale / 100);
+    return Math.round(discounted);
+  };
+
+  // Format giá tiền
+  const formatPrice = (price) =>
+    Number(price).toLocaleString("vi-VN") + " VNĐ";
 
   // Phân trang
   const paginatedProducts = useMemo(() => {
@@ -29,15 +45,15 @@ const products = productsProp ?? PRODUCT_DATA;
 
   const pagesToShow = useMemo(() => {
     const maxPages = 4; // Hiển thị tối đa 4 nút số
-    
+
     // Nếu tổng số trang ít hơn hoặc bằng 4, hiển thị tất cả
     if (TOTAL_PAGES <= maxPages) {
       return Array.from({ length: TOTAL_PAGES }, (_, i) => i + 1);
     }
-    
+
     // Nếu tổng số trang nhiều hơn 4
     let startPage = 1;
-    
+
     if (currentPage <= 2) {
       // Trang 1, 2: Hiển thị [1, 2, 3, 4]
       startPage = 1;
@@ -48,15 +64,10 @@ const products = productsProp ?? PRODUCT_DATA;
       // Các trang ở giữa: Trang hiện tại sẽ ở vị trí thứ 2
       startPage = currentPage - 1;
     }
-    
+
     // Tạo mảng 4 số từ startPage
     return Array.from({ length: maxPages }, (_, i) => startPage + i);
-
   }, [currentPage, TOTAL_PAGES]);
-
-  // Format giá tiền
-  const formatPrice = (price) =>
-    Number(price).toLocaleString("vi-VN") + " VNĐ";
 
   // Xử lý xem nhanh
   const handleQuickView = (product) => setQuickViewProduct(product);
@@ -72,14 +83,12 @@ const products = productsProp ?? PRODUCT_DATA;
 
   const handleGoToPage = () => {
     const pageNum = parseInt(goToPageInput, 10);
-    
+
     // Kiểm tra xem số nhập vào có hợp lệ không
     if (pageNum >= 1 && pageNum <= TOTAL_PAGES) {
       handlePageChange(pageNum); // Nếu hợp lệ thì nhảy trang
       setGoToPageInput(""); // Xóa input sau khi nhảy
     } else {
-      // THAY ĐỔI Ở ĐÂY:
-      // Nếu không hợp lệ, hiện thông báo lỗi
       alert(`Trang không tồn tại! Vui lòng chỉ nhập số từ 1 đến ${TOTAL_PAGES}.`);
       setGoToPageInput(""); // Vẫn xóa input đi cho sạch
     }
@@ -87,10 +96,11 @@ const products = productsProp ?? PRODUCT_DATA;
 
   // HÀM MỚI: Xử lý khi bấm "Enter" trong ô input
   const handleGoToPageKey = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleGoToPage();
     }
   };
+
   return (
     <div className="container mx-auto py-5">
       <GridHeader totalProducts={products.length} />
@@ -122,8 +132,8 @@ const products = productsProp ?? PRODUCT_DATA;
               <div className="absolute inset-0 z-30 pointer-events-none">
                 {/* Giảm giá góc trái */}
                 {p.sale && (
-<span className="absolute top-2 left-2 bg-purple-700 text-white text-xs font-semibold px-2 py-1 rounded-md shadow">
-                    {p.sale}
+                  <span className="absolute top-2 left-2 bg-purple-700 text-white text-xs font-semibold px-2 py-1 rounded-md shadow">
+                    {p.sale}%
                   </span>
                 )}
 
@@ -179,7 +189,7 @@ const products = productsProp ?? PRODUCT_DATA;
                     />
                   </Link>
                   <span className="absolute left-full top-1/2 -translate-y-1/2 ml-2 bg-gray-800 text-white text-xs px-2 py-1 rounded-md opacity-0 group-hover/eye:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none z-40">
-Xem chi tiết
+                    Xem chi tiết
                   </span>
                 </div>
               </div>
@@ -189,12 +199,15 @@ Xem chi tiết
             <div className="mt-2 p-3 text-center">
               <div className="font-medium text-[14px] md:text-lg">{p.name}</div>
               <div className="flex flex-col items-center mt-1">
+                {/* Giá mới sau giảm hoặc giá hiện tại nếu không có sale */}
                 <div className="text-red-600 font-bold text-base">
-                  {formatPrice(p.price)}
+                  {formatPrice(getSalePrice(p))}
                 </div>
-                {p.oldPrice && (
+
+                {/* Giá cũ (gạch ngang) – chỉ hiện nếu có sale */}
+                {p.sale && p.sale > 0 && (
                   <div className="text-gray-500 text-sm line-through mt-0.5">
-                    {formatPrice(p.oldPrice)}
+                    {formatPrice(getOldPrice(p))}
                   </div>
                 )}
               </div>
@@ -205,14 +218,13 @@ Xem chi tiết
 
       {/* --- PHÂN TRANG --- */}
       <div className="flex flex-wrap justify-center items-center mt-6 gap-4">
-        
         {/* Cụm điều hướng chính */}
         <div className="flex items-center">
           {/* Nút Trang Trước - Ẩn khi ở trang 1 */}
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             className={`px-4 py-1.5 border rounded-l-md text-sm font-medium hover:bg-gray-100 ${
-              currentPage === 1 ? "invisible" : "" 
+              currentPage === 1 ? "invisible" : ""
             }`}
           >
             &lt;
@@ -226,8 +238,8 @@ Xem chi tiết
               disabled={currentPage === page}
               className={`px-4 py-1.5 border-t border-b border-l-0 text-sm font-medium ${
                 currentPage === page
-                  ? "bg-gray-900 text-white cursor-not-allowed" // Kiểu active
-                  : "hover:bg-gray-100" // Kiểu bình thường
+                  ? "bg-gray-900 text-white cursor-not-allowed"
+                  : "hover:bg-gray-100"
               }`}
             >
               {page}
@@ -238,7 +250,7 @@ Xem chi tiết
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             className={`px-4 py-1.5 border border-l-0 rounded-r-md text-sm font-medium hover:bg-gray-100 ${
-              currentPage === TOTAL_PAGES ? "invisible" : "" 
+              currentPage === TOTAL_PAGES ? "invisible" : ""
             }`}
           >
             &gt;
@@ -264,7 +276,6 @@ Xem chi tiết
             Đi
           </button>
         </div>
-
       </div>
 
       {/* Popup xem nhanh */}
