@@ -40,6 +40,7 @@ export const products = [
     categoryId: 1,
     subcategoryId: 3, // Giày chạy bộ nam
     sizeTypeId: 1,
+    oldPrice: 8500000,
     brandId: "hoka",
     imgMain: giayHokaSide,
     imgHover: giayHokaBack,
@@ -80,6 +81,7 @@ export const products = [
     categoryId: 1,
     subcategoryId: 1, // Áo chạy bộ nam
     sizeTypeId: 4,
+    oldPrice: 8700000,
     brandId: "on",
     imgMain: aoOnFlat,
     imgHover: aoOnFlat,
@@ -114,6 +116,7 @@ export const products = [
     id: 3,
     name: "Dép Chạy Trail LUNA Mono",
     price: 2900000,
+    oldPrice: 9500000,
     categoryId: 1,
     subcategoryId: 4, // Giày địa hình nam
     brandId: "luna",
@@ -151,6 +154,7 @@ export const products = [
     price: 6990000,
     categoryId: 3, // Đồng hồ
     subcategoryId: 11, // Coros
+    oldPrice: 1500000,
     brandId: "coros",
     imgMain: corosGrey,
     imgHover: corosGrey,
@@ -181,6 +185,7 @@ export const products = [
     subcategoryId: 5, // Áo chạy bộ nữ
     brandId: "on",
     imgMain: aoNuFlat,
+    oldPrice: 500000,
     imgHover: aoNuModel,
     images: [aoNuFlat, aoNuModel, aoNuBack],
     sizes: ["XS", "S", "M", "L"],
@@ -217,6 +222,7 @@ export const products = [
     name: "Giày Chạy Bộ Nữ HOKA Clifton 9 Wide",
     price: 4300000,
     categoryId: 2,
+    oldPrice: 340000,
     subcategoryId: 7, // Giày chạy bộ nữ
     sizeTypeId: 1,
     brandId: "hoka",
@@ -240,6 +246,7 @@ export const products = [
     name: "Giày Chạy Địa Hình Nữ HOKA Mafate Speed 4",
     price: 4600000,
     categoryId: 2,
+    oldPrice: 8500000,
     subcategoryId: 8, // Giày địa hình nữ
     brandId: "hoka",
     imgMain: giayNuTrailSide,
@@ -262,6 +269,7 @@ export const products = [
     name: "Quần Chạy Bộ Nữ On Running 3 Inch",
     price: 2100000,
     categoryId: 2,
+    oldPrice: 8500000,
     subcategoryId: 6, // Quần chạy bộ nữ
     brandId: "on",
     imgMain: QuanNuOnRunning,
@@ -283,6 +291,7 @@ export const products = [
     id: 9,
     name: "Quần Chạy Bộ Nữ On Running 5 Inch",
     price: 1950000,
+    oldPrice: 8500000,
     categoryId: 2,
     subcategoryId: 6, // Quần chạy bộ nữ
     brandId: "on",
@@ -304,6 +313,7 @@ export const products = [
     id: 10,
     name: "Áo Thun Nam On Running Performance-T",
     price: 2190000,
+    oldPrice: 8500000,
     categoryId: 1,
     subcategoryId: 1, // Áo chạy bộ nam
     brandId: "on",
