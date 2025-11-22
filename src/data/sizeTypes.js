@@ -3,7 +3,7 @@ export const sizeTypes = [
     id: 1,
     name: "shoe",
     categoryId: 1,
-    columns: ["eu", "us", "uk", "ep"]  // ← phải có
+    columns: ["eu", "us", "uk", "ep"]  
   },
   {
     id: 2,

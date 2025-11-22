@@ -25,13 +25,12 @@ import { products } from "../data/products.mock";
 
 export default function Detail() {
   const { productId } = useParams();
-const navigate = useNavigate();
+  const navigate = useNavigate();
   const allProducts = products;
   const currentProduct = allProducts.find((p) => p.id === Number(productId));
 
-// Thay vì dùng brands
-const brandName = currentProduct?.brandId || "";
-
+  // Thay vì dùng brands
+  const brandName = currentProduct?.brandId || "";
 
   const thumbs = currentProduct
     ? currentProduct.images && currentProduct.images.length > 0
@@ -66,19 +65,19 @@ const brandName = currentProduct?.brandId || "";
       : saleRaw
     : priceDisplay;
 
- const categoryPath = currentProduct?.categoryPath || "";
-const categoryId = currentProduct?.categoryId || "";
+  const categoryPath = currentProduct?.categoryPath || "";
+  const categoryId = currentProduct?.categoryId || "";
   // phân loại để dùng cho ProductDescription
-let productType = "ao";
+  let productType = "ao";
   if (categoryId === 1) productType = "giay";
   else if (categoryId === 2) productType = "quan";
-  else if (categoryId === 3)  productType  = "dongho"
+  else if (categoryId === 3) productType = "dongho";
 
-const isWatch =
-    categoryPath.includes("dong-ho") ||
-    categoryId === 3 ||
-      (typeof categoryId === "string" && categoryId.toLowerCase().includes("watch"));
-
+  const isWatch =
+    categoryPath.includes("dong-ho") ||
+    categoryId === 3 ||
+    (typeof categoryId === "string" &&
+      categoryId.toLowerCase().includes("watch"));
 
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -151,7 +150,6 @@ const isWatch =
   };
 
   const lastThumb = thumbs.length > 0 ? thumbs[thumbs.length - 1] : mauAnh;
-
 
   if (!currentProduct) {
     return (
@@ -277,8 +275,7 @@ const isWatch =
               </span>
             </div>
             <div>
-              Mã SP:{" "}
-              <span className="text-gray-400">{currentProduct.id}</span>
+              Mã SP: <span className="text-gray-400">{currentProduct.id}</span>
             </div>
           </div>
 
@@ -314,7 +311,6 @@ const isWatch =
               </div>
             </>
           )}
-
 
           {/* Số lượng */}
           <div>Số lượng:</div>
@@ -353,37 +349,39 @@ const isWatch =
                   e.preventDefault();
                 }}
                 onChange={(e) => {
-                  let val = e.target.value;
-                  if (val === "") {
-                    setQuantity("");
-                    return;
-                  }
-                  val = val.replace(/\D/g, "");
-                  if (val !== "") {
-                    const num = Number(val);
-                    if (!Number.isNaN(num) && num >= 1) { 
-                      setQuantity(num);
-                    }
-                  }
-                }}
-                onBlur={() => {
-                  if (quantity === "" || quantity < 1) { 
-                    setQuantity(1);
-                  }
-                }}
-                className="border h-[50px] rounded-full text-center w-full md:w-[150px] pr-5 pl-8"
-              />
+                  let val = e.target.value;
+                  if (val === "") {
+                    setQuantity("");
+                    return;
+                  }
+                  val = val.replace(/\D/g, "");
+                  if (val !== "") {
+                    const num = Number(val);
+                    if (!Number.isNaN(num) && num >= 1) {
+                      setQuantity(num);
+                    }
+                  }
+                }}
+                onBlur={() => {
+                  if (quantity === "" || quantity < 1) {
+                    setQuantity(1);
+                  }
+                }}
+                className="border h-[50px] rounded-full text-center w-full md:w-[150px] pr-5 pl-8"
+              />
             </div>
             <div className="flex justify-center gap-2">
-           <button 
-  onClick={handleAddToCart}
-  disabled={isAddDisabled}
-  className={`rounded-full text-white py-2.5 px-12 transition-colors duration-200 ${
-    isAddDisabled ? "bg-gray-400 cursor-not-allowed" : "bg-[#673AB7] hover:bg-[#5a329f]"
-  }`}
->
-  THÊM VÀO GIỎ HÀNG
-</button>
+              <button
+                onClick={handleAddToCart}
+                disabled={isAddDisabled}
+                className={`rounded-full text-white py-2.5 px-12 transition-colors duration-200 ${
+                  isAddDisabled
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-[#673AB7] hover:bg-[#5a329f]"
+                }`}
+              >
+                THÊM VÀO GIỎ HÀNG
+              </button>
 
               <div className="border p-4 rounded-full cursor-pointer ">
                 <CiHeart />
@@ -420,6 +418,7 @@ const isWatch =
         <ProductTabs
           descriptionContent={
             <ProductDescription
+              descriptionHtml={currentProduct.descriptionHtml}
               sizeTypeId={currentProduct.sizeTypeId}
             />
           }
