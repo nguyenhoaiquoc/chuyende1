@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Detail from "./components/Detail";
 import CartPage from "./components/CartPage";
 import ProductPage from "./components/ProductPage";
+import AdminPage from "./admin/AdminPage";
 
 const routers = createBrowserRouter([
   {
