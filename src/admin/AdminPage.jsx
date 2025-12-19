@@ -1,22 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
-
-/**
- * AdminPage.jsx
- * - Modern admin dashboard (Products / Categories / Subcategories / Size Types / Sizes)
- * - Works with mock data now; later replace loaders with API calls
- *
- * Notes:
- * - This file doesn't assume your exact schema. It renders "safe" columns and shows JSON details on demand.
- * - You can map fields (name/price/categoryId/subcategoryId/brand/sizes/images) once you lock schema.
- */
-
-// ====== MOCK IMPORT (bạn đổi sang API sau) ======
-// Nếu đường dẫn bạn khác thì chỉnh lại.
 import { products } from "../data/products.mock";
 import { categoriesType } from "../data/categoriesType";
 import { subcategories } from "../data/subcategories";
 import { sizeTypes } from "../data/sizeTypes";
 import { sizes } from "../data/sizes";
+
 
 // ====== tiny helpers ======
 const cn = (...xs) => xs.filter(Boolean).join(" ");
@@ -177,6 +165,28 @@ const NAV = [
   { key: "sizes", label: "Sizes" },
 ];
 
+const EMPTY_PRODUCT = {
+  product_id: "",
+  name: "",
+  brandId: "",
+  categoryId: "",
+  subcategoryId: "",
+  sizeTypeId: "",
+
+  price: 0,
+  sale: 0,
+  gift: "",
+
+  imgMain: "",
+  imgHover: "",
+  images: [],
+
+  sizes: [],
+
+  descriptionHtml: "",
+  specifications: "",
+};
+
 export default function AdminPage() {
   const [section, setSection] = useState("products");
 
@@ -197,8 +207,15 @@ export default function AdminPage() {
   const [editorDraft, setEditorDraft] = useState({}); // generic draft
 
   useEffect(() => {
+    fetch("https://ns414sbifk.execute-api.ap-southeast-1.amazonaws.com/api/products")
+      .then(res => res.json())
+      .then(data => {
+        setProductsState(Array.isArray(data) ? data.map((p) => ({ ...p, id: ensureId(p) })) : []);
+        console.log(data);
+      })
+      .catch(err => console.error(err));
     // init from mocks
-    setProductsState(Array.isArray(products) ? products.map((p) => ({ ...p, id: ensureId(p) })) : []);
+    
     setCategoriesState(Array.isArray(categoriesType) ? categoriesType.map((c) => ({ ...c, id: ensureId(c) })) : []);
     setSubcategoriesState(Array.isArray(subcategories) ? subcategories.map((s) => ({ ...s, id: ensureId(s) })) : []);
     setSizeTypesState(Array.isArray(sizeTypes) ? sizeTypes.map((s) => ({ ...s, id: ensureId(s) })) : []);
@@ -335,6 +352,34 @@ export default function AdminPage() {
           },
         },
         {
+          key: "sizes",
+          title: "Sizes",
+          render: (p) => {
+            // Lấy dữ liệu từ nhiều tên trường khác nhau cho chắc ăn
+            const val = pickFirst(p, ["sizes", "size_variants", "size_variants_json", "sizeVariants"]);
+
+            // Xử lý dữ liệu (nếu là string JSON thì parse ra mảng)
+            let arr = [];
+            if (Array.isArray(val)) arr = val;
+            else if (typeof val === 'string') {
+              // Thử parse nếu là chuỗi "[...]"
+              try { arr = JSON.parse(val); } catch { arr = [val]; }
+            }
+
+            if (!arr || arr.length === 0) return <span className="text-zinc-400 text-xs">—</span>;
+
+            return (
+              <div className="flex flex-wrap gap-1 max-w-[150px]">
+                {arr.map((size, i) => (
+                  <span key={i} className="inline-flex items-center rounded border border-zinc-200 bg-zinc-50 px-1.5 py-0.5 text-xs font-medium text-zinc-700">
+                    {size}
+                  </span>
+                ))}
+              </div>
+            );
+          },
+        },
+        {
           key: "price",
           title: "Price",
           render: (p) => {
@@ -371,6 +416,7 @@ export default function AdminPage() {
           title: "Status",
           render: () => <Pill>Active</Pill>,
         },
+
       ];
     }
 
@@ -449,7 +495,16 @@ export default function AdminPage() {
 
   function openCreate() {
     setEditorMode("create");
-    setEditorDraft({});
+
+    if (section === "products") {
+      setEditorDraft({
+        ...EMPTY_PRODUCT,
+        product_id: Math.floor(Date.now() / 1000) // id tạm
+      });
+    } else {
+      setEditorDraft({});
+    }
+
     setEditorOpen(true);
   }
 
@@ -482,6 +537,20 @@ export default function AdminPage() {
       if (editorMode === "create") setSizesState((prev) => [{ ...editorDraft, id }, ...prev]);
       else setSizesState((prev) => prev.map((s) => (String(ensureId(s)) === String(id) ? { ...editorDraft, id } : s)));
     }
+    console.log("detailRow", editorDraft);
+    fetch("https://ns414sbifk.execute-api.ap-southeast-1.amazonaws.com/api/products", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(
+        editorDraft
+      )
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log("Created:", data);
+      });
 
     setEditorOpen(false);
   }
@@ -610,27 +679,27 @@ export default function AdminPage() {
                         key: "__actions",
                         title: "",
                         render: (r) => (
-                         <div className="flex items-center justify-end gap-2">
-  <button
-    className="inline-flex items-center gap-1 rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1.5 text-xs font-medium text-blue-700 hover:bg-blue-100"
-    onClick={(e) => {
-      e.stopPropagation();
-      openEdit(r);
-    }}
-  >
-    Edit
-  </button>
+                          <div className="flex items-center justify-end gap-2">
+                            <button
+                              className="inline-flex items-center gap-1 rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1.5 text-xs font-medium text-blue-700 hover:bg-blue-100"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                openEdit(r);
+                              }}
+                            >
+                              Edit
+                            </button>
 
-  <button
-    className="inline-flex items-center gap-1 rounded-lg border border-red-200 bg-red-50 px-2.5 py-1.5 text-xs font-medium text-red-700 hover:bg-red-100"
-    onClick={(e) => {
-      e.stopPropagation();
-      applyDelete(r);
-    }}
-  >
-    Delete
-  </button>
-</div>
+                            <button
+                              className="inline-flex items-center gap-1 rounded-lg border border-red-200 bg-red-50 px-2.5 py-1.5 text-xs font-medium text-red-700 hover:bg-red-100"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                applyDelete(r);
+                              }}
+                            >
+                              Delete
+                            </button>
+                          </div>
 
                         ),
                       },
@@ -673,7 +742,7 @@ export default function AdminPage() {
                       Raw JSON
                     </div>
                     <pre className="mt-2 max-h-[420px] overflow-auto rounded-xl bg-zinc-950 p-3 text-xs text-zinc-100">
-{JSON.stringify(detailRow, null, 2)}
+                      {JSON.stringify(detailRow, null, 2)}
                     </pre>
                   </div>
                 )}
@@ -708,141 +777,198 @@ export default function AdminPage() {
         title={`${editorMode === "create" ? "Create" : "Edit"} ${headerTitle}`}
         onClose={() => setEditorOpen(false)}
       >
-        <div className="grid grid-cols-12 gap-4">
-          {/* Generic editor: user can paste JSON or edit common fields */}
-          <div className="col-span-12 md:col-span-6">
-            <div className="text-sm font-semibold text-zinc-900">Common fields</div>
-            <div className="mt-3 space-y-3">
-              <div>
-                <div className="mb-1 text-xs font-medium text-zinc-600">Name</div>
-                <Input
-                  value={pickFirst(editorDraft, ["name", "title", "label"]) || ""}
-                  onChange={(e) => setEditorDraft((d) => ({ ...d, name: e.target.value }))}
-                  placeholder="name/title/label..."
-                />
+        <div className="div">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div className="absolute inset-0 bg-zinc-900/60 backdrop-blur-sm" onClick={() => setEditorOpen(false)} />
+
+            <div className="relative flex h-[90vh] w-full max-w-6xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl">
+              {/* Header Modal */}
+              <div className="flex items-center justify-between border-b px-6 py-4">
+                <div>
+                  <h2 className="text-lg font-bold text-zinc-900">{editorMode === "create" ? "Tạo sản phẩm mới" : "Chỉnh sửa sản phẩm"}</h2>
+                  <p className="text-xs text-zinc-500 font-mono">{editorDraft.id}</p>
+                </div>
+                <button onClick={() => setEditorOpen(false)} className="rounded-full p-2 hover:bg-zinc-100 text-zinc-400">✕</button>
               </div>
 
-              {section === "products" && (
-                <>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <div className="mb-1 text-xs font-medium text-zinc-600">Price</div>
-                      <Input
-                        value={pickFirst(editorDraft, ["price", "basePrice", "originalPrice"]) || ""}
-                        onChange={(e) => setEditorDraft((d) => ({ ...d, price: e.target.value }))}
-                        placeholder="199000"
+              {/* Body Modal (Scrollable) */}
+              <div className="flex-1 overflow-y-auto p-6">
+                <div className="grid grid-cols-12 gap-8">
+
+                  {/* CỘT TRÁI: Form nhập liệu */}
+                  <div className="col-span-12 lg:col-span-7 space-y-8">
+
+                    {/* Section 1: Thông tin chung */}
+                    <section>
+                      <h3 className="mb-4 text-sm font-bold border-l-4 border-zinc-900 pl-2">1. Thông tin cơ bản</h3>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="col-span-2">
+                          <label>Tên sản phẩm</label>
+                          <Input value={editorDraft.name} onChange={e => setEditorDraft({ ...editorDraft, name: e.target.value })} placeholder="Ví dụ: Áo Sơ Mi Nam Oxford" />
+                        </div>
+                        <div>
+                          <label>Thương hiệu (Brand)</label>
+                          <Input value={editorDraft.brand} onChange={e => setEditorDraft({ ...editorDraft, brand: e.target.value })} placeholder="Nike, Uniqlo..." />
+                        </div>
+                        <div>
+                          <label>Trạng thái</label>
+                          <Select value={editorDraft.status} onChange={e => setEditorDraft({ ...editorDraft, status: e.target.value })}>
+                            <option value="Active">Đang bán (Active)</option>
+                            <option value="Inactive">Ngừng bán (Inactive)</option>
+                            <option value="Draft">Bản nháp (Draft)</option>
+                          </Select>
+                        </div>
+                      </div>
+                    </section>
+
+                    {/* Section 2: Phân loại & Size */}
+                    <section>
+                      <h3 className="mb-4 text-sm font-bold border-l-4 border-zinc-900 pl-2">2. Phân loại & Biến thể</h3>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label>Danh mục chính</label>
+                          <Select value={editorDraft.categoryId} onChange={e => setEditorDraft({ ...editorDraft, categoryId: e.target.value })}>
+                            <option value="">Chọn danh mục...</option>
+                            {categoriesState.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                          </Select>
+                        </div>
+                        <div>
+                          <label>Danh mục phụ (Sub)</label>
+                          <Select value={editorDraft.subcategoryId} onChange={e => setEditorDraft({ ...editorDraft, subcategoryId: e.target.value })}>
+                            <option value="">Chọn danh mục phụ...</option>
+                            {subcategoriesState.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+                          </Select>
+                        </div>
+
+                        {/* Size Selector */}
+                        <div className="col-span-2 p-4 bg-zinc-50 rounded-2xl border border-zinc-200">
+                          <label>Danh sách Size hiện có</label>
+                          <div className="flex flex-wrap gap-2 mt-2">
+                            {["XS", "S", "M", "L", "XL", "2XL", "38", "39", "40", "41", "42"].map(s => {
+                              const isSelected = editorDraft.sizes?.includes(s);
+                              return (
+                                <button
+                                  key={s}
+                                  type="button"
+                                  onClick={() => {
+                                    const next = isSelected
+                                      ? editorDraft.sizes.filter(x => x !== s)
+                                      : [...(editorDraft.sizes || []), s];
+                                    setEditorDraft({ ...editorDraft, sizes: next });
+                                  }}
+                                  className={cn(
+                                    "px-3 py-1.5 rounded-lg text-xs font-bold border transition-all",
+                                    isSelected ? "bg-zinc-900 border-zinc-900 text-white" : "bg-white border-zinc-200 text-zinc-500 hover:border-zinc-400"
+                                  )}
+                                >{s}</button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+
+                    {/* Section 3: Giá & Khuyến mãi */}
+                    <section>
+                      <h3 className="mb-4 text-sm font-bold border-l-4 border-zinc-900 pl-2">3. Giá bán & Quà tặng</h3>
+                      <div className="grid grid-cols-3 gap-4">
+                        <div>
+                          <label>Giá gốc (đ)</label>
+                          <Input type="number" value={editorDraft.price} onChange={e => setEditorDraft({ ...editorDraft, price: Number(e.target.value) })} />
+                        </div>
+                        <div>
+                          <label>Giảm giá (%)</label>
+                          <Input type="number" value={editorDraft.sale} onChange={e => setEditorDraft({ ...editorDraft, sale: Number(e.target.value) })} />
+                        </div>
+                        <div className="flex items-end pb-2">
+                          <label className="flex items-center gap-2 text-sm font-medium cursor-pointer">
+                            <input type="checkbox" checked={editorDraft.gift} onChange={e => setEditorDraft({ ...editorDraft, gift: e.target.checked })} className="h-4 w-4 rounded border-zinc-300" />
+                            🎁 Có quà tặng
+                          </label>
+                        </div>
+                      </div>
+                    </section>
+
+                    {/* Section 4: Hình ảnh */}
+                    <section>
+                      <h3 className="mb-4 text-sm font-bold border-l-4 border-zinc-900 pl-2">4. Hình ảnh (URL)</h3>
+                      <div className="space-y-3">
+                        <div>
+                          <label>Ảnh chính (Img Main)</label>
+                          <Input value={editorDraft.imgMain} onChange={e => setEditorDraft({ ...editorDraft, imgMain: e.target.value })} placeholder="https://..." />
+                        </div>
+                        <div>
+                          <label>Ảnh khi Hover (Img Hover)</label>
+                          <Input value={editorDraft.imgHover} onChange={e => setEditorDraft({ ...editorDraft, imgHover: e.target.value })} placeholder="https://..." />
+                        </div>
+                        <div>
+                          <label>Ảnh bộ sưu tập (Phân cách bằng dấu phẩy)</label>
+                          <textarea
+                            className="w-full rounded-xl border border-zinc-200 p-3 text-sm min-h-[80px]"
+                            placeholder="link-anh-1, link-anh-2..."
+                            value={editorDraft.images?.join(", ")}
+                            onChange={e => setEditorDraft({ ...editorDraft, images: e.target.value.split(",").map(x => x.trim()) })}
+                          />
+                        </div>
+                      </div>
+                    </section>
+
+                    {/* Section 5: Mô tả chi tiết */}
+                    <section>
+                      <h3 className="mb-4 text-sm font-bold border-l-4 border-zinc-900 pl-2">5. Nội dung mô tả (HTML)</h3>
+                      <textarea
+                        className="w-full rounded-2xl border border-zinc-200 p-4 text-sm font-mono min-h-[200px] focus:border-zinc-400 outline-none"
+                        value={editorDraft.descriptionHtml}
+                        onChange={e => setEditorDraft({ ...editorDraft, descriptionHtml: e.target.value })}
+                        placeholder="<p>Mô tả sản phẩm ở đây...</p>"
                       />
-                    </div>
-                    <div>
-                      <div className="mb-1 text-xs font-medium text-zinc-600">Brand</div>
-                      <Input
-                        value={pickFirst(editorDraft, ["brand", "brandName"]) || ""}
-                        onChange={(e) => setEditorDraft((d) => ({ ...d, brand: e.target.value }))}
-                        placeholder="Nike/Adidas/..."
-                      />
+                    </section>
+                  </div>
+
+                  {/* CỘT PHẢI: Preview JSON & Meta */}
+                  <div className="col-span-12 lg:col-span-5 space-y-6">
+                    <div className="sticky top-0 space-y-6">
+                      <div>
+                        <label>Dữ liệu JSON thực tế (Raw Data)</label>
+                        <div className="relative group">
+                          <textarea
+                            className="w-full rounded-2xl bg-zinc-900 p-4 text-[11px] font-mono text-zinc-300 min-h-[500px] outline-none border-4 border-zinc-800 focus:border-blue-500/30 transition-all"
+                            value={JSON.stringify(editorDraft, null, 2)}
+                            onChange={e => {
+                              try {
+                                const parsed = JSON.parse(e.target.value);
+                                setEditorDraft(parsed);
+                              } catch (err) { /* gõ dở JSON thì ignore */ }
+                            }}
+                          />
+                          <div className="absolute top-2 right-2 px-2 py-1 bg-zinc-800 rounded text-[10px] text-zinc-500 font-bold opacity-0 group-hover:opacity-100 transition-opacity">REALTIME JSON</div>
+                        </div>
+                      </div>
+
+                      <div className="p-4 rounded-2xl bg-blue-50 border border-blue-100 text-blue-700">
+                        <h4 className="text-xs font-bold uppercase mb-1">Mẹo Admin:</h4>
+                        <p className="text-xs leading-relaxed">Bạn có thể copy trực tiếp mã JSON từ Database (PostgreSQL/MongoDB) và paste vào ô đen phía trên để cập nhật nhanh toàn bộ các trường.</p>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <div className="mb-1 text-xs font-medium text-zinc-600">Category</div>
-                      <Select
-                        value={pickFirst(editorDraft, ["categoryId", "typeId", "category_id"]) || ""}
-                        onChange={(e) => setEditorDraft((d) => ({ ...d, categoryId: e.target.value }))}
-                      >
-                        <option value="">Select...</option>
-                        {categoryOptions.map((c) => (
-                          <option key={c.id} value={c.id}>
-                            {c.name}
-                          </option>
-                        ))}
-                      </Select>
-                    </div>
-
-                    <div>
-                      <div className="mb-1 text-xs font-medium text-zinc-600">Subcategory</div>
-                      <Select
-                        value={pickFirst(editorDraft, ["subcategoryId", "subcategory_id"]) || ""}
-                        onChange={(e) => setEditorDraft((d) => ({ ...d, subcategoryId: e.target.value }))}
-                      >
-                        <option value="">Select...</option>
-                        {subcategoryOptions.map((s) => (
-                          <option key={s.id} value={s.id}>
-                            {s.name}
-                          </option>
-                        ))}
-                      </Select>
-                    </div>
-                  </div>
-                </>
-              )}
-
-              {section === "subcategories" && (
-                <div>
-                  <div className="mb-1 text-xs font-medium text-zinc-600">Category</div>
-                  <Select
-                    value={pickFirst(editorDraft, ["categoryId", "parentId", "typeId", "category_id"]) || ""}
-                    onChange={(e) => setEditorDraft((d) => ({ ...d, categoryId: e.target.value }))}
-                  >
-                    <option value="">Select...</option>
-                    {categoryOptions.map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {c.name}
-                      </option>
-                    ))}
-                  </Select>
                 </div>
-              )}
+              </div>
 
-              {section === "sizes" && (
-                <div>
-                  <div className="mb-1 text-xs font-medium text-zinc-600">Size Type</div>
-                  <Select
-                    value={pickFirst(editorDraft, ["sizeTypeId", "typeId", "size_type_id"]) || ""}
-                    onChange={(e) => setEditorDraft((d) => ({ ...d, sizeTypeId: e.target.value }))}
-                  >
-                    <option value="">Select...</option>
-                    {sizeTypesState.map((st) => (
-                      <option key={ensureId(st)} value={ensureId(st)}>
-                        {pickFirst(st, ["name", "title", "label"]) || ensureId(st)}
-                      </option>
-                    ))}
-                  </Select>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="col-span-12 md:col-span-6">
-            <div className="text-sm font-semibold text-zinc-900">Raw JSON editor</div>
-            <div className="mt-3">
-              <textarea
-                className={cn(
-                  "h-[360px] w-full resize-none rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm font-mono outline-none",
-                  "focus:border-zinc-400 focus:ring-4 focus:ring-zinc-100"
-                )}
-                value={JSON.stringify(editorDraft, null, 2)}
-                onChange={(e) => {
-                  try {
-                    const parsed = JSON.parse(e.target.value);
-                    setEditorDraft(parsed);
-                  } catch {
-                    // ignore invalid json while typing
-                  }
-                }}
-              />
-              <div className="mt-2 text-xs text-zinc-500">
-                Tip: bạn có thể paste object từ mock vào đây rồi Save.
+              {/* Footer Modal */}
+              <div className="flex items-center justify-end gap-3 border-t bg-zinc-50 px-6 py-4">
+                <Button variant="ghost" onClick={() => setEditorOpen(false)}>Hủy bỏ</Button>
+                <Button className="px-12 shadow-lg shadow-zinc-200" onClick={applySave}>Lưu sản phẩm</Button>
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="mt-4 flex items-center justify-end gap-2">
-          <Button variant="ghost" onClick={() => setEditorOpen(false)}>
-            Cancel
-          </Button>
-          <Button onClick={applySave}>Save</Button>
+          <div className="mt-4 flex items-center justify-end gap-2">
+            <Button variant="ghost" onClick={() => setEditorOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={applySave}>Save</Button>
+          </div>
         </div>
       </Modal>
     </div>
