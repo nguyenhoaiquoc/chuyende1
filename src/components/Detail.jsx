@@ -47,6 +47,11 @@ export default function Detail() {
       .finally(() => setLoading(false));
   }, [productId]);
 
+  useEffect(() => {
+    setQuantity(1);
+    setSelectedSize(null);
+  }, [currentProduct?.id]);
+
   // Thương hiệu
   const brandName = currentProduct?.brand || "";
 
@@ -109,11 +114,8 @@ export default function Detail() {
   else if (categoryId === 2) productType = "quan";
   else if (categoryId === 3) productType = "dongho";
 
-  const isWatch =
-    categoryPath.includes("dong-ho") ||
-    categoryId === 3 ||
-    (typeof categoryId === "string" &&
-      categoryId.toLowerCase().includes("watch"));
+  const hasSize =
+    Array.isArray(currentProduct?.sizes) && currentProduct.sizes.length > 0;
 
   // ==== ZOOM & ẢNH CHÍNH ====
   const [selectedImage, setSelectedImage] = useState(null);
@@ -156,7 +158,7 @@ export default function Detail() {
 
   const [selectedSize, setSelectedSize] = useState(null);
 
-  const isAddDisabled = (!isWatch && !selectedSize) || quantity < 1;
+  const isAddDisabled = (hasSize && !selectedSize) || quantity < 1;
 
   const handleAddToCart = () => {
     if (isAddDisabled) {
@@ -167,7 +169,7 @@ export default function Detail() {
     }
 
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const sizeToSave = isWatch ? null : selectedSize;
+    const sizeToSave = hasSize ? selectedSize : null;
 
     // Giá lưu giỏ: có sale thì dùng giá sale, không thì giá gốc
     const priceForCart =
@@ -185,8 +187,9 @@ export default function Detail() {
         name: currentProduct.name,
         price: priceForCart,
         size: sizeToSave,
-        quantity: quantity,
+        quantity,
         image: currentProduct.imgMain,
+        stockQuantity,
       });
     }
 
@@ -359,7 +362,7 @@ export default function Detail() {
           </div>
 
           {/* === NẾU KHÔNG PHẢI ĐỒNG HỒ -> CHỌN SIZE === */}
-          {!isWatch && (
+          {hasSize && (
             <>
               <div>Chọn Size:</div>
               <div className="flex items-center gap-2 min-w-11 text-center leading-[2] text-[#767676]">
@@ -368,13 +371,13 @@ export default function Detail() {
                     key={label}
                     onClick={() => available && setSelectedSize(label)}
                     className={`border h-[30px] min-w-10 cursor-pointer relative transition-[box-shadow] duration-300 ease-out 
-                ${
-                  available
-                    ? selectedSize === label
-                      ? "[box-shadow:0_0_2px_2px_#FF7A00] border-white"
-                      : "border-white [box-shadow:0_0_0_1px_#B8B8B8] hover:[box-shadow:0_0_2px_2px_#FF7A00]"
-                    : "border border-white bg-gray-300 shadow-sm shadow-slate-500 before:content[''] before:w-[1px] before:h-[40px] before:bg-gray-600 before:absolute before:left-1/2 before:-top-[6px] before:rotate-[55deg] after:content[''] after:w-[1px] after:h-[40px] after:bg-gray-600 after:absolute after:left-1/2 after:-top-[6px] after:-rotate-[55deg]"
-                }`}
+            ${
+              available
+                ? selectedSize === label
+                  ? "[box-shadow:0_0_2px_2px_#FF7A00] border-white"
+                  : "border-white [box-shadow:0_0_0_1px_#B8B8B8] hover:[box-shadow:0_0_2px_2px_#FF7A00]"
+                : "border border-white bg-gray-300"
+            }`}
                   >
                     {label}
                   </div>
