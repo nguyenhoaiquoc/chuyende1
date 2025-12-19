@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Detail from "./components/Detail";
 import CartPage from "./components/CartPage";
 import ProductPage from "./components/ProductPage";
+// Import trang Admin
 import AdminPage from "./admin/AdminPage";
 
 const routers = createBrowserRouter([
@@ -13,13 +14,18 @@ const routers = createBrowserRouter([
     path: "/",
     children: [
       { index: true, element: <App /> }, // Trang chủ
+      
       { path: "product/:productId", element: <Detail /> },
       
       { path: "cart", element: <CartPage /> },
       
+      // === THÊM ROUTE ADMIN VÀO ĐÂY ===
+      // Truy cập: http://localhost:5173/admin
+      { path: "admin", element: <AdminPage /> },
+
+      // Route danh mục (để cuối cùng để tránh xung đột)
       { path: ":category", element: <ProductPage /> }, 
       { path: ":category/:subCategory", element: <ProductPage /> },
-      
     ],
   },
 ]);
