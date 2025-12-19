@@ -51,7 +51,7 @@ setCartCount(savedCount);
 
             </form>
 
-            <Link> <FaUser className="hidden md:block mb-1 hover:text-purple-500 ml-3" /> </Link>
+            <Link to="/login"> <FaUser className="hidden md:block mb-1 hover:text-purple-500 ml-3" /> </Link>
             <Link to="/cart" className="relative">
               <HiShoppingBag className="ml-3 text-xl lg:mb-1 hover:text-purple-500 hidden md:block" />
               <IoMdCart className="text-xl lg:mb-1 block md:hidden" />

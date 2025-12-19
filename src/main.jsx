@@ -8,6 +8,8 @@ import CartPage from "./components/CartPage";
 import ProductPage from "./components/ProductPage";
 // Import trang Admin
 import AdminPage from "./admin/AdminPage";
+import LoginRegister from "./components/LoginRegister";
+import Register from "./components/Register";
 
 const routers = createBrowserRouter([
   {
@@ -22,6 +24,9 @@ const routers = createBrowserRouter([
       // === THÊM ROUTE ADMIN VÀO ĐÂY ===
       // Truy cập: http://localhost:5173/admin
       { path: "admin", element: <AdminPage /> },
+      { path: "login", element: <LoginRegister /> },
+      { path: "register", element: <Register /> },
+
 
       // Route danh mục (để cuối cùng để tránh xung đột)
       { path: ":category", element: <ProductPage /> }, 
