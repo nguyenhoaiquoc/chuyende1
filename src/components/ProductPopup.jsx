@@ -8,21 +8,33 @@ const ProductPopup = ({ product, onClose }) => {
   const [selectedSize, setSelectedSize] = useState(null);
   const navigate = useNavigate(); // ✅ để chuyển trang cùng tab
 
+  const image = product?.imgMain || "https://via.placeholder.com/300x400.png";
+
+  const name = product?.name || "Tên sản phẩm";
+  const price = Number(product?.price ?? 0);
+  const sale = Number(product?.sale ?? 0);
+
+  const finalPrice = sale > 0 ? Math.round(price * (1 - sale / 100)) : price;
+
+  const brand = product?.brand || "Đang cập nhật";
   const sizes = product?.sizes || [];
+  const stockQuantity = Number(product?.quantity ?? 0);
+  console.log("stockQuantity:", stockQuantity);
+
   const hasSizes = sizes.length > 0;
 
-  const image = product?.imgMain || "https://via.placeholder.com/300x400.png?text=Áo+Khoác";
-  const name = product?.name || "Tên sản phẩm";
-  const price = product?.price || "0";
-
-  
   const handleQuantityChange = (e) => {
-    const value = e.target.value;
-    if (/^\d+$/.test(value) && Number(value) > 0) {
-      setQuantity(Number(value));
-    } else {
-      setQuantity(1);
+    let value = Number(e.target.value);
+
+    if (isNaN(value) || value <= 0) {
+      value = 1;
     }
+
+    if (value > stockQuantity) {
+      value = stockQuantity;
+    }
+
+    setQuantity(value);
   };
 
   const handleSizeClick = (size) => {
@@ -30,7 +42,7 @@ const ProductPopup = ({ product, onClose }) => {
   };
 
   // ✅ Xử lý khi nhấn "Thêm vào giỏ hàng"
-const handleAddToCart = () => {
+  const handleAddToCart = () => {
     // Kiểm tra lại điều kiện disable
     if ((hasSizes && !selectedSize) || quantity <= 0) {
       if (hasSizes && !selectedSize) {
@@ -70,7 +82,7 @@ const handleAddToCart = () => {
     window.scrollTo(0, 0);
   };
 
-const isAddDisabled = (hasSizes && !selectedSize) || quantity <= 0;
+  const isAddDisabled = (hasSizes && !selectedSize) || quantity <= 0;
 
   return (
     <div className="popup-overlay" onClick={onClose}>
@@ -89,22 +101,39 @@ const isAddDisabled = (hasSizes && !selectedSize) || quantity <= 0;
 
           <div className="popup-info">
             <h3 className="product-name">
-  <Link 
-    to={`/product/${product.id}`} 
-    onClick={onClose} 
-  >
-    {name}
-  </Link>
-</h3>
-
+              <Link to={`/product/${product.id}`} onClick={onClose}>
+                {name}
+              </Link>
+            </h3>
 
             <div className="qv-header-info">
-              <span><b>Mã SP:</b> {product.id || "39113978"}</span>
+              <span>
+                <b>Mã SP:</b> {product.id}
+              </span>
               <span className="line">|</span>
-              <span><b>Thương hiệu:</b> Zoot</span>
+              <span>
+                <b>Thương hiệu:</b> {brand}
+              </span>
             </div>
 
-            <div className="product-price">{price}₫</div>
+            <div className="product-price">
+              {sale > 0 ? (
+                <div className="flex items-center gap-2">
+                  <span className="text-gray-400 line-through text-sm">
+                    {price.toLocaleString("vi-VN")} VNĐ
+                  </span>
+
+                  <span className=" font-bold text-lg">
+                    {finalPrice.toLocaleString("vi-VN")} VNĐ
+                  </span>
+                </div>
+              ) : (
+                <span className="font-semibold">
+                  {price.toLocaleString("vi-VN")} VNĐ
+                </span>
+              )}
+            </div>
+
             <hr className="divider" />
 
             {/* === Size chọn === */}
@@ -114,7 +143,9 @@ const isAddDisabled = (hasSizes && !selectedSize) || quantity <= 0;
                   {sizes.map((size) => (
                     <div
                       key={size}
-                      className={`size-box ${selectedSize === size ? "selected" : ""}`}
+                      className={`size-box ${
+                        selectedSize === size ? "selected" : ""
+                      }`}
                       onClick={() => handleSizeClick(size)}
                     >
                       {size}
@@ -131,11 +162,11 @@ const isAddDisabled = (hasSizes && !selectedSize) || quantity <= 0;
                 <input
                   type="number"
                   min="1"
+                  max={stockQuantity > 0 ? stockQuantity : undefined}
                   value={quantity}
                   onChange={handleQuantityChange}
                   className="quantity-input"
                 />
-
                 <button
                   disabled={isAddDisabled}
                   onClick={handleAddToCart}
@@ -153,7 +184,6 @@ const isAddDisabled = (hasSizes && !selectedSize) || quantity <= 0;
         </div>
       </div>
     </div>
-
   );
 };
 
