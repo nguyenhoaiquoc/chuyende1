@@ -20,17 +20,40 @@ import ProductComposition from "./ProductComposition";
 import Panel from "./Panel";
 import Footer from "./Footer";
 import RelatedProducts from "./RelatedProducts";
-
-import { products } from "../data/products.mock";
+import { getProducts } from "../services/productApi";
 
 export default function Detail() {
   const { productId } = useParams();
   const navigate = useNavigate();
-  const allProducts = products;
-  const currentProduct = allProducts.find((p) => p.id === Number(productId));
+  const [allProducts, setAllProducts] = useState([]);
+  const [currentProduct, setCurrentProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+
+    getProducts()
+      .then((data) => {
+        setAllProducts(data);
+
+        const found = data.find((p) => String(p.id) === String(productId));
+
+        setCurrentProduct(found || null);
+      })
+      .catch((err) => {
+        console.error("Fetch product detail error:", err);
+        setCurrentProduct(null);
+      })
+      .finally(() => setLoading(false));
+  }, [productId]);
+
+  useEffect(() => {
+    setQuantity(1);
+    setSelectedSize(null);
+  }, [currentProduct?.id]);
 
   // Thương hiệu
-  const brandName = currentProduct?.brandId || "";
+  const brandName = currentProduct?.brand || "";
 
   // Ảnh thumbnails
   const thumbs = currentProduct
@@ -91,11 +114,8 @@ export default function Detail() {
   else if (categoryId === 2) productType = "quan";
   else if (categoryId === 3) productType = "dongho";
 
-  const isWatch =
-    categoryPath.includes("dong-ho") ||
-    categoryId === 3 ||
-    (typeof categoryId === "string" &&
-      categoryId.toLowerCase().includes("watch"));
+  const hasSize =
+    Array.isArray(currentProduct?.sizes) && currentProduct.sizes.length > 0;
 
   // ==== ZOOM & ẢNH CHÍNH ====
   const [selectedImage, setSelectedImage] = useState(null);
@@ -131,9 +151,14 @@ export default function Detail() {
 
   // ==== SỐ LƯỢNG & SIZE ====
   const [quantity, setQuantity] = useState(1);
+  const stockQuantity = Number(currentProduct?.quantity ?? 0);
+  useEffect(() => {
+    setQuantity(1);
+  }, [currentProduct?.id]);
+
   const [selectedSize, setSelectedSize] = useState(null);
 
-  const isAddDisabled = (!isWatch && !selectedSize) || quantity < 1;
+  const isAddDisabled = (hasSize && !selectedSize) || quantity < 1;
 
   const handleAddToCart = () => {
     if (isAddDisabled) {
@@ -144,7 +169,7 @@ export default function Detail() {
     }
 
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const sizeToSave = isWatch ? null : selectedSize;
+    const sizeToSave = hasSize ? selectedSize : null;
 
     // Giá lưu giỏ: có sale thì dùng giá sale, không thì giá gốc
     const priceForCart =
@@ -162,8 +187,9 @@ export default function Detail() {
         name: currentProduct.name,
         price: priceForCart,
         size: sizeToSave,
-        quantity: quantity,
+        quantity,
         image: currentProduct.imgMain,
+        stockQuantity,
       });
     }
 
@@ -181,6 +207,18 @@ export default function Detail() {
         <NavigationMenu />
         <div className="w-full text-center my-20 text-2xl">
           Đang tải sản phẩm hoặc không tìm thấy...
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="flex flex-col">
+        <NavigationMenu />
+        <div className="w-full text-center my-20 text-2xl">
+          Đang tải sản phẩm...
         </div>
         <Footer />
       </div>
@@ -287,7 +325,7 @@ export default function Detail() {
 
         {/* Thông tin sản phẩm */}
         <div className="flex flex-col space-y-5 px-4 ">
-          <div className="font-semibold">
+          <div className="font-semibold uppercase">
             <h1 className="text-xl">{currentProduct.name}</h1>
           </div>
 
@@ -324,7 +362,7 @@ export default function Detail() {
           </div>
 
           {/* === NẾU KHÔNG PHẢI ĐỒNG HỒ -> CHỌN SIZE === */}
-          {!isWatch && (
+          {hasSize && (
             <>
               <div>Chọn Size:</div>
               <div className="flex items-center gap-2 min-w-11 text-center leading-[2] text-[#767676]">
@@ -333,13 +371,13 @@ export default function Detail() {
                     key={label}
                     onClick={() => available && setSelectedSize(label)}
                     className={`border h-[30px] min-w-10 cursor-pointer relative transition-[box-shadow] duration-300 ease-out 
-                ${
-                  available
-                    ? selectedSize === label
-                      ? "[box-shadow:0_0_2px_2px_#FF7A00] border-white"
-                      : "border-white [box-shadow:0_0_0_1px_#B8B8B8] hover:[box-shadow:0_0_2px_2px_#FF7A00]"
-                    : "border border-white bg-gray-300 shadow-sm shadow-slate-500 before:content[''] before:w-[1px] before:h-[40px] before:bg-gray-600 before:absolute before:left-1/2 before:-top-[6px] before:rotate-[55deg] after:content[''] after:w-[1px] after:h-[40px] after:bg-gray-600 after:absolute after:left-1/2 after:-top-[6px] after:-rotate-[55deg]"
-                }`}
+            ${
+              available
+                ? selectedSize === label
+                  ? "[box-shadow:0_0_2px_2px_#FF7A00] border-white"
+                  : "border-white [box-shadow:0_0_0_1px_#B8B8B8] hover:[box-shadow:0_0_2px_2px_#FF7A00]"
+                : "border border-white bg-gray-300"
+            }`}
                   >
                     {label}
                   </div>
@@ -355,6 +393,7 @@ export default function Detail() {
               <input
                 type="number"
                 min="1"
+                max={stockQuantity}
                 value={quantity}
                 onKeyDown={(e) => {
                   const allowedKeys = [
@@ -379,6 +418,13 @@ export default function Detail() {
                   const pasteData = e.clipboardData.getData("text");
                   if (!/^\d+$/.test(pasteData)) {
                     e.preventDefault();
+                    return;
+                  }
+
+                  const num = Number(pasteData);
+                  if (num > stockQuantity) {
+                    e.preventDefault();
+                    setQuantity(stockQuantity);
                   }
                 }}
                 onDrop={(e) => {
@@ -386,23 +432,30 @@ export default function Detail() {
                 }}
                 onChange={(e) => {
                   let val = e.target.value;
+
                   if (val === "") {
                     setQuantity("");
                     return;
                   }
+
                   val = val.replace(/\D/g, "");
                   if (val !== "") {
-                    const num = Number(val);
-                    if (!Number.isNaN(num) && num >= 1) {
-                      setQuantity(num);
-                    }
+                    let num = Number(val);
+
+                    if (num < 1) num = 1;
+                    if (num > stockQuantity) num = stockQuantity;
+
+                    setQuantity(num);
                   }
                 }}
                 onBlur={() => {
                   if (quantity === "" || quantity < 1) {
                     setQuantity(1);
+                  } else if (quantity > stockQuantity) {
+                    setQuantity(stockQuantity);
                   }
                 }}
+                disabled={stockQuantity === 0}
                 className="border h-[50px] rounded-full text-center w-full md:w-[150px] pr-5 pl-8"
               />
             </div>
@@ -454,10 +507,9 @@ export default function Detail() {
         <ProductTabs
           descriptionContent={
             <ProductDescription
-              // 1. Lấy description từ object product
               descriptionHtml={currentProduct.descriptionHtml}
               imgUrl={currentProduct.imgMain}
-              sizeTypeId={currentProduct.sizeTypeId}
+              sizes={currentProduct.sizes}
             />
           }
           compositionContent={<ProductComposition product={currentProduct} />}
