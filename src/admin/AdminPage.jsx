@@ -222,6 +222,22 @@ export default function AdminPage() {
   const [editorDraft, setEditorDraft] = useState({}); // generic draft
 
   useEffect(() => {
+  const token = localStorage.getItem("token");
+  const role = localStorage.getItem("role");
+
+  if (!token) {
+    navigate("/login");
+    return;
+  }
+
+  if (role !== "admin") {
+    alert("Bạn không có quyền truy cập trang Admin!");
+    navigate("/");
+  }
+}, []);
+
+
+  useEffect(() => {
     fetch(
       "https://ns414sbifk.execute-api.ap-southeast-1.amazonaws.com/api/products"
     )
