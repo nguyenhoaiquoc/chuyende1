@@ -1,13 +1,10 @@
+// src/components/ProductPage.jsx
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import {
-  Bars3Icon,
-  XMarkIcon,
-  ChevronUpIcon,
-} from "@heroicons/react/24/solid";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 
 import NavigationMenu from "./NavigationMenu";
-import Gird from "./Gird";
+import Grid from "./Gird";
 import Footer from "./Footer";
 import Panel from "./Panel";
 import ScrollTest from "../ScrollTest";
@@ -16,13 +13,10 @@ import PriceFilter from "./PriceFilter";
 import SizeFilter from "./SizeFilter";
 import BrandFilter from "./BrandFilter";
 
-import { products } from "../data/products.mock";
-
 /* ================== UTILS ================== */
 const norm = (s = "") => s.replace(/\/+$/, "");
 
 /* ================== CATEGORY SIDEBAR ================== */
-
 function CategorySidebar({ categories, onLinkClick }) {
   const location = useLocation();
 
@@ -34,9 +28,7 @@ function CategorySidebar({ categories, onLinkClick }) {
 
       <ul>
         {categories.map((cat) => {
-          const isParentActive = norm(location.pathname).startsWith(
-            norm(cat.path)
-          );
+          const isParentActive = norm(location.pathname).startsWith(norm(cat.path));
 
           return (
             <li key={cat.id} className="mb-2">
@@ -44,9 +36,7 @@ function CategorySidebar({ categories, onLinkClick }) {
                 to={cat.path}
                 onClick={onLinkClick}
                 className={`block py-1 ${
-                  isParentActive
-                    ? "text-purple-600 font-semibold"
-                    : "text-gray-700"
+                  isParentActive ? "text-purple-600 font-semibold" : "text-gray-700"
                 }`}
               >
                 {cat.name}
@@ -55,8 +45,7 @@ function CategorySidebar({ categories, onLinkClick }) {
               {isParentActive && cat.subcategories?.length > 0 && (
                 <ul className="pl-4 mt-1 border-l">
                   {cat.subcategories.map((sub) => {
-                    const isSubActive =
-                      norm(location.pathname) === norm(sub.path);
+                    const isSubActive = norm(location.pathname) === norm(sub.path);
 
                     return (
                       <li key={sub.id} className="py-1">
@@ -64,9 +53,7 @@ function CategorySidebar({ categories, onLinkClick }) {
                           to={sub.path}
                           onClick={onLinkClick}
                           className={`block ${
-                            isSubActive
-                              ? "text-purple-600 font-semibold"
-                              : "text-gray-600"
+                            isSubActive ? "text-purple-600 font-semibold" : "text-gray-600"
                           }`}
                         >
                           {sub.name}
@@ -85,12 +72,12 @@ function CategorySidebar({ categories, onLinkClick }) {
 }
 
 /* ================== PRODUCT PAGE ================== */
-
 export default function ProductPage() {
   const location = useLocation();
 
   const [apiCategories, setApiCategories] = useState([]);
   const [apiSubcategories, setApiSubcategories] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
 
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const sidebarRef = useRef(null);
@@ -99,23 +86,27 @@ export default function ProductPage() {
   const [sizeCodes, setSizeCodes] = useState(null);
   const [brandFilter, setBrandFilter] = useState(null);
 
-  /* ================== FETCH DATA ================== */
+  const API = "https://ns414sbifk.execute-api.ap-southeast-1.amazonaws.com/api";
 
+  /* ================== FETCH CATEGORY + SUBCATEGORY ================== */
   useEffect(() => {
     async function fetchData() {
       try {
-        const [catRes, subRes] = await Promise.all([
-          fetch("https://ns414sbifk.execute-api.ap-southeast-1.amazonaws.com/api/categories"),
-          fetch("https://ns414sbifk.execute-api.ap-southeast-1.amazonaws.com/api/SubCategories"),
+        const [catRes, subRes, prodRes] = await Promise.all([
+          fetch(`${API}/categories`),
+          fetch(`${API}/SubCategories`),
+          fetch(`${API}/products`), // lấy tất cả sản phẩm
         ]);
 
         const cats = await catRes.json();
         const subs = await subRes.json();
+        const products = await prodRes.json();
 
         setApiCategories(cats);
         setApiSubcategories(subs);
+        setAllProducts(products);
       } catch (err) {
-        console.error("Fetch category error:", err);
+        console.error("Fetch data error:", err);
       }
     }
 
@@ -123,38 +114,37 @@ export default function ProductPage() {
   }, []);
 
   /* ================== BUILD MENU TREE ================== */
-
- const categories = useMemo(() => {
-  return apiCategories.map(cat => ({
-    id: cat.category_id,
-    name: cat.name,
-    slug: cat.slug,
-    path: `/${cat.slug}`,
-    subcategories: apiSubcategories
-      .filter(sub => sub.categoryTypeId === cat.category_id)
-      .map(sub => ({
-        id: sub.id,
-        name: sub.name,
-        slug: sub.slug,
-        path: `/${cat.slug}/${sub.slug}`, // 🔥 FIX QUAN TRỌNG
-        description: sub.description
-      }))
-  }));
-}, [apiCategories, apiSubcategories]);
-
-
+  const categories = useMemo(() => {
+    return apiCategories.map((cat) => ({
+      id: cat.category_id,
+      name: cat.name,
+      slug: cat.slug,
+      path: `/${cat.slug}`,
+      subcategories: apiSubcategories
+        .filter((sub) => sub.categoryTypeId === cat.category_id)
+        .map((sub) => ({
+          id: sub.id,
+          name: sub.name,
+          slug: sub.slug || sub.path.split("/").pop(),
+          path: sub.path,
+          description: sub.description,
+        })),
+    }));
+  }, [apiCategories, apiSubcategories]);
 
   /* ================== CURRENT CATEGORY ================== */
-
   const currentCategory = useMemo(() => {
     const path = norm(location.pathname);
+
+    // 👉 Nếu đang ở trang /sale thì không cần category/subcategory
+    if (path === "/sale") {
+      return { type: "sale" };
+    }
 
     for (const cat of categories) {
       if (norm(cat.path) === path) return { type: "category", data: cat };
 
-      const sub = cat.subcategories?.find(
-        (s) => norm(s.path) === path
-      );
+      const sub = cat.subcategories?.find((s) => norm(s.path) === path);
       if (sub)
         return {
           type: "subcategory",
@@ -166,24 +156,27 @@ export default function ProductPage() {
     return null;
   }, [location.pathname, categories]);
 
-  /* ================== PRODUCTS IN CATEGORY ================== */
-
+  /* ================== FILTER PRODUCTS BY CATEGORY ================== */
   const productsInCategory = useMemo(() => {
     if (!currentCategory) return [];
 
+    if (currentCategory.type === "sale") {
+      // 👉 chỉ lấy sản phẩm có sale > 0
+      return allProducts.filter((p) => p.sale > 0 && p.status === "Active");
+    }
+
     if (currentCategory.type === "subcategory") {
-      return products.filter(
-        (p) => p.subcategoryId === currentCategory.data.id
+      return allProducts.filter(
+        (p) => p.subcategoryId === currentCategory.data.id && p.status === "Active"
       );
     }
 
-    return products.filter(
-      (p) => p.categoryId === currentCategory.data.id
+    return allProducts.filter(
+      (p) => p.categoryId === currentCategory.data.id && p.status === "Active"
     );
-  }, [currentCategory]);
+  }, [currentCategory, allProducts]);
 
   /* ================== FILTER ================== */
-
   const filteredProducts = useMemo(() => {
     const [min, max] = priceRange;
 
@@ -192,7 +185,7 @@ export default function ProductPage() {
       if (max != null && p.price > max) return false;
 
       if (sizeCodes?.length) {
-        const code = p.code || String(p.id);
+        const code = p.code || String(p.product_id || p.id);
         if (!sizeCodes.includes(code)) return false;
       }
 
@@ -205,10 +198,11 @@ export default function ProductPage() {
   }, [productsInCategory, priceRange, sizeCodes, brandFilter]);
 
   const pageDescription =
-    currentCategory?.data?.description || null;
+    currentCategory?.type === "sale"
+      ? "Danh sách sản phẩm đang giảm giá"
+      : currentCategory?.data?.description || null;
 
   /* ================== RENDER ================== */
-
   return (
     <>
       <NavigationMenu />
@@ -248,24 +242,24 @@ export default function ProductPage() {
           {/* Desktop sidebar */}
           <div className="hidden md:block w-64">
             <CategorySidebar categories={categories} />
-            <PriceFilter onSearch={setPriceRange} />
-            <SizeFilter
-              products={productsInCategory}
-              onChange={(_, codes) =>
-                setSizeCodes(codes?.length ? codes : null)
-              }
-            />
-            <BrandFilter
-              products={productsInCategory}
-              onChange={(brands) =>
-                setBrandFilter(brands.length ? brands : null)
-              }
-            />
+            {currentCategory?.type !== "sale" && (
+              <>
+                <PriceFilter onSearch={setPriceRange} />
+                <SizeFilter
+                  products={productsInCategory}
+                  onChange={(_, codes) => setSizeCodes(codes?.length ? codes : null)}
+                />
+                <BrandFilter
+                  products={productsInCategory}
+                  onChange={(brands) => setBrandFilter(brands.length ? brands : null)}
+                />
+              </>
+            )}
           </div>
 
           {/* Main */}
           <main className="flex-1">
-            <Gird products={filteredProducts} />
+            <Grid products={filteredProducts} />
             <CategoryDescription description={pageDescription} />
           </main>
         </div>
