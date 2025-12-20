@@ -55,39 +55,28 @@ export default function Detail() {
   // Thương hiệu
   const brandName = currentProduct?.brand || "";
 
-  // Ảnh thumbnails
-  const thumbs = currentProduct
-    ? currentProduct.images && currentProduct.images.length > 0
-      ? currentProduct.images
-      : [currentProduct.imgMain, currentProduct.imgHover].filter(Boolean)
+  // ==== Ảnh thumbnails ====
+  const thumbs = currentProduct.images && currentProduct.images.length > 0
+    ? currentProduct.images
+    : [currentProduct.imgMain, currentProduct.imgHover].filter(Boolean);
+
+  // ==== Size ====
+  const sizes = Array.isArray(currentProduct.sizes)
+    ? currentProduct.sizes.map((s) =>
+        typeof s === "string" ? { label: s, available: true } : s
+      )
     : [];
 
-  // Size hiển thị (string → {label, available})
-  const sizes = currentProduct
-    ? Array.isArray(currentProduct.sizes)
-      ? currentProduct.sizes.map((s) =>
-          typeof s === "string" ? { label: s, available: true } : s
-        )
-      : []
-    : [];
-
+  // ==== Description ====
   const description = currentProduct?.description || [];
 
-  // ==== TÍNH GIÁ: GIÁ GỐC + % GIẢM (Number) → GIÁ SALE ====
-
-  // Giá gốc dạng số
+  // ==== Giá & Sale ====
   const basePrice =
-    currentProduct && typeof currentProduct.price === "number"
-      ? currentProduct.price
-      : 0;
+    typeof currentProduct.price === "number" ? currentProduct.price : 0;
 
-  // % giảm: sale là Number
   const salePercent =
-    currentProduct && typeof currentProduct.sale === "number"
-      ? currentProduct.sale
-      : 0;
+    typeof currentProduct.sale === "number" ? currentProduct.sale : 0;
 
-  // Tính giá sale nếu có giảm
   let salePriceNumber = null;
   if (salePercent > 0 && basePrice > 0) {
     salePriceNumber = Math.round(basePrice * (1 - salePercent / 100));
@@ -105,7 +94,7 @@ export default function Detail() {
       ? `${salePriceNumber.toLocaleString("vi-VN")} VNĐ`
       : priceDisplay;
 
-  // ==== PHÂN LOẠI SẢN PHẨM / ĐỒNG HỒ HAY KHÔNG ====
+  // ==== Phân loại sản phẩm / đồng hồ hay không ====
   const categoryPath = currentProduct?.categoryPath || "";
   const categoryId = currentProduct?.categoryId || "";
 
@@ -117,39 +106,20 @@ export default function Detail() {
   const hasSize =
     Array.isArray(currentProduct?.sizes) && currentProduct.sizes.length > 0;
 
-  // ==== ZOOM & ẢNH CHÍNH ====
-  const [selectedImage, setSelectedImage] = useState(null);
-
-  useEffect(() => {
-    if (currentProduct) {
-      setSelectedImage(currentProduct.imgMain);
-    }
-  }, [currentProduct]);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [productId]);
-
+  // ==== Zoom & Ảnh chính ====
+  const [selectedImage, setSelectedImage] = useState(currentProduct.imgMain);
   const [zoom, setZoom] = useState(false);
   const [zoomPos, setZoomPos] = useState({ x: 0, y: 0 });
   const ZOOM_SCALE = 3;
 
   const scrollRef = useRef(null);
 
-  const handleUp = () => {
-    scrollRef.current?.scrollBy({ top: -120, behavior: "smooth" });
-  };
-  const handleDown = () => {
-    scrollRef.current?.scrollBy({ top: 120, behavior: "smooth" });
-  };
-  const handleLeft = () => {
-    scrollRef.current?.scrollBy({ left: -100, behavior: "smooth" });
-  };
-  const handleRight = () => {
-    scrollRef.current?.scrollBy({ left: 100, behavior: "smooth" });
-  };
+  const handleUp = () => scrollRef.current?.scrollBy({ top: -120, behavior: "smooth" });
+  const handleDown = () => scrollRef.current?.scrollBy({ top: 120, behavior: "smooth" });
+  const handleLeft = () => scrollRef.current?.scrollBy({ left: -100, behavior: "smooth" });
+  const handleRight = () => scrollRef.current?.scrollBy({ left: 100, behavior: "smooth" });
 
-  // ==== SỐ LƯỢNG & SIZE ====
+  // ==== Số lượng & size ====
   const [quantity, setQuantity] = useState(1);
   const stockQuantity = Number(currentProduct?.quantity ?? 0);
   useEffect(() => {
@@ -162,9 +132,7 @@ export default function Detail() {
 
   const handleAddToCart = () => {
     if (isAddDisabled) {
-      if (!isWatch && !selectedSize) {
-        alert("Vui lòng chọn size trước khi thêm vào giỏ.");
-      }
+      if (!isWatch && !selectedSize) alert("Vui lòng chọn size trước khi thêm vào giỏ.");
       return;
     }
 
@@ -201,17 +169,9 @@ export default function Detail() {
 
   const lastThumb = thumbs.length > 0 ? thumbs[thumbs.length - 1] : mauAnh;
 
-  if (!currentProduct) {
-    return (
-      <div className="flex flex-col">
-        <NavigationMenu />
-        <div className="w-full text-center my-20 text-2xl">
-          Đang tải sản phẩm hoặc không tìm thấy...
-        </div>
-        <Footer />
-      </div>
-    );
-  }
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [productId]);
 
   if (loading) {
     return (
@@ -291,7 +251,7 @@ export default function Detail() {
             />
           </div>
 
-          {/* Ảnh chính + vùng zoom */}
+          {/* Ảnh chính + zoom */}
           <div
             className="w-[450px] h-[450px] relative  overflow-hidden"
             onMouseEnter={() => setZoom(true)}
@@ -341,7 +301,7 @@ export default function Detail() {
             </div>
           </div>
 
-          {/* GIÁ + GIÁ SALE */}
+          {/* Giá */}
           <div className="flex items-center">
             <p className="mr-2">Giá:</p>
             {hasSale ? (
@@ -471,7 +431,6 @@ export default function Detail() {
               >
                 THÊM VÀO GIỎ HÀNG
               </button>
-
               <div className="border p-4 rounded-full cursor-pointer ">
                 <CiHeart />
               </div>

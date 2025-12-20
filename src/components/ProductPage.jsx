@@ -1,406 +1,265 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+// src/components/ProductPage.jsx
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import {
-  ChevronUpIcon,
-  Bars3Icon,
-  XMarkIcon,
-} from "@heroicons/react/24/solid";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 
-import CategoryDescription from "./CategoryDescription";
-import Gird from "./Gird";
+import NavigationMenu from "./NavigationMenu";
+import Grid from "./Gird";
 import Footer from "./Footer";
 import Panel from "./Panel";
 import ScrollTest from "../ScrollTest";
+import CategoryDescription from "./CategoryDescription";
 import PriceFilter from "./PriceFilter";
 import SizeFilter from "./SizeFilter";
 import BrandFilter from "./BrandFilter";
 
-import { categoriesType } from "../data/categoriesType";
-import { subcategories } from "../data/subcategories";
-import { products } from "../data/products.mock";
-
-import NavigationMenu from "./NavigationMenu";
-
-/* ================== CATEGORIES (THEO PATH) ================== */
-
-const categories = categoriesType.map((cat) => ({
-  ...cat,
-  // đảm bảo luôn có path, ví dụ: "/do-nam", "/do-nu", "/dong-ho"
-  path: cat.path || `/${cat.slug}`,
-  subcategories: subcategories.filter((s) => s.categoryTypeId === cat.id),
-}));
-
-
-
 /* ================== UTILS ================== */
-
-// Chuẩn hoá path: bỏ dấu "/" ở cuối để so sánh ổn định
 const norm = (s = "") => s.replace(/\/+$/, "");
 
-/* ================== BREADCRUMB (nếu cần bật lại) ================== */
-
-const Breadcrumb = () => {
+/* ================== CATEGORY SIDEBAR ================== */
+function CategorySidebar({ categories, onLinkClick }) {
   const location = useLocation();
-  const pathnames = location.pathname.slice(1).split("/").filter(Boolean);
-  if (pathnames.length === 0) return null;
-
-  const findPathData = (pathSegment, index) => {
-    const fullPath = `/${pathnames.slice(0, index + 1).join("/")}`;
-    for (const cat of categories) {
-      if (cat.path === fullPath) return { name: cat.name, path: cat.path };
-      if (cat.subcategories) {
-        const sub = cat.subcategories.find((s) => s.path === fullPath);
-        if (sub) return { name: sub.name, path: sub.path };
-      }
-    }
-    return { name: pathSegment.replace(/-/g, " "), path: fullPath };
-  };
-
-  // đang tắt breadcrumb
-  return null;
-};
-
-/* ================== SIDEBAR ================== */
-
-const CategorySidebar = ({ onLinkClick }) => {
-  const MenuItem = ({ item }) => {
-    const location = useLocation();
-    const isParentActive = norm(location.pathname).startsWith(norm(item.path));
-    const [isOpen, setIsOpen] = useState(false);
-
-    useEffect(() => {
-      const shouldOpen =
-        isParentActive &&
-        item.subcategories?.some(
-          (sub) => norm(location.pathname) === norm(sub.path)
-        );
-      setIsOpen(shouldOpen);
-    }, [isParentActive, item.subcategories, location.pathname]);
-
-    return (
-      <li className="mb-1 text-[14px]">
-        <div className="flex justify-between items-center group py-1">
-          <Link
-            to={item.path}
-            onClick={onLinkClick}
-            className={`flex-grow pr-2 group-hover:text-purple-600 transition-colors duration-150 ${
-              isParentActive
-                ? "font-semibold text-purple-600"
-                : "text-gray-700"
-            }`}
-          > 
-            {item.name}
-          </Link>
-          {item.subcategories && (
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="p-1 text-gray-400 hover:text-purple-600 transition-colors"
-              aria-expanded={isOpen}
-              aria-label={`Mở rộng ${item.name}`}
-            >
-              <ChevronUpIcon
-                className={`w-3 h-3 transition-transform duration-200 ${
-                  isOpen ? "" : "rotate-180"
-                }`}
-              />
-            </button>
-          )}
-        </div>
-
-        {isOpen && item.subcategories && (
-          <ul className="pl-4 mt-1 border-l ml-[5px] border-gray-200 animate-fade-in">
-            {item.subcategories.map((sub) => {
-              const isSubActive = norm(location.pathname) === norm(sub.path);
-              return (
-                <li
-                  key={sub.path}
-                  className="py-1 pl-3 group relative before:content-[''] before:absolute before:left-[-1px] before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-[1px] before:bg-gray-300"
-                >
-                  <Link
-                    to={sub.path}
-                    onClick={onLinkClick}
-                    className={`block group-hover:text-purple-600 transition-colors duration-150 ${
-                      isSubActive
-                        ? "text-purple-600 font-semibold"
-                        : "text-gray-600"
-                    }`}
-                  >
-                    {sub.name}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </li>
-    );
-  };
 
   return (
-    <aside className="w-full text-sm space-y-6">
-      <div>
-        <h3 className="font-bold uppercase text-[18px] mb-2 text-gray-800 border-b pb-1">
-          Danh mục
-        </h3>
-       <ul>
-  {categories.map((item) => (
-    <MenuItem key={item.id} item={item} />
-  ))}
-</ul>
+    <aside className="w-full text-sm">
+      <h3 className="font-bold uppercase text-[18px] mb-2 border-b pb-1">
+        Danh mục
+      </h3>
 
-      </div>
+      <ul>
+        {categories.map((cat) => {
+          const isParentActive = norm(location.pathname).startsWith(norm(cat.path));
+
+          return (
+            <li key={cat.id} className="mb-2">
+              <Link
+                to={cat.path}
+                onClick={onLinkClick}
+                className={`block py-1 ${
+                  isParentActive ? "text-purple-600 font-semibold" : "text-gray-700"
+                }`}
+              >
+                {cat.name}
+              </Link>
+
+              {isParentActive && cat.subcategories?.length > 0 && (
+                <ul className="pl-4 mt-1 border-l">
+                  {cat.subcategories.map((sub) => {
+                    const isSubActive = norm(location.pathname) === norm(sub.path);
+
+                    return (
+                      <li key={sub.id} className="py-1">
+                        <Link
+                          to={sub.path}
+                          onClick={onLinkClick}
+                          className={`block ${
+                            isSubActive ? "text-purple-600 font-semibold" : "text-gray-600"
+                          }`}
+                        >
+                          {sub.name}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </li>
+          );
+        })}
+      </ul>
     </aside>
   );
-};
+}
 
-/* ================== PAGE CHÍNH ================== */
-
+/* ================== PRODUCT PAGE ================== */
 export default function ProductPage() {
   const location = useLocation();
-const [priceRange, setPriceRange] = useState([null, null]);
-const [sizeFilterCodes, setSizeFilterCodes] = useState(null); 
-const [brandFilter, setBrandFilter] = useState(null); // mảng thương hiệu đang chọn
 
-// null = không lọc theo size, [] / ['1','2'] = đang lọc
-
-  // Xác định các path đang active: nếu đang ở cha (có sub) -> gom cả sub; ngược lại -> chỉ đúng path hiện tại
-  const activePaths = useMemo(() => {
-    const curr = norm(location.pathname);
-    const cat = categories.find((c) => norm(c.path) === curr);
-    if (cat?.subcategories?.length) {
-      return [curr, ...cat.subcategories.map((s) => norm(s.path))];
-    }
-    return [curr];
-  }, [location.pathname]);
-
-  // Lọc sản phẩm thuộc danh mục hiện tại
-
-
+  const [apiCategories, setApiCategories] = useState([]);
+  const [apiSubcategories, setApiSubcategories] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
 
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const sidebarRef = useRef(null);
 
-  // Đóng sidebar khi click ra ngoài
+  const [priceRange, setPriceRange] = useState([null, null]);
+  const [sizeCodes, setSizeCodes] = useState(null);
+  const [brandFilter, setBrandFilter] = useState(null);
+
+  const API = "https://ns414sbifk.execute-api.ap-southeast-1.amazonaws.com/api";
+
+  /* ================== FETCH CATEGORY + SUBCATEGORY ================== */
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
-        const toggleButton = document.querySelector(
-          'button[aria-label="Mở bộ lọc"]'
-        );
-        if (toggleButton && toggleButton.contains(event.target)) return;
-        setSidebarOpen(false);
-      }
-    };
-    if (isSidebarOpen)
-      document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isSidebarOpen]);
+    async function fetchData() {
+      try {
+        const [catRes, subRes, prodRes] = await Promise.all([
+          fetch(`${API}/categories`),
+          fetch(`${API}/SubCategories`),
+          fetch(`${API}/products`), // lấy tất cả sản phẩm
+        ]);
 
-  const getPageTitle = (pathname) => {
-    for (const cat of categories) {
-      if (cat.path === pathname) return cat.name;
-      if (cat.subcategories) {
-        const sub = cat.subcategories.find((s) => s.path === pathname);
-        if (sub) return sub.name;
+        const cats = await catRes.json();
+        const subs = await subRes.json();
+        const products = await prodRes.json();
+
+        setApiCategories(cats);
+        setApiSubcategories(subs);
+        setAllProducts(products);
+      } catch (err) {
+        console.error("Fetch data error:", err);
       }
     }
-    return "Sản phẩm";
-  };
 
-  const getCurrentCategoryData = (pathname) => {
-    if (pathname === "/") return { name: "Trang Chủ", description: null };
-    for (const cat of categories) {
-      if (cat.path === pathname)
-        return { name: cat.name, description: cat.description || null };
-      if (cat.subcategories) {
-        const sub = cat.subcategories.find((s) => s.path === pathname);
-        if (sub)
-          return {
-            name: sub.name,
-            description: sub.description || cat.description || null,
-          };
-      }
+    fetchData();
+  }, []);
+
+  /* ================== BUILD MENU TREE ================== */
+  const categories = useMemo(() => {
+    return apiCategories.map((cat) => ({
+      id: cat.category_id,
+      name: cat.name,
+      slug: cat.slug,
+      path: `/${cat.slug}`,
+      subcategories: apiSubcategories
+        .filter((sub) => sub.categoryTypeId === cat.category_id)
+        .map((sub) => ({
+          id: sub.id,
+          name: sub.name,
+          slug: sub.slug || sub.path.split("/").pop(),
+          path: sub.path,
+          description: sub.description,
+        })),
+    }));
+  }, [apiCategories, apiSubcategories]);
+
+  /* ================== CURRENT CATEGORY ================== */
+  const currentCategory = useMemo(() => {
+    const path = norm(location.pathname);
+
+    // 👉 Nếu đang ở trang /sale thì không cần category/subcategory
+    if (path === "/sale") {
+      return { type: "sale" };
     }
-    return { name: getPageTitle(pathname), description: null };
-  };
-const currentCategory = useMemo(() => {
-  const currPath = location.pathname;
 
-  // Tìm category cha
-  const cat = categoriesType.find(c => `/` + c.slug === currPath);
-  if (cat) return cat;
+    for (const cat of categories) {
+      if (norm(cat.path) === path) return { type: "category", data: cat };
 
-  // Tìm subcategory
-  const sub = subcategories.find(s => s.path === currPath);
-  if (sub) {
-    // Lấy luôn thông tin category cha để map sản phẩm
-    const parent = categoriesType.find(c => c.id === sub.categoryTypeId);
-    return { ...parent, subcategory: sub };
-  }
+      const sub = cat.subcategories?.find((s) => norm(s.path) === path);
+      if (sub)
+        return {
+          type: "subcategory",
+          data: sub,
+          parent: cat,
+        };
+    }
 
-  return null;
-}, [location.pathname]);
+    return null;
+  }, [location.pathname, categories]);
 
-const productsInCategory = useMemo(() => {
-  if (!currentCategory) return [];
+  /* ================== FILTER PRODUCTS BY CATEGORY ================== */
+  const productsInCategory = useMemo(() => {
+    if (!currentCategory) return [];
 
-  if (currentCategory.subcategory) {
-    return products.filter(
-      (p) => p.subcategoryId === currentCategory.subcategory.id
+    if (currentCategory.type === "sale") {
+      // 👉 chỉ lấy sản phẩm có sale > 0
+      return allProducts.filter((p) => p.sale > 0 && p.status === "Active");
+    }
+
+    if (currentCategory.type === "subcategory") {
+      return allProducts.filter(
+        (p) => p.subcategoryId === currentCategory.data.id && p.status === "Active"
+      );
+    }
+
+    return allProducts.filter(
+      (p) => p.categoryId === currentCategory.data.id && p.status === "Active"
     );
-  }
-  return products.filter((p) => p.categoryId === currentCategory.id);
-}, [currentCategory]);
-// TÍNH GIÁ MIN/MAX THEO SẢN PHẨM TRONG DANH MỤC
-const [minPriceInCategory, maxPriceInCategory] = useMemo(() => {
-  if (!productsInCategory.length) return [0, 0];
+  }, [currentCategory, allProducts]);
 
-  let min = Infinity;
-  let max = -Infinity;
+  /* ================== FILTER ================== */
+  const filteredProducts = useMemo(() => {
+    const [min, max] = priceRange;
 
-  for (const p of productsInCategory) {
-    if (typeof p.price !== "number") continue;
-    if (p.price < min) min = p.price;
-    if (p.price > max) max = p.price;
-  }
+    return productsInCategory.filter((p) => {
+      if (min != null && p.price < min) return false;
+      if (max != null && p.price > max) return false;
 
-  if (!Number.isFinite(min) || !Number.isFinite(max)) return [0, 0];
-  return [min, max];
-}, [productsInCategory]);
+      if (sizeCodes?.length) {
+        const code = p.code || String(p.product_id || p.id);
+        if (!sizeCodes.includes(code)) return false;
+      }
 
-// LỌC THEO GIÁ
-const filteredProducts = useMemo(() => {
-  const [min, max] = priceRange;
+      if (brandFilter?.length) {
+        if (!brandFilter.includes(p.brand)) return false;
+      }
 
-  return productsInCategory.filter((p) => {
-    // Lọc theo giá
-    if (min != null && p.price < min) return false;
-    if (max != null && p.price > max) return false;
+      return true;
+    });
+  }, [productsInCategory, priceRange, sizeCodes, brandFilter]);
 
-    // Lọc theo size (nếu có)
-    if (sizeFilterCodes && sizeFilterCodes.length > 0) {
-      const code = p.code || p.sku || String(p.id ?? "");
-      if (!sizeFilterCodes.includes(code)) return false;
-    }
+  const pageDescription =
+    currentCategory?.type === "sale"
+      ? "Danh sách sản phẩm đang giảm giá"
+      : currentCategory?.data?.description || null;
 
-    // Lọc theo thương hiệu (brandFilter là mảng 'hoka', 'on', ...)
-    if (brandFilter && brandFilter.length > 0) {
-      const brand = p.brandId || p.brand || p.brandName || "";
-      if (!brandFilter.includes(brand)) return false;
-    }
-
-    return true;
-  });
-}, [productsInCategory, priceRange, sizeFilterCodes, brandFilter]);
-
-
-const pageDescription = currentCategory?.description || null;
-
+  /* ================== RENDER ================== */
   return (
-    <div className="">
-      <NavigationMenu/>
-      <div className="container mx-auto px-4 py-6 md:py-6">
-        {/* Mobile Sidebar Toggle */}
-        {!isSidebarOpen && (
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className="fixed top-1/2 right-0 z-50 bg-purple-600 hover:bg-purple-700 text-white p-3 rounded-l-lg shadow-lg transform -translate-y-1/2 transition-all duration-300 md:hidden"
-            aria-label="Mở bộ lọc"
-          >
-            <Bars3Icon className="w-6 h-6" />
-          </button>
+    <>
+      <NavigationMenu />
+
+      <div className="container mx-auto px-4 py-6">
+        {/* Mobile toggle */}
+        <button
+          className="md:hidden fixed right-0 top-1/2 z-50 bg-purple-600 text-white p-3 rounded-l"
+          onClick={() => setSidebarOpen(true)}
+        >
+          <Bars3Icon className="w-6 h-6" />
+        </button>
+
+        {/* Mobile sidebar */}
+        {isSidebarOpen && (
+          <div className="fixed inset-0 z-40 bg-black/40">
+            <div
+              ref={sidebarRef}
+              className="absolute right-0 top-0 h-full w-[300px] bg-white p-4"
+            >
+              <button
+                className="absolute left-[-40px] top-1/2 bg-purple-600 text-white p-2"
+                onClick={() => setSidebarOpen(false)}
+              >
+                <XMarkIcon className="w-5 h-5" />
+              </button>
+
+              <CategorySidebar
+                categories={categories}
+                onLinkClick={() => setSidebarOpen(false)}
+              />
+            </div>
+          </div>
         )}
 
-        {/* Overlay */}
-        <div
-          className={`fixed inset-0 bg-black/40 z-40 md:hidden transition-opacity duration-300 ${
-            isSidebarOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-          }`}
-          onClick={() => setSidebarOpen(false)}
-          aria-hidden={!isSidebarOpen}
-        />
-
-        {/* Sidebar Mobile */}
-        <div
-          ref={sidebarRef}
-          className={`fixed top-0 right-0 h-full w-[300px] max-w-[85vw] bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out md:hidden ${
-            isSidebarOpen ? "translate-x-0" : "translate-x-full"
-          }`}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="filter-heading-mobile"
-        >
-          {isSidebarOpen && (
-            <button
-              onClick={() => setSidebarOpen(false)}
-              className="absolute top-1/2 -left-10 bg-purple-600 hover:bg-purple-700 text-white p-2 rounded-r-lg shadow-md transform -translate-y-1/2 transition-all duration-300"
-              aria-label="Đóng bộ lọc"
-            >
-              <XMarkIcon className="w-5 h-5" />
-            </button>
-          )}
-
-          <div className="p-4 overflow-y-auto h-full">
-            <CategorySidebar onLinkClick={() => setSidebarOpen(false)} />
-            <div className="mt-6">
-            <PriceFilter
-  onSearch={(min, max) => setPriceRange([min, max])}
-/>
-            </div>
-            <div className="mt-6">
-            <SizeFilter
-    products={productsInCategory}
-    onChange={(_sizesSelected, codes) => {
-      f
-      setSizeFilterCodes(codes && codes.length ? codes : null);
-    }}
-  />
-            </div>
-            <div className="mt-6">
-               <BrandFilter
-    products={productsInCategory}
-    onChange={(brands) => {
-      // brands là mảng ['hoka', 'on', ...]
-      setBrandFilter(brands.length ? brands : null);
-    }}
-  />
-            </div>
-          </div>
-        </div>
-
-        {/* Main Layout */}
-        <div className="flex flex-col md:flex-row gap-6 md:gap-8">
-          <div className="hidden md:block w-60 lg:w-64 flex-shrink-0">
-            <CategorySidebar />
-            <div className="mt-6">
-             <PriceFilter
-    onSearch={(min, max) => setPriceRange([min, max])}
-  />
-            </div>
-            <div className="mt-6">
-  <SizeFilter
-    products={productsInCategory}
-    onChange={(_sizesSelected, codes) => {
-      setSizeFilterCodes(codes && codes.length ? codes : null);
-    }}
-  />
-            </div>
-            <div className="mt-6">
-               <BrandFilter
-    products={productsInCategory}
-    onChange={(brands) => {
-      setBrandFilter(brands.length ? brands : null);
-    }}
-  />
-            </div>
+        <div className="flex gap-8">
+          {/* Desktop sidebar */}
+          <div className="hidden md:block w-64">
+            <CategorySidebar categories={categories} />
+            {currentCategory?.type !== "sale" && (
+              <>
+                <PriceFilter onSearch={setPriceRange} />
+                <SizeFilter
+                  products={productsInCategory}
+                  onChange={(_, codes) => setSizeCodes(codes?.length ? codes : null)}
+                />
+                <BrandFilter
+                  products={productsInCategory}
+                  onChange={(brands) => setBrandFilter(brands.length ? brands : null)}
+                />
+              </>
+            )}
           </div>
 
+          {/* Main */}
           <main className="flex-1">
-            {/* TODO: nếu Gird nhận props, truyền productsInCategory vào */}
-            <div className="min-h-[60vh] rounded-md flex items-center justify-center">
-<Gird products={filteredProducts} />
-            </div>
-
+            <Grid products={filteredProducts} />
             <CategoryDescription description={pageDescription} />
           </main>
         </div>
@@ -409,6 +268,6 @@ const pageDescription = currentCategory?.description || null;
       <Footer />
       <Panel />
       <ScrollTest />
-    </div>
+    </>
   );
 }

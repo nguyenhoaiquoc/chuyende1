@@ -12,7 +12,7 @@ export default function NavigationMenu() {
   const [hoveredItem, setHoveredItem] = useState(null);
   const menuRef = useRef(null);
 
-  
+  // ✅ FETCH CATEGORY + SUBCATEGORY
   useEffect(() => {
     const fetchMenu = async () => {
       try {

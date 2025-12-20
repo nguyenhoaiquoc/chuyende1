@@ -1,68 +1,63 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { FaSearchPlus, FaRegEye } from "react-icons/fa";
-import ProductPopup from "./ProductPopup";
-
 import { Swiper, SwiperSlide } from "swiper/react";
-
 import "swiper/css";
 
-import { subcategories } from "../data/subcategories";
+import ProductPopup from "./ProductPopup";
 
-/** Xác định loại sản phẩm: giày / áo / quần / đồng hồ… dựa vào subcategory */
-function getProductType(product) {
-  if (!product) return "other";
-
-  const subcat = subcategories.find((s) => s.id === product.subcategoryId);
-  if (!subcat) return "other";
-
-  const name = subcat.name.toLowerCase();
-
-  if (name.includes("giày")) return "giay";
-  if (name.includes("áo")) return "ao";
-  if (name.includes("quần")) return "quan";
-
-  // Các dòng đồng hồ: Suunto / Garmin / Coros
-  if (
-    name.includes("suunto") ||
-    name.includes("garmin") ||
-    name.includes("coros") ||
-    name.includes("đồng hồ") ||
-    name.includes("dong ho")
-  ) {
-    return "dongho";
-  }
-
-  return "other";
-}
-
+/**
+ * RelatedProducts
+ * - Hiển thị sản phẩm liên quan
+ * - Ưu tiên: cùng subcategory
+ * - Fallback: cùng category
+ */
 export default function RelatedProducts({
   currentProductId,
-  currentCategory,
-  allProducts,
+  allProducts = [],
 }) {
   const [showPopup, setShowPopup] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
-  // Tìm sản phẩm hiện tại
-  const currentProduct = allProducts.find(
-    (p) => p.id === currentProductId
-  );
+  /* ================= CURRENT PRODUCT ================= */
 
-  // Nếu không tìm thấy sản phẩm hiện tại thì khỏi render liên quan
-  if (!currentProduct) {
-    return null;
-  }
+  const currentProduct = useMemo(() => {
+    return allProducts.find((p) => p.id === currentProductId);
+  }, [allProducts, currentProductId]);
 
-  const currentType = getProductType(currentProduct);
+  if (!currentProduct) return null;
 
-  // Lọc sản phẩm liên quan: cùng category (Đồ Nam/Nữ/Đồng hồ) + cùng loại (giày / áo / quần / đồng hồ)
-  const relatedProducts = allProducts.filter((p) => {
-    if (p.id === currentProductId) return false;
-    // comment điều kiện này để hiển thị gợi ý liên quan cho cả nam và nữ
-    if (p.categoryId !== currentCategory) return false;
-    return getProductType(p) === currentType;
-  });
+  /* ================= RELATED PRODUCTS ================= */
+
+  const relatedProducts = useMemo(() => {
+    return allProducts.filter((p) => {
+      if (p.id === currentProductId) return false;
+
+      // Ưu tiên mạnh nhất: cùng subcategory
+      if (
+        p.subcategoryId &&
+        currentProduct.subcategoryId &&
+        p.subcategoryId === currentProduct.subcategoryId
+      ) {
+        return true;
+      }
+
+      // Fallback: cùng category (Đồ Nam / Đồ Nữ / Đồng hồ)
+      if (
+        p.categoryId &&
+        currentProduct.categoryId &&
+        p.categoryId === currentProduct.categoryId
+      ) {
+        return true;
+      }
+
+      return false;
+    });
+  }, [allProducts, currentProduct, currentProductId]);
+
+  if (relatedProducts.length === 0) return null;
+
+  /* ================= HANDLERS ================= */
 
   const handleOpenPopup = (e, product) => {
     e.preventDefault();
@@ -76,9 +71,7 @@ export default function RelatedProducts({
     setSelectedProduct(null);
   };
 
-  if (!relatedProducts || relatedProducts.length === 0) {
-    return null;
-  }
+  /* ================= RENDER ================= */
 
   return (
     <div className="w-full max-w-6xl mx-auto py-10 px-4">
@@ -87,14 +80,11 @@ export default function RelatedProducts({
       </div>
 
       <Swiper
-        modules={[]}
         spaceBetween={24}
         slidesPerView={2}
-        loop={true}
+        loop
         breakpoints={{
-          768: {
-            slidesPerView: 4,
-          },
+          768: { slidesPerView: 4 },
         }}
       >
         {relatedProducts.map((p) => {
@@ -112,62 +102,67 @@ export default function RelatedProducts({
 
           return (
             <SwiperSlide key={p.id}>
-              <Link
-                to={`/product/${p.id}`}
-                className="h-auto block"
-              >
+              <Link to={`/product/${p.id}`} className="block">
                 <div className="relative group">
-                  <div className="w-full h-full overflow-hidden relative">
+                  {/* IMAGE */}
+                  <div className="relative overflow-hidden">
                     <img
                       src={p.imgHover}
                       alt={p.name}
-                      className="object-cover w-full h-full absolute -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-in-out z-10"
+                      className="absolute inset-0 w-full h-full object-cover 
+                        -translate-x-full group-hover:translate-x-0 
+                        transition-transform duration-500 z-10"
                     />
                     <img
                       src={p.imgMain}
                       alt={p.name}
-                      className="object-cover w-full h-full group-hover:scale-0 transition-transform duration-500 ease-in-out delay-350 relative z-20"
+                      className="relative z-20 w-full h-full object-cover 
+                        group-hover:scale-0 transition-transform duration-500"
                     />
                   </div>
 
-                  <div className="absolute top-[10%] left-[10px]">
-                    <div className="flex flex-col items-center">
-                      {salePercent > 0 && (
-                        <div className="relative flex items-center justify-center pb-1 bg-purple-800 text-white text-[10px] font-bold mb-6 rounded-b-full z-30 w-[33px] h-[33px] before:content-[''] before:absolute before:inset-0.5 before:border before:z-0 before:rounded-b-full">
-                          -{salePercent}%
-                        </div>
-                      )}
+                  {/* ACTIONS */}
+                  <div className="absolute top-[10%] left-[10px] z-30">
+                    {salePercent > 0 && (
+                      <div className="mb-4 bg-purple-800 text-white text-[10px] 
+                        font-bold w-[34px] h-[34px] flex items-center 
+                        justify-center rounded-b-full">
+                        -{salePercent}%
+                      </div>
+                    )}
 
-                      <button
-                        onClick={(e) => handleOpenPopup(e, p)}
-                        className="hover:bg-purple-800 bg-white p-4 rounded-md mb-4 hover:text-white z-10 transition-colors duration-300 hidden md:block"
-                      >
-                        <FaSearchPlus className="text-[12px] opacity-0 group-hover:opacity-100 duration-500 ease-in-out transition-opacity" />
-                      </button>
+                    <button
+                      onClick={(e) => handleOpenPopup(e, p)}
+                      className="hidden md:flex mb-3 bg-white hover:bg-purple-800 
+                        hover:text-white p-3 rounded transition"
+                    >
+                      <FaSearchPlus className="text-xs" />
+                    </button>
 
-                      <Link
-                        to={`/product/${p.id}`}
-                        className="bg-white hover:bg-purple-800 p-4 rounded-md hover:text-white z-10 transition-colors duration-300 "
-                      >
-                        <FaRegEye className="text-[12px] opacity-0 group-hover:opacity-100 duration-500 ease-in-out transition-opacity" />
-                      </Link>
-                    </div>
+                    <Link
+                      to={`/product/${p.id}`}
+                      className="flex bg-white hover:bg-purple-800 
+                        hover:text-white p-3 rounded transition"
+                    >
+                      <FaRegEye className="text-xs" />
+                    </Link>
                   </div>
 
-                  <div>
-                    <div className="text-center font-medium text-[14px] md:text-lg">
+                  {/* INFO */}
+                  <div className="mt-3 text-center">
+                    <div className="font-medium text-sm md:text-base">
                       {p.name}
                     </div>
 
-                    <div className="text-center mt-1">
+                    <div className="mt-1">
                       {salePercent > 0 && basePrice && (
-                        <div className="inline-block text-gray-500 text-[13px] mr-2 relative before:content-[''] before:left-0 before:top-1/2 before:h-[1px] before:w-full before:bg-gray-300 before:absolute">
+                        <span className="text-gray-400 text-xs line-through mr-2">
                           {basePrice.toLocaleString("vi-VN")} VNĐ
-                        </div>
+                        </span>
                       )}
 
                       {finalPrice && (
-                        <span className="text-[14px] font-semibold text-red-600">
+                        <span className="text-red-600 font-semibold text-sm">
                           {finalPrice.toLocaleString("vi-VN")} VNĐ
                         </span>
                       )}
