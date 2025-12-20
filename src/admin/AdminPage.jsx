@@ -32,7 +32,7 @@ function pickFirst(obj, keys) {
 
 function ensureId(row) {
   // Some mocks might use _id or id or productId
-  const id = pickFirst(row, ["id", "_id", "productId", "code"]);
+  const id = pickFirst(row, ["product_id", "id", "_id", "productId", "code"]);
   return id !== "" ? id : Math.random().toString(36).slice(2);
 }
 
@@ -732,107 +732,97 @@ export default function AdminPage() {
     setEditorOpen(true);
   }
 
-  function openEdit(row) {
-    setEditorMode("edit");
-    setEditorDraft({ ...row });
-    setEditorOpen(true);
-  }
+ function openEdit(row) {
+  setEditorMode("edit");
+  setEditorDraft({
+    ...row,
+    id: undefined, // tránh trường id lẫn product_id
+    product_id: row.product_id ?? row.id,
+  });
+  setEditorOpen(true);
+}
 
-  function applySave() {
-    // Mock save to state only (no API yet)
-    const id = ensureId(editorDraft);
 
-    if (section === "products") {
+function applySave() {
+  // Lấy product_id từ draft
+  const id = ensureId(editorDraft);  // Dùng id của sản phẩm để cập nhật
+
+  // Tạo dữ liệu cần gửi đi, nhưng loại bỏ product_id khi cập nhật
+  const { product_id, ...dataToSave } = editorDraft; // Loại bỏ product_id
+
+  // Nếu đang tạo mới (POST), hãy thêm product_id vào
+  const finalData = editorMode === "create" ? { ...dataToSave, product_id: id } : dataToSave;
+
+  const url =
+    editorMode === "create"
+      ? `https://ns414sbifk.execute-api.ap-southeast-1.amazonaws.com/api/products`
+      : `https://ns414sbifk.execute-api.ap-southeast-1.amazonaws.com/api/products/${id}`;
+
+  const method = editorMode === "create" ? "POST" : "PUT";  // POST cho tạo mới, PUT cho chỉnh sửa
+
+  fetch(url, {
+    method,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(finalData),  // Gửi dữ liệu đã được xử lý
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log("Saved:", data);
+
+      // Cập nhật state sau khi tạo/sửa sản phẩm thành công
       if (editorMode === "create") {
-        setProductsState((prev) => [{ ...editorDraft, id }, ...prev]);
+        setProductsState((prev) => [{ ...finalData, product_id: id }, ...prev]);
       } else {
         setProductsState((prev) =>
           prev.map((p) =>
-            String(ensureId(p)) === String(id) ? { ...editorDraft, id } : p
+            String(ensureId(p)) === String(id) ? { ...finalData, product_id: id } : p
           )
         );
       }
-    } else if (section === "categories") {
-      if (editorMode === "create")
-        setCategoriesState((prev) => [{ ...editorDraft, id }, ...prev]);
-      else
-        setCategoriesState((prev) =>
-          prev.map((c) =>
-            String(ensureId(c)) === String(id) ? { ...editorDraft, id } : c
-          )
-        );
-    } else if (section === "subcategories") {
-      if (editorMode === "create")
-        setSubcategoriesState((prev) => [{ ...editorDraft, id }, ...prev]);
-      else
-        setSubcategoriesState((prev) =>
-          prev.map((s) =>
-            String(ensureId(s)) === String(id) ? { ...editorDraft, id } : s
-          )
-        );
-    } else if (section === "sizeTypes") {
-      if (editorMode === "create")
-        setSizeTypesState((prev) => [{ ...editorDraft, id }, ...prev]);
-      else
-        setSizeTypesState((prev) =>
-          prev.map((s) =>
-            String(ensureId(s)) === String(id) ? { ...editorDraft, id } : s
-          )
-        );
-    } else if (section === "sizes") {
-      if (editorMode === "create")
-        setSizesState((prev) => [{ ...editorDraft, id }, ...prev]);
-      else
-        setSizesState((prev) =>
-          prev.map((s) =>
-            String(ensureId(s)) === String(id) ? { ...editorDraft, id } : s
-          )
-        );
+    })
+    .catch((err) => console.error("Save error:", err));
+
+  setEditorOpen(false);  // Đóng modal sau khi lưu
+}
+
+
+
+
+
+
+
+
+
+
+function applyDelete(row) {
+  const id = ensureId(row);  // Lấy ID sản phẩm
+
+  if (!window.confirm(`Xóa sản phẩm ID ${id}?`)) return;
+
+  fetch(
+    `https://ns414sbifk.execute-api.ap-southeast-1.amazonaws.com/api/products/${id}`,
+    {
+      method: "DELETE",  // Gửi yêu cầu DELETE
     }
-    console.log("detailRow", editorDraft);
-    fetch(
-      "https://ns414sbifk.execute-api.ap-southeast-1.amazonaws.com/api/products",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(editorDraft),
+  )
+    .then((res) => {
+      if (res.ok) {
+        // Xoá sản phẩm trong local state sau khi xóa thành công từ API
+        setProductsState((prev) =>
+          prev.filter((p) => String(ensureId(p)) !== String(id))  // Cập nhật danh sách sản phẩm
+        );
+        console.log("Deleted:", id);
+      } else {
+        console.error("Delete failed");
       }
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("Created:", data);
-      });
+    })
+    .catch((err) => console.error("Delete error:", err));
+}
 
-    setEditorOpen(false);
-  }
 
-  function applyDelete(row) {
-    const id = ensureId(row);
-    if (!window.confirm(`Xoá item ID ${id}?`)) return;
 
-    if (section === "products")
-      setProductsState((prev) =>
-        prev.filter((p) => String(ensureId(p)) !== String(id))
-      );
-    if (section === "categories")
-      setCategoriesState((prev) =>
-        prev.filter((c) => String(ensureId(c)) !== String(id))
-      );
-    if (section === "subcategories")
-      setSubcategoriesState((prev) =>
-        prev.filter((s) => String(ensureId(s)) !== String(id))
-      );
-    if (section === "sizeTypes")
-      setSizeTypesState((prev) =>
-        prev.filter((s) => String(ensureId(s)) !== String(id))
-      );
-    if (section === "sizes")
-      setSizesState((prev) =>
-        prev.filter((s) => String(ensureId(s)) !== String(id))
-      );
-  }
 
   const headerTitle = useMemo(() => {
     const item = NAV.find((n) => n.key === section);
