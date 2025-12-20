@@ -10,6 +10,8 @@ import ProductPage from "./components/ProductPage";
 import AdminPage from "./admin/AdminPage";
 import CheckoutPage from "./components/CheckoutPage";
 import CartAdmin from "./admin/CartAdmin";
+import Register from "./components/Register";
+import Login from "./components/Login";
 
 const routers = createBrowserRouter([
   {
@@ -25,6 +27,10 @@ const routers = createBrowserRouter([
       // Truy cập: http://localhost:5173/admin
       { path: "admin", element: <AdminPage /> },
       { path: "/admin/cart", element: <CartAdmin /> },
+      { path: "login", element: <Login /> },
+      { path: "register", element: <Register /> },
+
+
 
       // Route danh mục (để cuối cùng để tránh xung đột)
       { path: ":category", element: <ProductPage /> }, 
