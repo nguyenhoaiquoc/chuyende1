@@ -36,7 +36,11 @@ export default function Login() {
       setType("success");
       setMessage(" Đăng nhập thành công!");
 
-      if (res.data.token) localStorage.setItem("token", res.data.token);
+      if(res.data.token)
+        localStorage.setItem("token", res.data.token);
+      else
+        localStorage.setItem("token", "dummy_token");
+
 
       setTimeout(() => navigate("/"), 1000);
     } catch (err) {

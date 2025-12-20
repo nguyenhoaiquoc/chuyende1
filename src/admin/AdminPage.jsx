@@ -222,20 +222,14 @@ export default function AdminPage() {
   const [editorDraft, setEditorDraft] = useState({}); // generic draft
 
   useEffect(() => {
-  const token = localStorage.getItem("token");
-  const role = localStorage.getItem("role");
+    const role = (localStorage.getItem("role") || "").trim().toLowerCase();
+    console.log("ROLE =", role);
 
-  if (!token) {
-    navigate("/login");
-    return;
-  }
-
-  if (role !== "admin") {
-    alert("Bạn không có quyền truy cập trang Admin!");
-    navigate("/");
-  }
-}, []);
-
+    if (role !== "admin") {
+      alert("Bạn không có quyền truy cập trang Admin!");
+      navigate("/");
+    }
+  }, []);
 
   useEffect(() => {
     fetch(
@@ -878,7 +872,7 @@ export default function AdminPage() {
                 key={n.key}
                 onClick={() => {
                   if (n.key === "cart") {
-                    navigate("/admin/cart"); 
+                    navigate("/admin/cart");
                   } else {
                     setSection(n.key);
                     resetFilters();

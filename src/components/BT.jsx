@@ -84,6 +84,7 @@ export default function BT({ onMenuToggle }) {
                       onClick={() => {
                         localStorage.removeItem("userName");
                         localStorage.removeItem("token");
+                        localStorage.removeItem("role");
                         setUserName(null);
                         setOpenDropdown(false);
                       }}
