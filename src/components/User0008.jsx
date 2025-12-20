@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
 import ProductPopup from "./ProductPopup";
 import ProductCard from "./ProductCard";
-import { products } from "../data/products.mock"; // <<< dùng data chung
+import { products } from "../data/products.mock"; // 
 
 export default function User0008() {
 

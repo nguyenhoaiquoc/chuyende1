@@ -1,5 +1,5 @@
 // src/Collection.jsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./collection.css";
 
 // ảnh banner lớn cho từng bộ sưu tập
@@ -7,20 +7,17 @@ import nam from "./assets/nam.jpg";
 import nu from "./assets/women.jpg";
 import dongho from "./assets/dongho.jpg";
 
-// data chung
-import { products as PRODUCT_DATA } from "./data/products.mock";
-
 // dùng card & popup chung
 import ProductCard from "./components/ProductCard";
 import ProductPopup from "./components/ProductPopup";
 
-// Cấu hình từng collection + cách lọc sản phẩm từ data chung
+// Cấu hình từng collection + cách lọc sản phẩm dựa trên categoryId
 const collectionsConfig = [
   {
     key: "men",
     title: "Men",
     image: nam,
-    filter: (p) => p.categoryId === 1, // <- so sánh số trực tiếp
+    filter: (p) => p.categoryId === 1,
   },
   {
     key: "women",
@@ -37,22 +34,57 @@ const collectionsConfig = [
 ];
 
 function Collection() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch(
+          "https://ns414sbifk.execute-api.ap-southeast-1.amazonaws.com/api/products"
+        );
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        const data = await res.json();
+        setProducts(data);
+      } catch (err) {
+        console.error("Fetch products error:", err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  if (loading) {
+    return <div className="text-center my-20 text-2xl">Đang tải sản phẩm...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className="text-center my-20 text-2xl text-red-600">
+        Lỗi khi tải sản phẩm: {error}
+      </div>
+    );
+  }
+
   return (
     <main className="collections-page">
       <h1 className="page-title">Các Bộ Sưu Tập</h1>
 
       {collectionsConfig.map((col) => {
-        // lấy sản phẩm cho từng collection
-        const products = PRODUCT_DATA.filter(col.filter).slice(0, 6);
+        const filteredProducts = products.filter(col.filter).slice(0, 6);
 
-        if (!products.length) return null;
+        if (!filteredProducts.length) return null;
 
         return (
           <div key={col.key} className="collection-wrapper">
             <CollectionSection
               title={col.title}
               image={col.image}
-              products={products}
+              products={filteredProducts}
             />
           </div>
         );

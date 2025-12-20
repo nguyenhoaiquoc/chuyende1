@@ -21,50 +21,100 @@ import Panel from "./Panel";
 import Footer from "./Footer";
 import RelatedProducts from "./RelatedProducts";
 
-import { products } from "../data/products.mock";
-
 export default function Detail() {
   const { productId } = useParams();
   const navigate = useNavigate();
-  const allProducts = products;
-  const currentProduct = allProducts.find((p) => p.id === Number(productId));
 
-  // Thương hiệu
+  const [allProducts, setAllProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // ==== FETCH API PRODUCTS ====
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch(
+          "https://ns414sbifk.execute-api.ap-southeast-1.amazonaws.com/api/products"
+        );
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        const data = await res.json();
+        setAllProducts(data);
+      } catch (err) {
+        console.error("Fetch products error:", err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const currentProduct = allProducts.find(
+    (p) => p.id === Number(productId)
+  );
+
+  if (loading) {
+    return (
+      <div className="flex flex-col">
+        <NavigationMenu />
+        <div className="w-full text-center my-20 text-2xl">
+          Đang tải sản phẩm...
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col">
+        <NavigationMenu />
+        <div className="w-full text-center my-20 text-2xl text-red-600">
+          Lỗi khi tải sản phẩm: {error}
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (!currentProduct) {
+    return (
+      <div className="flex flex-col">
+        <NavigationMenu />
+        <div className="w-full text-center my-20 text-2xl">
+          Sản phẩm không tìm thấy.
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  // ==== Thương hiệu ====
   const brandName = currentProduct?.brandId || "";
 
-  // Ảnh thumbnails
-  const thumbs = currentProduct
-    ? currentProduct.images && currentProduct.images.length > 0
-      ? currentProduct.images
-      : [currentProduct.imgMain, currentProduct.imgHover].filter(Boolean)
+  // ==== Ảnh thumbnails ====
+  const thumbs = currentProduct.images && currentProduct.images.length > 0
+    ? currentProduct.images
+    : [currentProduct.imgMain, currentProduct.imgHover].filter(Boolean);
+
+  // ==== Size ====
+  const sizes = Array.isArray(currentProduct.sizes)
+    ? currentProduct.sizes.map((s) =>
+        typeof s === "string" ? { label: s, available: true } : s
+      )
     : [];
 
-  // Size hiển thị (string → {label, available})
-  const sizes = currentProduct
-    ? Array.isArray(currentProduct.sizes)
-      ? currentProduct.sizes.map((s) =>
-          typeof s === "string" ? { label: s, available: true } : s
-        )
-      : []
-    : [];
-
+  // ==== Description ====
   const description = currentProduct?.description || [];
 
-  // ==== TÍNH GIÁ: GIÁ GỐC + % GIẢM (Number) → GIÁ SALE ====
-
-  // Giá gốc dạng số
+  // ==== Giá & Sale ====
   const basePrice =
-    currentProduct && typeof currentProduct.price === "number"
-      ? currentProduct.price
-      : 0;
+    typeof currentProduct.price === "number" ? currentProduct.price : 0;
 
-  // % giảm: sale là Number
   const salePercent =
-    currentProduct && typeof currentProduct.sale === "number"
-      ? currentProduct.sale
-      : 0;
+    typeof currentProduct.sale === "number" ? currentProduct.sale : 0;
 
-  // Tính giá sale nếu có giảm
   let salePriceNumber = null;
   if (salePercent > 0 && basePrice > 0) {
     salePriceNumber = Math.round(basePrice * (1 - salePercent / 100));
@@ -82,7 +132,7 @@ export default function Detail() {
       ? `${salePriceNumber.toLocaleString("vi-VN")} VNĐ`
       : priceDisplay;
 
-  // ==== PHÂN LOẠI SẢN PHẨM / ĐỒNG HỒ HAY KHÔNG ====
+  // ==== Phân loại sản phẩm / đồng hồ hay không ====
   const categoryPath = currentProduct?.categoryPath || "";
   const categoryId = currentProduct?.categoryId || "";
 
@@ -97,58 +147,33 @@ export default function Detail() {
     (typeof categoryId === "string" &&
       categoryId.toLowerCase().includes("watch"));
 
-  // ==== ZOOM & ẢNH CHÍNH ====
-  const [selectedImage, setSelectedImage] = useState(null);
-
-  useEffect(() => {
-    if (currentProduct) {
-      setSelectedImage(currentProduct.imgMain);
-    }
-  }, [currentProduct]);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [productId]);
-
+  // ==== Zoom & Ảnh chính ====
+  const [selectedImage, setSelectedImage] = useState(currentProduct.imgMain);
   const [zoom, setZoom] = useState(false);
   const [zoomPos, setZoomPos] = useState({ x: 0, y: 0 });
   const ZOOM_SCALE = 3;
 
   const scrollRef = useRef(null);
 
-  const handleUp = () => {
-    scrollRef.current?.scrollBy({ top: -120, behavior: "smooth" });
-  };
-  const handleDown = () => {
-    scrollRef.current?.scrollBy({ top: 120, behavior: "smooth" });
-  };
-  const handleLeft = () => {
-    scrollRef.current?.scrollBy({ left: -100, behavior: "smooth" });
-  };
-  const handleRight = () => {
-    scrollRef.current?.scrollBy({ left: 100, behavior: "smooth" });
-  };
+  const handleUp = () => scrollRef.current?.scrollBy({ top: -120, behavior: "smooth" });
+  const handleDown = () => scrollRef.current?.scrollBy({ top: 120, behavior: "smooth" });
+  const handleLeft = () => scrollRef.current?.scrollBy({ left: -100, behavior: "smooth" });
+  const handleRight = () => scrollRef.current?.scrollBy({ left: 100, behavior: "smooth" });
 
-  // ==== SỐ LƯỢNG & SIZE ====
+  // ==== Số lượng & size ====
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState(null);
-
   const isAddDisabled = (!isWatch && !selectedSize) || quantity < 1;
 
   const handleAddToCart = () => {
     if (isAddDisabled) {
-      if (!isWatch && !selectedSize) {
-        alert("Vui lòng chọn size trước khi thêm vào giỏ.");
-      }
+      if (!isWatch && !selectedSize) alert("Vui lòng chọn size trước khi thêm vào giỏ.");
       return;
     }
 
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     const sizeToSave = isWatch ? null : selectedSize;
-
-    // Giá lưu giỏ: có sale thì dùng giá sale, không thì giá gốc
-    const priceForCart =
-      hasSale && salePriceNumber !== null ? salePriceNumber : basePrice;
+    const priceForCart = hasSale && salePriceNumber !== null ? salePriceNumber : basePrice;
 
     const existingItemIndex = cart.findIndex(
       (item) => item.id === currentProduct.id && item.size === sizeToSave
@@ -175,17 +200,9 @@ export default function Detail() {
 
   const lastThumb = thumbs.length > 0 ? thumbs[thumbs.length - 1] : mauAnh;
 
-  if (!currentProduct) {
-    return (
-      <div className="flex flex-col">
-        <NavigationMenu />
-        <div className="w-full text-center my-20 text-2xl">
-          Đang tải sản phẩm hoặc không tìm thấy...
-        </div>
-        <Footer />
-      </div>
-    );
-  }
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [productId]);
 
   return (
     <div className="overflow-hidden">
@@ -253,7 +270,7 @@ export default function Detail() {
             />
           </div>
 
-          {/* Ảnh chính + vùng zoom */}
+          {/* Ảnh chính + zoom */}
           <div
             className="w-[450px] h-[450px] relative  overflow-hidden"
             onMouseEnter={() => setZoom(true)}
@@ -303,7 +320,7 @@ export default function Detail() {
             </div>
           </div>
 
-          {/* GIÁ + GIÁ SALE */}
+          {/* Giá */}
           <div className="flex items-center">
             <p className="mr-2">Giá:</p>
             {hasSale ? (
@@ -323,7 +340,7 @@ export default function Detail() {
             )}
           </div>
 
-          {/* === NẾU KHÔNG PHẢI ĐỒNG HỒ -> CHỌN SIZE === */}
+          {/* Size nếu không phải đồng hồ */}
           {!isWatch && (
             <>
               <div>Chọn Size:</div>
@@ -333,13 +350,13 @@ export default function Detail() {
                     key={label}
                     onClick={() => available && setSelectedSize(label)}
                     className={`border h-[30px] min-w-10 cursor-pointer relative transition-[box-shadow] duration-300 ease-out 
-                ${
-                  available
-                    ? selectedSize === label
-                      ? "[box-shadow:0_0_2px_2px_#FF7A00] border-white"
-                      : "border-white [box-shadow:0_0_0_1px_#B8B8B8] hover:[box-shadow:0_0_2px_2px_#FF7A00]"
-                    : "border border-white bg-gray-300 shadow-sm shadow-slate-500 before:content[''] before:w-[1px] before:h-[40px] before:bg-gray-600 before:absolute before:left-1/2 before:-top-[6px] before:rotate-[55deg] after:content[''] after:w-[1px] after:h-[40px] after:bg-gray-600 after:absolute after:left-1/2 after:-top-[6px] after:-rotate-[55deg]"
-                }`}
+                      ${
+                        available
+                          ? selectedSize === label
+                            ? "[box-shadow:0_0_2px_2px_#FF7A00] border-white"
+                            : "border-white [box-shadow:0_0_0_1px_#B8B8B8] hover:[box-shadow:0_0_2px_2px_#FF7A00]"
+                          : "border border-white bg-gray-300 shadow-sm shadow-slate-500 before:content[''] before:w-[1px] before:h-[40px] before:bg-gray-600 before:absolute before:left-1/2 before:-top-[6px] before:rotate-[55deg] after:content[''] after:w-[1px] after:h-[40px] after:bg-gray-600 after:absolute after:left-1/2 after:-top-[6px] after:-rotate-[55deg]"
+                      }`}
                   >
                     {label}
                   </div>
@@ -356,53 +373,7 @@ export default function Detail() {
                 type="number"
                 min="1"
                 value={quantity}
-                onKeyDown={(e) => {
-                  const allowedKeys = [
-                    "Backspace",
-                    "Delete",
-                    "ArrowLeft",
-                    "ArrowRight",
-                    "ArrowUp",
-                    "ArrowDown",
-                    "Home",
-                    "End",
-                    "Tab",
-                    "Enter",
-                  ];
-
-                  if (e.ctrlKey || e.metaKey) return;
-                  if (allowedKeys.includes(e.key)) return;
-                  if (/^\d$/.test(e.key)) return;
-                  e.preventDefault();
-                }}
-                onPaste={(e) => {
-                  const pasteData = e.clipboardData.getData("text");
-                  if (!/^\d+$/.test(pasteData)) {
-                    e.preventDefault();
-                  }
-                }}
-                onDrop={(e) => {
-                  e.preventDefault();
-                }}
-                onChange={(e) => {
-                  let val = e.target.value;
-                  if (val === "") {
-                    setQuantity("");
-                    return;
-                  }
-                  val = val.replace(/\D/g, "");
-                  if (val !== "") {
-                    const num = Number(val);
-                    if (!Number.isNaN(num) && num >= 1) {
-                      setQuantity(num);
-                    }
-                  }
-                }}
-                onBlur={() => {
-                  if (quantity === "" || quantity < 1) {
-                    setQuantity(1);
-                  }
-                }}
+                onChange={(e) => setQuantity(Math.max(1, Number(e.target.value)))}
                 className="border h-[50px] rounded-full text-center w-full md:w-[150px] pr-5 pl-8"
               />
             </div>
@@ -418,7 +389,6 @@ export default function Detail() {
               >
                 THÊM VÀO GIỎ HÀNG
               </button>
-
               <div className="border p-4 rounded-full cursor-pointer ">
                 <CiHeart />
               </div>
@@ -454,7 +424,6 @@ export default function Detail() {
         <ProductTabs
           descriptionContent={
             <ProductDescription
-              // 1. Lấy description từ object product
               descriptionHtml={currentProduct.descriptionHtml}
               imgUrl={currentProduct.imgMain}
               sizeTypeId={currentProduct.sizeTypeId}
