@@ -164,6 +164,8 @@ export default function CartPage() {
 
   return (
     <div className="">
+      
+      <NavigationMenu />
       <Breadcrumb />
       <div className="max-w-6xl mx-auto bg-white p-6 md:p-8 shadow-sm">
         {/* === TITLE === */}
