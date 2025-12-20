@@ -31,8 +31,7 @@ export default function Register() {
       return;
     }
 
-    const pwRule =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{6,}$/;
+    const pwRule = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{6,}$/;
 
     if (!pwRule.test(password)) {
       setType("error");
@@ -54,9 +53,9 @@ export default function Register() {
         {
           email,
           phone,
-          fullName,      
+          fullName,
           name: fullName,
-          password
+          password,
         }
       );
 
@@ -71,7 +70,7 @@ export default function Register() {
       setType("error");
       setMessage(
         err?.response?.data?.message ||
-        "Đăng ký thất bại! Email có thể đã tồn tại."
+          "Đăng ký thất bại! Email có thể đã tồn tại."
       );
     }
   };
@@ -79,7 +78,6 @@ export default function Register() {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md animate-in fade-in slide-in-from-right-4 duration-300">
-
         <h2 className="text-2xl font-semibold text-center text-gray-700 mb-3">
           ĐĂNG KÝ
         </h2>
@@ -95,7 +93,6 @@ export default function Register() {
         )}
 
         <form onSubmit={handleRegister}>
-
           <div className="mb-4">
             <label>Họ tên</label>
             <input
