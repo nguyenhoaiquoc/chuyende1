@@ -797,15 +797,6 @@ function applySave() {
   setEditorOpen(false);  // Đóng modal sau khi lưu
 }
 
-
-
-
-
-
-
-
-
-
 function applyDelete(row) {
   const id = ensureId(row);  // Lấy ID sản phẩm
 

@@ -6,34 +6,26 @@ const ProductPopup = ({ product, onClose }) => {
   if (!product) return null;
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState(null);
-  const navigate = useNavigate(); // ✅ để chuyển trang cùng tab
+  const navigate = useNavigate();
 
   const image = product?.imgMain || "https://via.placeholder.com/300x400.png";
-
   const name = product?.name || "Tên sản phẩm";
   const price = Number(product?.price ?? 0);
   const sale = Number(product?.sale ?? 0);
 
+  // Tính giá cuối cùng (để hiển thị hoặc lưu nếu muốn)
   const finalPrice = sale > 0 ? Math.round(price * (1 - sale / 100)) : price;
 
   const brand = product?.brand || "Đang cập nhật";
   const sizes = product?.sizes || [];
   const stockQuantity = Number(product?.quantity ?? 0);
-  console.log("stockQuantity:", stockQuantity);
 
   const hasSizes = sizes.length > 0;
 
   const handleQuantityChange = (e) => {
     let value = Number(e.target.value);
-
-    if (isNaN(value) || value <= 0) {
-      value = 1;
-    }
-
-    if (value > stockQuantity) {
-      value = stockQuantity;
-    }
-
+    if (isNaN(value) || value <= 0) value = 1;
+    if (value > stockQuantity) value = stockQuantity;
     setQuantity(value);
   };
 
@@ -41,9 +33,9 @@ const ProductPopup = ({ product, onClose }) => {
     setSelectedSize(size);
   };
 
-  // ✅ Xử lý khi nhấn "Thêm vào giỏ hàng"
+  // ✅ SỬA HÀM NÀY: Xử lý thêm vào giỏ hàng theo User
   const handleAddToCart = () => {
-    // Kiểm tra lại điều kiện disable
+    // 1. Validate
     if ((hasSizes && !selectedSize) || quantity <= 0) {
       if (hasSizes && !selectedSize) {
         alert("Vui lòng chọn size.");
@@ -51,13 +43,18 @@ const ProductPopup = ({ product, onClose }) => {
       return;
     }
 
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    // 🔥 2. Xác định KEY giỏ hàng (Quan trọng)
+    const user = JSON.parse(localStorage.getItem("user"));
+    const cartKey = user && user.id ? `cart_${user.id}` : "cart";
 
-    // ✅ 4. Quyết định size lưu vào giỏ (nếu không có size, lưu là null)
+    // 🔥 3. Lấy giỏ hàng hiện tại dựa trên KEY đó
+    const cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+
+    // 4. Quyết định size
     const sizeToSave = hasSizes ? selectedSize : null;
 
+    // 5. Kiểm tra sản phẩm đã tồn tại chưa
     const existingItemIndex = cart.findIndex(
-      // ✅ 5. So sánh dựa trên sizeToSave
       (item) => item.id === product.id && item.size === sizeToSave
     );
 
@@ -67,15 +64,22 @@ const ProductPopup = ({ product, onClose }) => {
       cart.push({
         id: product.id,
         name,
-        price,
-        size: sizeToSave, // ✅ 6. Lưu sizeToSave
+        // Lưu ý: Bạn đang lưu giá gốc 'price'. 
+        // Nếu muốn lưu giá đã giảm, hãy đổi thành 'finalPrice'
+        price: price, 
+        size: sizeToSave,
         quantity,
         image,
       });
     }
 
-    localStorage.setItem("cart", JSON.stringify(cart));
+    // 🔥 6. Lưu lại vào đúng KEY
+    localStorage.setItem(cartKey, JSON.stringify(cart));
+    
+    // Cập nhật số lượng item để hiển thị badge trên Header (nếu có dùng)
     localStorage.setItem("cartCount", cart.length);
+    
+    // Bắn sự kiện để các component khác (như CartPage, Header) tự cập nhật
     window.dispatchEvent(new Event("storage"));
 
     navigate("/cart");
@@ -107,13 +111,9 @@ const ProductPopup = ({ product, onClose }) => {
             </h3>
 
             <div className="qv-header-info">
-              <span>
-                <b>Mã SP:</b> {product.id}
-              </span>
+              <span><b>Mã SP:</b> {product.id}</span>
               <span className="line">|</span>
-              <span>
-                <b>Thương hiệu:</b> {brand}
-              </span>
+              <span><b>Thương hiệu:</b> {brand}</span>
             </div>
 
             <div className="product-price">
@@ -122,7 +122,6 @@ const ProductPopup = ({ product, onClose }) => {
                   <span className="text-gray-400 line-through text-sm">
                     {price.toLocaleString("vi-VN")} VNĐ
                   </span>
-
                   <span className=" font-bold text-lg">
                     {finalPrice.toLocaleString("vi-VN")} VNĐ
                   </span>
@@ -143,9 +142,7 @@ const ProductPopup = ({ product, onClose }) => {
                   {sizes.map((size) => (
                     <div
                       key={size}
-                      className={`size-box ${
-                        selectedSize === size ? "selected" : ""
-                      }`}
+                      className={`size-box ${selectedSize === size ? "selected" : ""}`}
                       onClick={() => handleSizeClick(size)}
                     >
                       {size}
