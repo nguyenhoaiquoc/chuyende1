@@ -41,6 +41,7 @@
 
 .product-name {
   font-size: 21px;
+  color: #232526;
 }
 
 .product-name:hover {
@@ -50,6 +51,7 @@
 .qv-header-info {
   margin-top: 10px;
   padding-bottom: 10px;
+  color: #858688;
 }
 
 .qv-header-info b {
@@ -61,7 +63,7 @@
 }
 .product-price {
   font-size: 25px;
-
+  color: #858688;
   font-weight: 500;
 }
 
