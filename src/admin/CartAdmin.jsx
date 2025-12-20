@@ -4,10 +4,34 @@ import { Link } from "react-router-dom";
 export default function CartAdmin() {
   const [orders, setOrders] = useState([]);
 
-  useEffect(() => {
-    // Lấy danh sách tất cả đơn hàng từ localStorage
-    const data = JSON.parse(localStorage.getItem("allOrders")) || [];
-    setOrders(data);
+useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await fetch("https://ns414sbifk.execute-api.ap-southeast-1.amazonaws.com/api/cart");
+        const data = await response.json();
+
+        const formattedOrders = data.map(item => ({
+          ...item,
+          date: new Date(item.createdAt).toLocaleString('vi-VN'),
+          
+          total: item.totalAmount,
+
+          customerInfo: {
+            fullName: item.fullName,
+            phone: item.phone,
+            email: item.email,
+            address: item.address, 
+            note: item.note
+          }
+        }));
+
+        setOrders(formattedOrders);
+      } catch (error) {
+        console.error("Lỗi lấy danh sách đơn hàng:", error);
+      }
+    };
+
+    fetchOrders();
   }, []);
 
   // Hàm render trạng thái cho đẹp
@@ -86,8 +110,8 @@ export default function CartAdmin() {
                     <div>
                       <span className="block text-gray-500 text-xs">Địa chỉ giao hàng</span>
                       <span className="font-medium">
-                        {order.customerInfo?.address} <br /> ({order.customerInfo?.ward}, {order.customerInfo?.district}, {order.customerInfo?.province})
-                      </span>
+  {order.customerInfo?.address}
+</span>
                     </div>
                     <div>
                       <span className="block text-gray-500 text-xs">Ghi chú</span>
