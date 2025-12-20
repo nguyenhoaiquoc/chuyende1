@@ -23,17 +23,15 @@ export default function Login() {
 
       console.log("LOGIN OK:", res.data);
 
-    // lấy danh sách user
-    const userRes = await axios.get(
-    "https://ns414sbifk.execute-api.ap-southeast-1.amazonaws.com/api/users"
-    );
+      // lấy danh sách user
+      const userRes = await axios.get(
+        "https://ns414sbifk.execute-api.ap-southeast-1.amazonaws.com/api/users"
+      );
 
-    const user = userRes.data.find(u => u.email === email);
+      const user = userRes.data.find((u) => u.email === email);
 
-    localStorage.setItem(
-    "userName",
-    user?.name || user?.fullName || "User"
-    );
+      localStorage.setItem("userName", user?.name || user?.fullName || "User");
+      localStorage.setItem("role", user?.role || "user");
 
       setType("success");
       setMessage(" Đăng nhập thành công!");
